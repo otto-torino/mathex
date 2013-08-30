@@ -41,8 +41,8 @@ mathex.Shared = {
     }
 
     // toggle images
-    var img_rexp = new RegExp("<img class=\"toggle\" src=\"(.*?)\"");
-    final = final.replace(img_rexp, "<img class=\"toggle\" src=\"$1\" onclick=\"mathex.Shared.toggleImage(this)\"");
+    var img_rexp = new RegExp("<img class=\"toggle\" src=\"(.*?)\"(.*?)>", 'g');
+    final = final.replace(img_rexp, "<img class=\"toggle\" src=\"$1\" onclick=\"mathex.Shared.toggleImage(this)\"$2>");
 
     return final;
   },
