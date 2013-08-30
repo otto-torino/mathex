@@ -904,7 +904,7 @@ mathex.FaqRouter = function(faq) {
     var list = new Element('ul').inject(this.faq_div);
     this.faq.items.each(function(item, index) {
       if(typeof item.index == 'undefined' || item.index) {
-        var li = new Element('li')
+        var li = new Element('li.link')
           .set('html', mathex.Shared.parseTpl(item.question, []))
           .addEvent('click', function() {
             this.renderFaq(index);
