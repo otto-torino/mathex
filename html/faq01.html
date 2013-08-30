@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>FAQ</title>
+    <meta charset="utf-8" />
+    <script src="../res-otto/js/modernizr.js"></script>
+    <script src="../res-otto/js/mootools-core-yc.js"></script>
+    <script src="../res-otto/js/mootools-more-yc.js"></script>
+    <script src="../res-otto/js/mathex.js"></script>
+    <script type="text/javascript"
+      src="../res-otto/js/MathJax.js?config=custom">
+    </script>
+    <link type="text/css" rel="stylesheet" href="../res-otto/css/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1 class="left">Io e la matematica - Aritmetica I</h1>
+      <p class="right" id="widgets"></p>
+      <div class="clear"></div>
+    </header>
+    <h2>FAQ</h2>
+    <div id="container"></div>
+    <script>
+
+      var faq = new mathex.Faq([
+        {
+          question: "Che cosa sono le <i>potenze</i>?",
+          answer: "<p>Si chiama <i>potenza</i> il prodotto di fattori tutti uguali tra loro.</p>"+
+ "<p>Il fattore che si ripete è chiamato <i>base</i>, il numero di fattori è detto <i>esponente</i> (o <i>grado</i>) della potenza.</p>" +
+ "<p><i>Esempio:</i></p>" +
+            '<img src="../res-otto/img/A104_1_1.jpg" alt="figura" />'
+        },
+        {
+          question: "Che cosa sono la <i>base</i>, l\’<i>esponente</i> e il <i>grado di una potenza</i>?",
+          answer: "<p>Si chiama <i>potenza</i> il prodotto di fattori tutti uguali tra loro.</p>"+
+ "<p>Il fattore che si ripete è chiamato <i>base</i>, il numero di fattori è detto <i>esponente</i> (o <i>grado</i>) della potenza.</p>" +
+ "<p><i>Esempio:</i></p>" +
+            '<img src="../res-otto/img/A104_1_1.jpg" alt="figura" />'
+
+        },
+        {
+          question: 'Come si calcolano le potenze?',
+          answer: '<p>Per calcolare una potenza, si moltiplica la base per se stessa, tante volte quante ne indica l\’esponente della potenza.</p>'+
+ "<p><i>Esempio:</i></p>" +
+            '{%4^3 = 4 \\times 4 \\times 4 = 64 %}'
+
+        },
+        {
+          question: 'Che cos’è l\’<i>elevamento a potenza</i>?',
+          answer: "<p>Si chiama <b>elevamento a potenza</b> l\’operazione con la quale si calcola la potenza di un numero.</p>" +
+ "<p><i>Esempio:</i></p>" +
+            '{%6^4 = 6 \\times 6 \\times 6 \\times 6 = 1296 %}'
+
+        },
+        {
+          question: "Come si leggono le potenze?",
+          answer: '<p>Le {{potenze:0}} si leggono usando il numero cardinale per la base e il numero ordinale per l\’esponente.</p>'+
+'<p><i>Esempio:</i></p>' +
+            '<p>{% 12^5 %} si legge "dodici alla quinta"</p>'+
+            '<p>Esistono due eccezioni:</p>'+
+      '<p><ol>'+
+        '<li>Se l\’esponente è il numero 2, si può leggere “al quadrato” (oltre che “alla seconda”).</li>'+
+        '<li>Se l\’esponente è il numero 3, si può leggere “al cubo” (oltre che “alla terza”).</li>'+
+      '</ol></p>'+
+'<p><i>Esempi:</i></p>' +
+            '<p>{% 23^2 %} “ventitre al quadrato” oppure “ventitre alla seconda”</p>'+
+            '<p>{% 8^3 %} “otto al cubo” oppure “otto alla terza”</p>'
+      },
+        {
+          question: 'Perché {%5^2%} si legge 5 al quadrato?',
+          answer: '<p>Perché rappresenta l’area di un quadrato.</p>'+
+"<p><i>Esempio:</i></p>" +
+            '<img src="../res-otto/img/A104_1_5.jpg" alt="figura" />'+
+      '<p>Puoi verificare che nel quadrato di 5 file e 5 colonne ci sono 25 piastrelle.<br/>'+
+      'Infatti: {% 5^2 %} = 25 <br/>'+
+      'Dunque {% 5^2 %} si legge <b>cinque al quadrato</b> perché corrisponde all’area del quadrato che ha lato 5.</p>'
+        },
+        {
+          question: 'Perché {%5^3%} si legge 5 al cubo?',
+          answer: '<p>Perché rappresenta il volume di un cubo.</p>'+
+'<p>Consideriamo uno scatolone cubico (cioè con tutti gli spigoli uguali), pieno di scatolette cubiche.<br/>'+
+
+'{% 5^3 %} si legge <b>5 al cubo</b><br/>'+
+'perché rappresenta il volume di un cubo il cui spigolo è lungo 5.</p>'+
+
+'<p>Nello strato di base dello scatolone, come in ciascuno degli altri strati, sono contenute 5 × 5 scatolette; siccome ci sono 5 strati, il numero complessivo di scatolette è: 5 × 5 × 5.<br/>'+
+'Questo prodotto può essere scritto sotto forma di potenza come {% 5^3 %}.<br/>'+
+'Le scatolette riempiono tutto lo spazio delimitato dallo scatolone cubico e il loro numero indica quanto spazio contiene lo scatolone, cioè il suo volume.<br/>'+
+'Dunque, {% 5^3 %} si legge «5 al cubo» perché rappresenta il volume di un cubo il cui spigolo è lungo 5.</p>'
+        },
+        {
+          question: 'Che cosa sono le <i>tavole delle potenze</i>?',
+          answer: '<p>Le <b>tavole delle potenze</b> sono elenchi di numeri e delle rispettive potenze già calcolate.</p>'+
+'<p><i>Esempio:</i></p>' +
+            '<p>{% 23^2 %} “ventitre al quadrato” oppure “ventitre alla seconda”</p>'+
+'<table cellspacing="0" border="1" >'+
+ '<tr bgcolor="#ffa500" align="center"><th rowspan="2"><b></b><br/><b>n</b></th><th rowspan="2"><b>quadrati</b><br/><b>n<sup>2</sup></b></th><th rowspan="2"><b>cubi</b><br/><b>n<sup>3</sup></b></th></tr>'+
+ '<tr></tr>'+
+ '<tr align="center"><td>1</td><td>1</td><td>1</td></tr>'+
+ '<tr align="center"><td>2</td><td>4</td><td>8</td></tr>'+ 
+ '<tr align="center"><td>3</td><td>9</td><td>27</td></tr>'+
+ '<tr align="center"><td>4</td><td>16</td><td>64</td></tr>'+ 
+ '<tr align="center"><td>5</td><td>25</td><td>125</td></tr>'+
+ '<tr align="center"><td>6</td><td>36</td><td>216</td></tr>'+
+ '<tr align="center"><td>7</td><td>49</td><td>343</td></tr>'+
+ '<tr align="center"><td>8</td><td>64</td><td>512</td></tr>'+
+ '<tr align="center"><td>9</td><td>81</td><td>729</td></tr>'+
+ '<tr align="center"><td>10</td><td>100</td><td>1000</td></tr>'+
+ '<tr align="center"><td>11</td><td>121</td><td>1728</td></tr>'+
+ '<tr align="center"><td>12</td><td>144</td><td>2197</td></tr>'+
+ '<tr align="center"><td>13</td><td>169</td><td>2744</td></tr>'+
+ '<tr align="center"><td>14</td><td>196</td><td>3375</td></tr>'+
+'</table>'+
+            '<p>In fondo al tuo libro sono riportate le tavole dei quadrati e dei cubi dei primi 1000 numeri e le istruzioni per l’uso.</p>'
+ },
+        {
+          question: 'Che cos’è lo <i>sviluppo</i> della potenza?',
+          answer: 'Lo <b>sviluppo della potenza</b> è la trasformazione della {{potenza:0}} nella sequenza di moltiplicazioni.'+
+            '<p>{%2^4 = 2\\ {\\mathrm x}\\ 2\\ {\\mathrm x}\\ 2\\ {\\mathrm x}\\ 2 \\longrightarrow %} sviluppo della potenza </p>'
+        }
+      ])
+
+      var router = new mathex.FaqRouter(faq);
+      router.start();
+
+
+    </script>
+    <footer>
+      <p></p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,278 @@
+body {
+  font: normal 82%/200% Georgia, "Times New Roman", serif;
+  margin: 0;
+}
+header, footer {
+  display: block;
+}
+a.link, a.visited, .link {
+  color:#f08008;
+  text-decoration: none;
+}
+a:hover, .link:hover {
+  text-decoration: underline;
+}
+.left { float: left; }
+.right {float: right; }
+div.clear {clear: both; background: none !important; border: none !important; }
+.link {cursor: pointer;}
+h1, h2, h3, h4, h5, .info {
+  font-family: Verdana, Arial, sans-serif;
+}
+body > header, #container, body > footer {
+  box-sizing: border-box;
+  padding: 0 10px;
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 1.1em !important;
+}
+body > h2 {
+  padding: 5px 10px 10px;
+  border-bottom: 1px dotted #aaa;
+  color: #3399cc;
+}
+#container {
+  padding-bottom: 80px;
+}
+body > header, body > footer {
+  background: #3399cc;
+  color: white;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+body > header h1 {
+  font-size: 1.1em;
+}
+.info {
+  background: #b6e3fa;
+  margin-top: 0;
+  padding-left: 10px;
+  font-size: 1.1em;
+}
+body > footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #3399cc url('../img/logoSEI_footer.png') no-repeat 20px center;
+  padding-left: 200px;
+}
+
+p {
+  margin: 5px 0;
+}
+
+p.example {
+  margin-top: 10px !important;
+}
+
+#message {
+  font-family: Verdana, Arial, serif;
+  font-size: 2em;
+  line-height: 1.2em;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 8px;
+}
+
+.error {
+  color: orange !important;
+  border: solid orange 6px;
+}
+
+.success {
+  color: green !important;
+  border: solid green 6px;
+}
+
+.failed {
+  color: red !important;
+  border: solid red 6px;
+}
+.message {
+  border: solid #3399CC 6px;
+  color: black;
+  font-size: 1.2em !important;
+  line-height: 1.8em !important;
+}
+
+/* exercises */
+input[type=text] {
+  border: 1px solid #fff;
+  background: #fce483;
+  font-size: 1em;
+}
+select {
+  font-size: 1em;
+}
+/* questions */
+ul.test {
+  list-style-type: none;
+}
+ul.test li {
+  padding: 10px 0;
+}
+ul.test li label {
+  margin-left: 10px;
+}
+span.x {
+  font-size: 24px;
+  margin: 0 0 0 2px;
+  color: red;
+}
+span.v {
+  font-size: 24px;
+  margin: 0 0 0 2px;
+  color: green;
+}
+#answers_nav span {
+  display: inline-block;
+  width: 30px;
+  height: 50px;
+  border: 1px solid #000;
+  margin-right: 10px;
+  text-align: center;
+  line-height: 50px;
+  border-radius: 10px 0 0 0;
+}
+#answers_nav span.current {
+  background: #3399CC;
+  color: #fff;
+}
+#answers_nav span.success {
+  background: green;
+  color: #fff !important;
+}
+#answers_nav span.failed {
+  background: red;
+  color: #fff !important;
+}
+#answers_nav span.sattempt {
+  background: orange;
+  color: #fff !important;
+}
+/* faq */
+#faq_nav {
+  margin-top: 20px;
+}
+#faq_nav span {
+  display: inline-block;
+  padding: 5px;
+  border: 2px solid #3399cc;
+  text-align: center;
+  height: 20px;
+  line-height: 20px;
+  margin-right: 5px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+#faq_nav span:hover {
+  background: #3399cc;
+  color: #fff;
+}
+
+/* recovery */
+#r_nav {
+  margin-top: 20px;
+}
+#r_nav span {
+  display: inline-block;
+  padding: 5px;
+  border: 2px solid #3399cc;
+  text-align: center;
+  height: 20px;
+  line-height: 20px;
+  margin-right: 5px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+#r_nav span:hover {
+  background: #3399cc;
+  color: #fff;
+}
+.recovery-hidden {
+  background: #f2c014;
+  color: #f2c014;
+  cursor: pointer;
+}
+
+
+/* widgets */
+.font_controller, #calc {
+  display: inline-block;
+  margin-left: 10px;
+  height: 30px;
+  width: 30px;
+  line-height: 30px;
+  color: #3399cc;
+  text-align: center;
+  cursor: pointer;
+}
+#font_minus {
+  color: transparent;
+  background: url('../img/font_minus.jpg') no-repeat center center;
+}
+#font_plus {
+  color: transparent;
+  background: url('../img/font_plus.jpg') no-repeat center center;
+}
+#font_regular {
+  color: transparent;
+  background: url('../img/font_regular.jpg') no-repeat center center;
+}
+#calc {
+  background: #fff url('../img/calc.png') no-repeat center center;
+  color: transparent;
+}
+
+/* calculator */
+#calculator {
+  border: 1px solid #aaa;
+  border-top: 10px solid #3399cc;
+  width: 212px;
+  padding: 20px;
+  font-size: 12px;
+  font-family: sans-serif;
+  background: #fff;
+  box-shadow: 0 0 10px #666;
+  cursor: move;
+}
+#display {
+  border: 1px solid #aaa;
+  height: 35px;
+  line-height: 35px;
+  font-size: 18px;
+  width:98%;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  margin: auto;
+  margin-bottom: 5px;
+  text-align: right;
+  padding: 0 5px;
+  cursor: auto;
+}
+#calculator table td {
+  width: 50px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  color: #333;
+  cursor: pointer;
+}
+#calculator table td:hover {
+  background: #fff;
+}
+.equal:hover {
+  background: #62a6f4 !important;
+}
+.number, .dot {
+  background: #f5f5f5;
+  border: 1px solid #dedede;
+}
+.operation, .clear {
+  background: #d6d6d6;
+  border: 1px solid #c6c6c6;
+}
+.equal {
+  background: #4084f2;
+  border: 1px solid #3079ed;
+  color: #fff !important;
+}

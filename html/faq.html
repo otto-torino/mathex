@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>FAQ</title>
+    <meta charset="utf-8" />
+    <script src="../res-otto/js/modernizr.js"></script>
+    <script src="../res-otto/js/mootools-core-yc.js"></script>
+    <script src="../res-otto/js/mootools-more-yc.js"></script>
+    <script src="../res-otto/js/mathex.js"></script>
+    <script type="text/javascript"
+      src="../res-otto/js/MathJax.js?config=custom">
+    </script>
+    <link type="text/css" rel="stylesheet" href="../res-otto/css/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1 class="left">Io e la matematica - Aritmetica I</h1>
+      <p class="right" id="widgets"></p>
+      <div class="clear"></div>
+    </header>
+    <p class="info">Messaggio info</p>
+    <h2>FAQ</h2>
+    <div id="container"></div>
+    <script>
+
+      var faq = new mathex.Faq([
+        {
+          question: "A che cosa servono le equazioni?",
+          answer: ''
+        },
+        {
+          question: "Che cosa sono il 1° ed il 2° <i>membro</i> di un'eguaglianza?",
+          answer: "<p>Le equazioni sono nate per {{risolvere:2}} problemi numerici bla bla</p>{% 3x -5 = x + 7 %}<p>Ancora bla bla</p>"
+        },
+        {
+          question: 'Qual è la differenza tra <i>identità</i> ed <i>equazione</i>?',
+          answer: '<p>Nelle eguaglianze tutto ciò che è inserito bla bla</p>',
+          index: false
+        },
+        {
+          question: 'Che cosa sono i <b>termini noti</b> ed i <b>termini incogniti</b>?',
+          answer: "<p>Si chiama <b>identità</b> un'<b>eguaglianza sempre vera</b>.</p>" +
+                  "<p><i>Esempio<i></p>" +
+                  "{% 2a + 3a = 5a %} identità" +
+                  "<p>Si chiama <b>equazione</b> un'<b>eguaglianza</b> che è <b>vera solo per alcuni valori</b> attribuiti all'incognita e falsa invece per tutti gli altri valori.</p>" + 
+                  "<p><i>Esempio<i></p>" +
+                  "{% x + 5 = 8 %} è un'eguaglianza vera solo per {% x = 3 %}"
+
+        },
+        {
+          question: "Quali sono le <i>soluzioni</i> di un'equazione?",
+          answer: 'bla bla'
+        },
+        {
+          question: 'Quando due equazioni sono <i>equivalenti</i>?',
+          answer: 'miao miao'
+        }
+      ])
+
+      var router = new mathex.FaqRouter(faq);
+      router.start();
+
+
+    </script>
+
+    <footer>
+      <p>© SEI - Società Editrice Internazionale p.a. - Torino</p>
+    </footer>
+  </body>
+</html>

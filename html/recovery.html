@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>FAQ</title>
+    <meta charset="utf-8" />
+    <script src="../res-otto/js/modernizr.js"></script>
+    <script src="../res-otto/js/mootools-core-yc.js"></script>
+    <script src="../res-otto/js/mootools-more-yc.js"></script>
+    <script src="../res-otto/js/mathex.js"></script>
+    <script type="text/javascript"
+      src="../res-otto/js/MathJax.js?config=custom">
+    </script>
+    <link type="text/css" rel="stylesheet" href="../res-otto/css/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1 class="left">Io e la matematica - Aritmetica I</h1>
+      <p class="right" id="widgets"></p>
+      <div class="clear"></div>
+    </header>
+    <p class="info">Messaggio info</p>
+    <h2>Esercizi di recupero</h2>
+    <div id="container"></div>
+    <script>
+
+      var recovery = new mathex.Recovery([
+        {
+          title: "Esercizi pagina 3",
+          tpl: '<img class="toggle" src="img/img.png" />' +
+               '<p>La cippa: [[48]]' +
+               '<p>la pippa: [[{% 54^5 %}]]' +
+               '<ol>' +
+                 '<li>la pippa: [[{% 54^5 %}]]</li>' +
+                 '<li>la pippa: [[{% 54^5 %}]]</li>' +
+                 '<li>la pippa: [[{% 54^5 %}]]</li>' +
+               '</ol>'
+        },
+        {
+          title: "Esercizi pagina 9?",
+          tpl: "<p>Le equazioni sono nate per problemi numerici bla bla</p>{% 3x -5 = x + 7 %}<p>Ancora bla bla</p>"
+        }
+      ])
+
+      var router = new mathex.RecoveryRouter(recovery);
+      router.start();
+
+
+    </script>
+    <footer>
+      <p>© SEI - Società Editrice Internazionale p.a. - Torino</p>
+    </footer>
+  </body>
+</html>
