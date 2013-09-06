@@ -437,27 +437,43 @@ mathex.Step = {
       field.store('errors', 0);
     }
 
-    if(!(field.value == result || field.retrieve('errors') == 1)) {
-      if(typeof fieldobj != 'undefined' && typeof fieldobj.comment != 'undefined') {
-        mathex.Shared.showMessage(fieldobj.comment, 'message', this.addInputEvents.bind(this));
-      }
-      else {
-        mathex.Shared.showMessage('Risposta errata, riprova', 'error', this.addInputEvents.bind(this));
-      }
-      field.blur();
-      field.value = '';
-      field.store('errors', 1);
-    }
-    else {
-      if(field.value == result) {
-        mathex.Shared.showMessage('Risposta esatta', 'success', callback);
+    if(!this.checkResult(fieldobj, result, field.value)){
+      if(field.retrieve('errors') != 1) {
+        if(typeof fieldobj != 'undefined' && typeof fieldobj.comment != 'undefined') {
+          mathex.Shared.showMessage(fieldobj.comment, 'message', this.addInputEvents.bind(this));
+        }
+        else {
+          mathex.Shared.showMessage('Risposta errata, riprova', 'error', this.addInputEvents.bind(this));
+        }
+        field.blur();
+        field.value = '';
+        field.store('errors', 1);
       }
       else {
         mathex.Shared.showMessage('Risposta errata. La risposta esatta è ' + result, 'failed', callback);
         field.value = result;
+        this.deactivate();
+        this.router.endStep();
       }
+    }
+    else {
+      mathex.Shared.showMessage('Risposta esatta', 'success', callback);
       this.deactivate();
       this.router.endStep();
+    }
+  },
+  checkResult: function(field, result, value) {
+    if(field.type == 'float') {
+      return parseFloat(result.replace(',', '.')) === parseFloat(value.replace(',', '.'));
+    }
+    else if(field.type == 'int') {
+      return parseInt(result) === parseInt(value);
+    }
+    else if(field.type == 'string_case') {
+      return result === value;
+    }
+    else {
+      return result.toLowerCase() === value.toLowerCase();
     }
   }
 }
@@ -485,7 +501,7 @@ mathex.TextFieldStep = function(tpl, inputs, end_message) {
     Object.each(this.inputs, function(input, index) {
       var input_obj = document.id('field_' + index);
       if(!input.active) {
-        input_obj.setProperty('readonly', 'readonly');
+        input_obj.setProperty('readonly', 'readonly').addClass('disabled');
       }
       else {
         input_obj.addEvent('keydown', self.keyhandler = function(evt) {
@@ -697,7 +713,7 @@ mathex.FieldStep = function(input_id, result, end_message, options) {
   this.run = function(router) {
     var self = this;
     mathex.TextFieldStep.prototype.run(router);
-    document.id('field_' + this.input_id).removeProperty('readonly');
+    document.id('field_' + this.input_id).removeProperty('readonly').removeClass('disabled');
     self.addInputEvents();
   }
 
@@ -904,7 +920,9 @@ mathex.FaqRouter = function(faq) {
     var list = new Element('ul').inject(this.faq_div);
     this.faq.items.each(function(item, index) {
       if(typeof item.index == 'undefined' || item.index) {
-        var li = new Element('li.link')
+/*      kkk*/
+        var li = new Element('li.link_faq')
+/*        kkk*/
           .set('html', mathex.Shared.parseTpl(item.question, []))
           .addEvent('click', function() {
             this.renderFaq(index);
