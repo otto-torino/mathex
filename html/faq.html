@@ -3,6 +3,7 @@
   <head>
     <title>FAQ</title>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="../res-otto/js/modernizr.js"></script>
     <script src="../res-otto/js/mootools-core-yc.js"></script>
     <script src="../res-otto/js/mootools-more-yc.js"></script>
@@ -12,7 +13,7 @@
     </script>
     <link type="text/css" rel="stylesheet" href="../res-otto/css/style.css" />
   </head>
-  <body>
+  <body class="aritmetica">
     <header>
       <h1 class="left">Io e la matematica - Aritmetica I</h1>
       <p class="right" id="widgets"></p>
@@ -26,11 +27,15 @@
       var faq = new mathex.Faq([
         {
           question: "A che cosa servono le equazioni?",
-          answer: ''
+          answer: '',
+          audio: {
+            mp3: 'audio/bird_of_sorrow.mp3',
+            ogg: 'audio/bird_of_sorrow.ogg',
+          }
         },
         {
           question: "Che cosa sono il 1° ed il 2° <i>membro</i> di un'eguaglianza?",
-          answer: "<p>Le equazioni sono nate per {{risolvere:2}} problemi numerici bla bla</p>{% 3x -5 = x + 7 %}<p>Ancora bla bla</p>"
+          answer: "<p>Le equazioni sono nate per {{risolvere:2:layer}} problemi numerici bla bla</p>{% 3x -5 = x + 7 %}<p>Ancora bla bla</p>"
         },
         {
           question: 'Qual è la differenza tra <i>identità</i> ed <i>equazione</i>?',
@@ -63,7 +68,7 @@
 
     </script>
 
-    <footer>
+    <footer class="aritmetica">
       <p>© SEI - Società Editrice Internazionale p.a. - Torino</p>
     </footer>
   </body>

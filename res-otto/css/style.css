@@ -1,14 +1,197 @@
 body {
   font: normal 82%/200% Georgia, "Times New Roman", serif;
   margin: 0;
+  padding-top: 54px;
 }
-header, footer {
-  display: block;
+#MathJax_MenuFrame {
+    display: none !important;
 }
 a.link, a.visited, .link {
   color:#f08008;
   text-decoration: none;
 }
+
+body.aritmetica a:link, body.aritmetica a:visited, body.aritmetica .link {
+  color: green;
+}
+.layer {
+  padding: 10px;
+  border: 1px solid #333;
+  background: #fff;
+  box-shadow: 0 0 10px #000;
+}
+.button-close {
+  background: #fff;
+  padding: 5px;
+}
+select.title {
+  font-size: 1.6em;
+  background: #fff;
+  font-weight: bold;
+  border-width: 0;
+}
+/*kkk*/
+.link_faq{cursor: pointer;
+  color:#f08008;
+  text-decoration: none;
+  font-weight:bold;
+}
+
+b.text_color_red {
+  color:#ff0000;
+}
+table.standard_recover,.standard_recover_UD{
+  border: 0px;
+  padding-right:50px;
+  text-align: left;
+  border-collapse:collapse;
+}
+table.standard_recover td{
+    padding-left:0px;
+    padding-top:1px;
+    padding-bottom:1px;
+    padding-right:15px;
+    text-align: left;
+    border-width: 0px;
+    border-style: solid;
+	border-color: #666699;
+}
+table.standard_recover_UD td{
+    padding-left:2px;
+    padding-top:10px;
+    padding-bottom:10px;
+    padding-right:2px;
+    text-align: left;
+    border-width: 0px;
+    border-style: solid;
+	border-color: #666699;
+}
+table.standard{
+  border: 1px solid black;
+  text-align: left;
+  border-collapse:collapse;
+}
+table.standard td{
+    padding-left:15px;
+    padding-top:1px;
+    padding-bottom:1px;
+    padding-right:15px;
+    text-align: left;
+    border-width: 1px;
+    border-style: solid;
+	border-color: #666699;
+}
+table.standard th, .standard_recover th{
+    padding:5px;
+    text-align: center;
+    border-width: 1px;
+    border-style: solid;
+	border-color: #00C;
+	background-color: #FF9900;
+}
+
+table.add{
+  border: 0;
+  text-align: right;
+  border-collapse:collapse;
+}
+
+table.graffa{
+
+  border-collapse: collapse;
+    text-align: center;
+}
+
+td.graf{
+    padding:0px;
+    text-align: center;
+    border-top-style: solid;
+	border-top-color: #00C;
+	border-top-width: thin;
+	border-bottom-width: thin;
+	border-bottom-style: solid;
+	border-bottom-color: #00C;
+    border-left-style: solid;
+	border-left-color: #00C;
+	border-left-width: thin;
+	border-right-width: thin;
+	border-right-style: solid;
+	border-right-color: #00C;
+}
+
+
+td.freccia-sx{
+    padding:0px;
+    border-top-style: solid;
+	border-top-color: #00C;
+	border-top-width: thin;
+
+    border-left-style: solid;
+	border-left-color: #00C;
+	border-left-width: thin;
+}
+
+td.freccia-dx{
+    padding:0px;
+    border-top-style: solid;
+	border-top-color: #00C;
+	border-top-width: thin;
+
+	border-right-width: thin;
+	border-right-style: solid;
+	border-right-color: #00C;
+}
+
+td.freccia-up{
+    padding:0px;
+    border-top-style: solid;
+	border-top-color: #00C;
+	border-top-width: thin;
+}
+
+td.freccia-left{
+    padding:0px;
+    border-left-style: solid;
+	border-left-color: #00C;
+	border-left-width: thin;
+}
+td.freccia-right, .fattori{
+    padding:0px;
+    border-right-style: solid;
+	border-right-color: #00C;
+	border-right-width: thin;
+}
+
+td.fattori {
+  text-align: right;
+  padding-right:10px;
+}
+
+td.fattori input {
+  text-align: right !important;
+}
+
+td.riga{
+	border-top: 1px solid #FF0000;
+}
+
+.spacer {
+  padding-bottom:10px;
+  padding-top:10px;
+}
+.input_tab input{
+    text-align: left;
+    margin: 0;
+}
+.input_tab #field_2{
+    text-align: right;
+}
+hr{
+    margin-top: 50px;
+    width: 25%;
+    color: #C6C5C5;
+}
+/*kkk*/
 a:hover, .link:hover {
   text-decoration: underline;
 }
@@ -30,6 +213,7 @@ body > h2 {
   border-bottom: 1px dotted #aaa;
   color: #3399cc;
 }
+
 #container {
   padding-bottom: 80px;
 }
@@ -39,14 +223,56 @@ body > header, body > footer {
   padding-top: 2px;
   padding-bottom: 2px;
 }
-body > header h1 {
-  font-size: 1.1em;
-}
 .info {
   background: #b6e3fa;
   margin-top: 0;
   padding-left: 10px;
   font-size: 1.1em;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+/* header and footer style classes */
+body.aritmetica > header, body.aritmetica > footer {
+  background: green;
+}
+body.geometria > header, body.geometria > footer {
+  background: purple;
+}
+body.algebra > header, body.algebra > footer {
+  background: green;
+}
+body.aritmetica .info {
+  background: #bddab6;
+}
+body.geometria .info {
+}
+body.algebra .info {
+  background: #bddab6;
+}
+/* end header and footer style classes */
+
+body > header h1 {
+  font-size: 1.1em;
+}
+
+/*kkk*/
+.tab {
+  padding-right: 30px;
+}
+.tab2 {
+  padding-right: 60px;
+}
+.tab3 {
+  padding-right: 90px;
+}
+/*kk*/
+body > header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    z-index: 1000;
 }
 body > footer {
   position: fixed;
@@ -56,13 +282,61 @@ body > footer {
   padding-left: 200px;
 }
 
-p {
-  margin: 5px 0;
+
+strong {
+/*  color:#f2c014;*/
+/*  color:#3399cc;*/
+  font-size: 1.1em;
+  font-weight: bold;
 }
 
-p.example {
-  margin-top: 10px !important;
+p {
+/*  margin: 5px 0;*/
+  margin:10px 0;
+  line-height: 1.4em;
 }
+
+li {
+/*  margin: 5px 0;*/
+  margin:10px 0;
+  line-height: 1.3em;
+}
+
+blockquote {
+/*  margin: 5px 0;*/
+  line-height: 1.3em;
+}
+h4,p.example {
+/*  margin-top: 10px !important*/;
+  margin-top: 45px !important;
+}
+
+h3.recover {
+/*  margin-top: 10px !important*/;
+  margin-top: 45px !important;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+h3 {
+  padding-top: 20px !important;
+}
+
+h5 {
+  font-size: 1.0em;
+}
+
+h5,#container {
+  font-size: 1.0em;
+  margin-bottom: 0px !important;
+}
+
+h3.continue {
+/*  margin-top: 10px !important*/;
+  padding-top: 5px !important;
+  font-size: 1.1em;
+}
+
 
 #message {
   font-family: Verdana, Arial, serif;
@@ -93,12 +367,19 @@ p.example {
   font-size: 1.2em !important;
   line-height: 1.8em !important;
 }
+/* STEFANO 5 settembre */
+.border {
+  border: 1px solid #000;
+}
 
 /* exercises */
 input[type=text] {
   border: 1px solid #fff;
   background: #fce483;
   font-size: 1em;
+}
+input.disabled {
+    background: #eee !important;
 }
 select {
   font-size: 1em;
@@ -152,6 +433,7 @@ span.v {
 /* faq */
 #faq_nav {
   margin-top: 20px;
+  padding-top: 10px; /* kkk */
 }
 #faq_nav span {
   display: inline-block;
@@ -189,19 +471,37 @@ span.v {
   color: #fff;
 }
 .recovery-hidden {
+  padding: 0.3em;
   background: #f2c014;
-  color: #f2c014;
+  color: #f2c014 !important;
   cursor: pointer;
+}
+/* STEFANO 5 settembre */
+.recovery-hidden * {
+	display: none;
 }
 
 
 /* widgets */
+#widgets {
+  position: relative;
+}
+#widgets audio {
+  position: absolute;
+  width: 200px;
+  height: 30px;
+  left: -200px;
+  top: 0px;
+  margin: 0;
+  padding: 0;
+}
 .font_controller, #calc {
   display: inline-block;
   margin-left: 10px;
   height: 30px;
   width: 30px;
   line-height: 30px;
+/*  background: white;*/
   color: #3399cc;
   text-align: center;
   cursor: pointer;
@@ -275,4 +575,82 @@ span.v {
   background: #4084f2;
   border: 1px solid #3079ed;
   color: #fff !important;
+}
+/* STEFANO 5 SETTEMBRE */
+.sudest {
+	width: 50px;
+	height: 50px;
+	padding: 0 !important;
+	background: url(../img/se.jpg) no-repeat 0px 0px;
+}
+
+
+.sudovest {
+	width: 50px;
+	height: 50px;
+	padding: 0 !important;
+	background: url(../img/sw.jpg) no-repeat 0px 0px;
+}
+
+.nordest {
+	width: 50px;
+	height: 50px;
+	padding: 0 !important;
+	background: url(../img/ne.jpg) no-repeat 1px 0px;
+}
+
+
+.nordovest {
+	width: 50px;
+	height: 50px;
+	padding: 0 !important;
+	background: url(../img/nw.jpg) no-repeat -1px -2px;
+}
+
+
+.lineah {
+	width: 50px;
+	height: 50px;
+	padding: 0 !important;
+	background: url(../img/hr.jpg) no-repeat 0px 0px;
+}
+
+
+.lineav {
+	width: 50px;
+	height: 50px;
+	padding: 0 !important;
+	background: url(../img/vr.jpg) no-repeat 0px 0px;
+}
+
+
+.frecciasu {
+	width: 50px;
+	height: 50px;
+	padding: 0 !important;
+	background: url(../img/fs.jpg) no-repeat 1px 0px;
+}
+
+
+.frecciagiu {
+	width: 50px;
+	height: 50px;
+	padding: 0 !important;
+	background: url(../img/fg.jpg) no-repeat 0px 0px;
+}
+
+
+.doppiafreccia {
+	width: 50px;
+	height: 50px;
+	padding: 0 !important;
+	background: url(../img/df.jpg) no-repeat 0px 0px;
+}
+
+
+.doppioangolo {
+	width: 50px;
+	height: 50px;
+	padding: 0 !important;
+	background: url(../img/dd2.jpg) no-repeat 0px 0px;
 }

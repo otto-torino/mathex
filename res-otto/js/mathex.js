@@ -119,6 +119,28 @@ mathex.Shared = {
     return {'width': width, 'height': height, 'left': left, 'top': top, 'cX': cX, 'cY': cY};
 
   },
+  addWidget: function(widget, position) {
+    widget.inject($('widgets'), position);
+  },
+  removeWidget: function(widget) {
+    widget.dispose();
+  },
+  playerWidget: function(audio_obj) {
+    if(audio_obj === null) {
+      if(typeof $('widgets').getElements('audio')[0] != 'undefined') {
+        $('widgets').getElements('audio')[0].dispose();
+      }
+      return true;
+    }
+    var audio = new Element('audio[controls]');
+    if(typeof audio_obj.mp3 != 'undefined') {
+      var mp3_source = new Element('source[src=' + audio_obj.mp3 + '][type=audio/mp3]').inject(audio);
+    }
+    if(typeof audio_obj.ogg != 'undefined') {
+      var ogg_source = new Element('source[src=' + audio_obj.ogg + '][type=audio/ogg]').inject(audio);
+    }
+    audio.inject($('widgets'), 'top');
+  },
   fontWidget: function() {
     var regular = parseFloat($(document.body).getStyle('font-size'));
     var fm = new Element('span#font_minus.font_controller')
@@ -192,7 +214,7 @@ mathex.Shared = {
         this.container = new Element('div#calculator')
           .inject(document.body)
           .setStyles({
-            position: 'absolute',
+            position: 'fixed',
             top: vp.cY - 150,
             left: vp.cX - 106
           })
@@ -361,6 +383,9 @@ mathex.Shared = {
   }
 }
 
+/*
+ * Router (exercises router)
+ */
 mathex.Router = function() {
   this.steps = [];
   this.current = null;
@@ -410,6 +435,14 @@ mathex.Router = function() {
       this.startStep(this.current + 1);
     }
   };
+
+  this.allSteps = function(callback) {
+    this.current = 0;
+    while(this.current <= this.steps.length - 1) {
+      this.startStep(this.current);
+      this.current++;
+    }
+  }
 }
 
 /**
@@ -468,7 +501,7 @@ mathex.Step = {
     }
     else if(field.type == 'int') {
       return parseInt(result) === parseInt(value);
-    }
+    } 
     else if(field.type == 'string_case') {
       return result === value;
     }
@@ -479,7 +512,7 @@ mathex.Step = {
 }
 
 /**
- * Text plus one active input field step
+ * Text plus one active input field step (exercises)
  */
 mathex.TextFieldStep = function(tpl, inputs, end_message) {
 
@@ -536,7 +569,7 @@ mathex.TextFieldStep = function(tpl, inputs, end_message) {
 mathex.TextFieldStep.prototype = mathex.Step;
 
 /**
- * Text plus one active choice field
+ * Text plus one active choice field (exercises)
  */
 mathex.TextChoiceFieldStep = function(tpl, result, end_message) {
 
@@ -621,7 +654,7 @@ mathex.TextChoiceFieldStep = function(tpl, result, end_message) {
 mathex.TextChoiceFieldStep.prototype = mathex.Step;
 
 /**
- * Text plus one active choice field
+ * Text plus one active choice field (exercises)
  */
 mathex.TextSelectFieldStep = function(tpl, options, result, end_message) {
 
@@ -701,7 +734,7 @@ mathex.TextSelectFieldStep = function(tpl, options, result, end_message) {
 mathex.TextSelectFieldStep.prototype = mathex.Step;
 
 /**
- * One already rendered input field active
+ * One already rendered input field active (exercises)
  */
 mathex.FieldStep = function(input_id, result, end_message, options) {
 
@@ -741,6 +774,9 @@ mathex.FieldStep = function(input_id, result, end_message, options) {
 }
 mathex.FieldStep.prototype = mathex.Step;
 
+/**
+ * Text (exercises)
+ */
 mathex.TextStep = function(tpl, end_message) {
 
   this.tpl = mathex.Shared.parseTpl(tpl, {});
@@ -931,17 +967,40 @@ mathex.FaqRouter = function(faq) {
       }
     }.bind(this));
 
+    mathex.Shared.playerWidget(null);
+
     MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
   }
 
   this.renderFaq = function(index) {
+
+
+    /* index */
+    var select = new Element('select.title');
+    this.faq.items.each(function(item, opt_index) {
+      if(typeof item.index == 'undefined' || item.index) {
+/*      kkk*/
+        var option = new Element('option')
+/*        kkk*/
+          .set('html', mathex.Shared.parseTpl(item.question, []))
+          .setProperty('value', opt_index)
+          .inject(select);
+        if(index == opt_index) {
+          option.setProperty('selected', 'selected');
+        }
+      }
+    }.bind(this));
+    var self = this;
+    select.addEvent('change', function() {
+      self.renderFaq(this.value);
+    });
     var item = this.faq.items[index];
     this.faq_div.empty();
     this.faq_nav.empty();
     var answer = mathex.Shared.parseTpl(item.answer, []);
-    var link_rexp = new RegExp("{{\s*(.*?):([0-9]+)\s*}}", "gim");
-    var answer = answer.replace(link_rexp, "<span class=\"link\" onclick=\"router.goto($2)\">$1</span>");
-    this.faq_div.set('html', "<h2>" + mathex.Shared.parseTpl(item.question, []) + "</h2>" + answer);
+    var link_rexp = new RegExp("{{\s*(.*?):([0-9]+):?(layer)?\s*}}", "gim");
+    var answer = answer.replace(link_rexp, "<span class=\"link\" onclick=\"router.goto($2, '$3')\">$1</span>");
+    this.faq_div.adopt(select, new Element('div').set('html', answer));
 
     MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
 
@@ -949,21 +1008,63 @@ mathex.FaqRouter = function(faq) {
     if(index > 0) {
       prev = new Element('span').set('text', 'precedente').addEvent('click', function() {
         this.renderFaq(index - 1);
+        window.location.hash = 'top';
       }.bind(this)).inject(this.faq_nav);
     }
     var toindex = new Element('span').set('text', 'indice').addEvent('click', function() {
       this.renderIndex();
+      window.location.hash = 'top';
     }.bind(this)).inject(this.faq_nav);
 
     if(index < this.faq.items.length - 1) {
       next = new Element('span').set('text', 'successiva').addEvent('click', function() {
         this.renderFaq(index + 1);
+        window.location.hash = 'top';
       }.bind(this)).inject(this.faq_nav);
     }
+
+    /* audio */
+    if(typeof item.audio != 'undefined') {
+      mathex.Shared.playerWidget(item.audio);
+    }
+    else {
+      mathex.Shared.playerWidget(null);
+    }
+
   };
 
-  this.goto = function(index) {
-    this.renderFaq(index);
+  this.goto = function(index, layer) {
+    if(layer == 'layer') {
+      var item = this.faq.items[index];
+      var answer = mathex.Shared.parseTpl(item.answer, []);
+      var link_rexp = new RegExp("{{\s*(.*?):([0-9]+):?(layer)?\s*}}", "gim");
+      var answer = answer.replace(link_rexp, "<span class=\"link\" onclick=\"router.goto($2, '$3')\">$1</span>");
+      var viewport = mathex.Shared.getViewport();
+      var layer = new Element('div.layer').setStyles({
+        'position': 'absolute',
+        'margin': 'auto',
+        'top': 0,
+        'bottom': 0,
+        'left': 0,
+        'right': 0,
+        'width': '500px',
+        'height': '50%',
+        'overflow': 'auto'
+        //'top': (viewport.cY - 100) + 'px',
+        //'left': (viewport.cX - 200) + 'px',
+      }).inject($(document.body));
+      var title = new Element('h2').set('html', mathex.Shared.parseTpl(item.question, []));
+      var close = new Element('div.link.button-close').setStyles({
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        'font-size': '32px'
+      }).set('html', '&#215;').addEvent('click', function() { layer.dispose(); });
+      layer.adopt(close, title, new Element('div').set('html', answer));
+    }
+    else {
+      this.renderFaq(index);
+    }
   }
 }
 
@@ -987,6 +1088,7 @@ mathex.RecoveryRouter = function(recovery) {
   }
 
   this.renderIndex = function() {
+    window.location.hash = '';
     this.r_div.empty();
     this.r_nav.empty();
     var list = new Element('ul').inject(this.r_div);
@@ -1003,6 +1105,7 @@ mathex.RecoveryRouter = function(recovery) {
   }
 
   this.renderRecovery = function(index) {
+    window.location.hash = '';
     var item = this.recovery.items[index];
     this.r_div.empty();
     this.r_nav.empty();
@@ -1023,15 +1126,18 @@ mathex.RecoveryRouter = function(recovery) {
     if(index > 0) {
       prev = new Element('span').set('text', 'precedente').addEvent('click', function() {
         this.renderRecovery(index - 1);
+        window.location.hash = 'top';
       }.bind(this)).inject(this.r_nav);
     }
     var toindex = new Element('span').set('text', 'indice').addEvent('click', function() {
       this.renderIndex();
+      window.location.hash = 'top';
     }.bind(this)).inject(this.r_nav);
 
     if(index < this.recovery.items.length - 1) {
       next = new Element('span').set('text', 'successiva').addEvent('click', function() {
         this.renderRecovery(index + 1);
+        window.location.hash = 'top';
       }.bind(this)).inject(this.r_nav);
     }
   };
@@ -1040,3 +1146,13 @@ mathex.RecoveryRouter = function(recovery) {
     this.renderRecovery(index);
   }
 }
+
+// place a top anchor in the header
+window.addEvent('load', function() {
+    var anchor = new Element('a', {name: 'top'}).set('text', 'top').setStyles({
+        color: '#fff',
+        'line-height': 0,
+        position: 'absolute',
+        top: 0
+    }).inject($$('header')[0], 'after');
+});
