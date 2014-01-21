@@ -450,9 +450,6 @@ mathex.Router = function() {
  */
 mathex.Step = {
 
-  run: function(router) {
-    this.router = router;
-  },
   checkFieldResult: function(field, result, fieldobj) {
 
     this.removeInputEvents();
@@ -514,15 +511,22 @@ mathex.Step = {
 /**
  * Text plus one active input field step (exercises)
  */
-mathex.TextFieldStep = function(tpl, inputs, end_message) {
+mathex.TextFieldStep = function(tpl, inputs, end_message, options) {
+
+  this.container = options && typeof options.container != 'undefined' ? options.container : true;
 
   this.run = function(router) {
     this.tpl = mathex.Shared.parseTpl(tpl, inputs);
     this.inputs = inputs;
     this.end_message = typeof end_message == 'undefined' ? null : end_message;
     var self = this;
-    mathex.TextFieldStep.prototype.run(router);
-    var div = new Element('div').set('html', this.tpl).inject($('container'), 'bottom');
+    this.router = router;
+    if(this.container) {
+      var div = new Element('div').set('html', this.tpl).inject($('container'), 'bottom');
+    }
+    else {
+      $('container').set('html', $('container').get('html') + this.tpl);
+    }
     MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
     MathJax.Hub.Queue(function() {
       self.addInputEvents();
@@ -571,7 +575,9 @@ mathex.TextFieldStep.prototype = mathex.Step;
 /**
  * Text plus one active choice field (exercises)
  */
-mathex.TextChoiceFieldStep = function(tpl, result, end_message) {
+mathex.TextChoiceFieldStep = function(tpl, result, end_message, options) {
+
+  this.container = options && typeof options.container != 'undefined' ? options.container : true;
 
   this.run = function(router) {
     this.errors = 0;
@@ -582,8 +588,13 @@ mathex.TextChoiceFieldStep = function(tpl, result, end_message) {
     this.result = result;
     this.end_message = typeof end_message == 'undefined' ? null : end_message;
     var self = this;
-    mathex.TextChoiceFieldStep.prototype.run(router);
-    var div = new Element('div').set('html', this.tpl).inject($('container'), 'bottom');
+    this.router = router;
+    if(this.container) {
+      var div = new Element('div').set('html', this.tpl).inject($('container'), 'bottom');
+    }
+    else {
+      $('container').set('html', $('container').get('html') + this.tpl);
+    }
     MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
     MathJax.Hub.Queue(function() {
       self.addInputEvents();
@@ -656,7 +667,9 @@ mathex.TextChoiceFieldStep.prototype = mathex.Step;
 /**
  * Text plus one active choice field (exercises)
  */
-mathex.TextSelectFieldStep = function(tpl, options, result, end_message) {
+mathex.TextSelectFieldStep = function(tpl, options, result, end_message, options) {
+
+  this.container = options && typeof options.container != 'undefined' ? options.container : true;
 
   this.populateSelect = function() {
     options.each(function(option) {
@@ -673,8 +686,13 @@ mathex.TextSelectFieldStep = function(tpl, options, result, end_message) {
     this.result = result;
     this.end_message = typeof end_message == 'undefined' ? null : end_message;
     var self = this;
-    mathex.TextSelectFieldStep.prototype.run(router);
-    var div = new Element('div').set('html', this.tpl).inject($('container'), 'bottom');
+    this.router = router;
+    if(this.container) {
+      var div = new Element('div').set('html', this.tpl).inject($('container'), 'bottom');
+    }
+    else {
+      $('container').set('html', $('container').get('html') + this.tpl);
+    }
     this.populateSelect();
     MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
     MathJax.Hub.Queue(function() {
@@ -745,7 +763,7 @@ mathex.FieldStep = function(input_id, result, end_message, options) {
 
   this.run = function(router) {
     var self = this;
-    mathex.TextFieldStep.prototype.run(router);
+    this.router = router;
     document.id('field_' + this.input_id).removeProperty('readonly').removeClass('disabled');
     self.addInputEvents();
   }
@@ -777,15 +795,22 @@ mathex.FieldStep.prototype = mathex.Step;
 /**
  * Text (exercises)
  */
-mathex.TextStep = function(tpl, end_message) {
+mathex.TextStep = function(tpl, end_message, options) {
+
+  this.container = options && typeof options.container != 'undefined' ? options.container : true;
 
   this.tpl = mathex.Shared.parseTpl(tpl, {});
   this.end_message = typeof end_message == 'undefined' ? null : end_message;
 
   this.run = function(router) {
     var self = this;
-    mathex.TextFieldStep.prototype.run(router);
-    var div = new Element('div').set('html', this.tpl).inject($('container'), 'bottom');
+    this.router = router;
+    if(this.container) {
+      var div = new Element('div').set('html', this.tpl).inject($('container'), 'bottom');
+    }
+    else {
+      $('container').set('html', $('container').get('html') + this.tpl);
+    }
     MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
 
     this.router.endStep();
