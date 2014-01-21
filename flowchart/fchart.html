@@ -1,0 +1,33 @@
+<!DOCTYPE html5>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flowchart</title>
+    <script src="js/flowchart.js"></script>
+    <script src="js/modernizr.js"></script>
+    <script src="js/mootools-core-yc.js"></script>
+    <script src="js/mootools-more-yc.js"></script>
+    <script src="js/jquery.js"></script>
+    <script>jQuery.noConflict();</script>
+    <script src="js/mathex.js"></script>
+    <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/flowchart.css" />
+  </head>
+  <body class="aritmetica">
+    <header>
+      <h1 class="left">Io e la matematica - Aritmetica I</h1>
+      <p class="right" id="widgets"></p>
+      <div class="clear"></div>
+    </header>
+    <script>
+      mathex.Shared.fontWidget();
+      mathex.Shared.calculatorWidget();
+      var chart = new flowchart.Chart();
+      chart.start('fchart.xml');
+    </script>
+    <footer>
+      <p>© SEI - Società Editrice Internazionale p.a. - Torino</p>
+    </footer>
+  </body>
+</html>

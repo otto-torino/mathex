@@ -1,0 +1,64 @@
+<chart>
+  <block id="1" type="straight" next="2">
+    <html>Un trapezio isoscele compie una rotazione completa intorno alla sua base minore. Calcola l'area della superficie totale e il volume del solido generato, sapendo che le due basi, l'altezza e il lato obliquo misurano rispettivamente 14 cm, 8 cm, 4 cm e 5 cm.</html>
+  </block>
+  <block id="2" type="conditional">
+    <html>Cosa devi trovare?</html>
+    <answer next="3">
+      <html>Area della superficie totale, volume</html>
+    </answer>
+    <answer next="4">
+      <html>Volume</html>
+    </answer>
+    <answer next="5">
+      <html>Area della superficie totale</html>
+    </answer>
+  </block>
+  <block id="3" type="conditional">
+    <html>Quali sono i dati del problema?</html>
+    <answer next="6">
+      <html>
+        <![CDATA[
+        lunghezza della base minore: 8 cm<br />
+        lunghezza della base maggiore: 14 cm<br />
+        altezza: 4 cm<br />
+        lato obliquo: 5 cm
+        ]]>
+      </html>
+    </answer>
+    <answer next="7">
+      <html>
+        <![CDATA[
+        lunghezza della base minore: 14 cm<br />
+        lunghezza della base maggiore: 8 cm<br />
+        altezza: 4 cm<br />
+        lato obliquo: 5 cm
+        ]]>
+      </html>
+    </answer>
+  </block>
+  <block id="4" type="error">
+    <html>risposta incompleta</html>
+  </block>
+  <block id="5" type="error">
+    <html>risposta incompleta</html>
+  </block>
+  <block id="6" type="conditional">
+    <html>Cosa vuoi calcolare prima?</html>
+    <answer next="8">
+      <html>Volume</html>
+    </answer>
+    <answer next="9">
+      <html>Area della superficie totale</html>
+    </answer>
+  </block>
+  <block id="7" type="error">
+    <html>risposta sbagliata</html>
+  </block>
+  <block id="8" type="end">
+    <html>fine</html>
+  </block>
+  <block id="9" type="end">
+    <html>fine</html>
+  </block>
+</chart>

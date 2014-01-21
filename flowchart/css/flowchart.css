@@ -1,0 +1,214 @@
+/* variables */
+body {
+  font: normal 82%/200% Georgia, "Times New Roman", serif;
+  margin: 0;
+}
+body > header,
+body > footer {
+  box-sizing: border-box;
+  padding: 0 10px;
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 1.1em !important;
+  background: #3399cc;
+  color: white;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+body > header {
+  margin-bottom: 40px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  z-index: 1000;
+}
+body > footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #3399cc url('../img/logoSEI_footer.png') no-repeat 20px center;
+  padding-left: 200px;
+}
+a:link,
+a:visited,
+.link {
+  color: #ccc;
+  cursor: pointer;
+}
+a:hover,
+.link:hover {
+  color: #000;
+}
+.left {
+  float: left;
+}
+.right {
+  float: right;
+}
+div.clear {
+  clear: both;
+  background: none !important;
+  border: none !important;
+}
+/* widgets */
+#widgets {
+  position: relative;
+}
+#widgets .font_controller,
+#widgets #calc {
+  display: inline-block;
+  margin-left: 10px;
+  height: 30px;
+  width: 30px;
+  line-height: 30px;
+  color: #3399cc;
+  text-align: center;
+  cursor: pointer;
+}
+#widgets #font_minus {
+  color: transparent;
+  background: url('../img/font_minus.jpg') no-repeat center center;
+}
+#widgets #font_plus {
+  color: transparent;
+  background: url('../img/font_plus.jpg') no-repeat center center;
+}
+#widgets #font_regular {
+  color: transparent;
+  background: url('../img/font_regular.jpg') no-repeat center center;
+}
+#widgets #calc {
+  background: #ffffff url('../img/calc.png') no-repeat center center;
+  color: transparent;
+}
+/* calculator */
+#calculator {
+  border: 1px solid #aaa;
+  border-top: 10px solid #3399cc;
+  width: 212px;
+  padding: 20px;
+  font-size: 12px;
+  font-family: sans-serif;
+  background: #fff;
+  box-shadow: 0 0 10px #666;
+  cursor: move;
+}
+#calculator table td {
+  width: 50px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  color: #333;
+  cursor: pointer;
+}
+#calculator table td:hover {
+  background: #fff;
+}
+#display {
+  border: 1px solid #aaa;
+  height: 35px;
+  line-height: 35px;
+  font-size: 18px;
+  width: 98%;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  margin: auto;
+  margin-bottom: 5px;
+  text-align: right;
+  padding: 0 5px;
+  cursor: auto;
+}
+.number,
+.dot {
+  background: #f5f5f5;
+  border: 1px solid #dedede;
+}
+.operation,
+.clear {
+  background: #d6d6d6;
+  border: 1px solid #c6c6c6;
+}
+.equal {
+  background: #4084f2;
+  border: 1px solid #3079ed;
+  color: #fff !important;
+}
+.equal:hover {
+  background: #62a6f4 !important;
+}
+/* flowchart */
+#chart {
+  margin: 6em 1em;
+}
+.fa-arrow-down.selected {
+  color: #000 !important;
+}
+.block {
+  position: relative;
+}
+.block.straight .block-content {
+  border: 1px solid #eee;
+  padding: 20px;
+}
+.block.straight .block-controllers {
+  text-align: center;
+}
+.block.straight.selected .block-content {
+  background: #f7d798;
+  border-color: #f7d798;
+}
+.block.conditional .block-content {
+  border: 1px solid #eee;
+  padding: 20px;
+}
+.block.conditional .block-controllers table {
+  width: 100%;
+  text-align: center;
+}
+.block.conditional .block-controllers table .answer {
+  border: 1px solid #eee;
+  padding: 10px;
+}
+.block.conditional.selected .block-content,
+.block.conditional.selected .answer.selected {
+  background: #f7d798;
+  border-color: #f7d798;
+}
+.block.error .block-content {
+  border: 1px solid red;
+  background: red;
+  color: #ffffff;
+  padding: 20px;
+}
+.block.end .block-content {
+  border: 1px solid green;
+  background: green;
+  color: #ffffff;
+  padding: 20px;
+}
+/* end flowchart */
+/* aritmetica */
+body.aritmetica > header,
+body.aritmetica > footer {
+  background-color: #008000;
+}
+body.aritmetica #calculator {
+  border-top: 10px solid #008000;
+}
+/* algenra */
+body.algebra > header,
+body.algebra > footer {
+  background-color: #008000;
+}
+body.algebra #calculator {
+  border-top: 10px solid #008000;
+}
+/* geometria */
+body.geometria > header,
+body.geometria > footer {
+  background-color: #800080;
+}
+body.geometria #calculator {
+  border-top: 10px solid #800080;
+}
