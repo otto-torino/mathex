@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Esercizi di recupero - unità 4</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../res-otto/js/modernizr.js"></script>
+
+    <script src="../res-otto/js/mootools-core-yc.js"></script>
+    <script src="../res-otto/js/mootools-more-yc.js"></script>
+    <script src="../res-otto/js/mathex.js"></script>
+    <script type="text/javascript"
+      src="../res-otto/js/MathJax.js?config=custom">
+    </script>
+    <link type="text/css" rel="stylesheet" href="../res-otto/css/style.css" />
+  </head>
+  <body class="aritmetica">
+    <header>
+      <h1 class="left">Verifica dell'attività di recupero</h1>
+      <p class="right" id="widgets"></p>
+      <div class="clear"></div>
+    </header>
+    <p class="info">Dopo aver digitato la risposta premi INVIO; quando necessario seleziona una voce dal menu a tendina</p>
+    <h2>Verifica</h2>
+    <div id="container"></div>
+
+    <script>
+      var question1 = new mathex.TestQuestion('input', {
+        question: '<p>Come si scrive la potenza che ha per esponente 3 e base 20?</p><p>{%\\FormInput0 ^ \\FormInput1%}</p>',
+        inputs: {
+          0: {
+            size: 2,
+            result: '20',
+            type: 'int'
+          },
+          1: {
+            size: 1,
+            result: 3,
+            type: 'int'
+          }
+        }
+      });
+
+      var question2 = new mathex.TestQuestion('input', {
+        question: '<p>Qual è il valore della potenza {% 0.3 ^ 4 %}?</p><p>{%\\FormInput0%}</p>',
+        inputs: {
+          0: {
+            size: 6,
+            result: '0.0081',
+            type: 'float'
+          }
+        }
+      });
+
+      var question3 = new mathex.TestQuestion('radio', {
+        question: 'Quale delle seguenti eguaglianze è errata?' + 
+          '<ul>' +
+            '<li>[[0]] {% 5^3 * 5^4 = 5^7 %}</li>' +
+            '<li>[[1]] {% 2^5 * 3^5 = 6^5 %}</li>' +
+            '<li>[[2]] {% 9^6 + 9^2 = 9^8 %}</li>' +
+            '<li>[[3]] {% 7^8 : 7 = 7^7 %}</li>' +
+          '</ul>',
+        result: 2,
+      });
+
+      var test = new mathex.Test();
+      test.init([question1, question2, question3], {
+        steps: [1, 2, 3],
+        rating: [
+          {message: 'mepw', color: 'red'},
+          {message: 'miao', color: 'yellow'},
+          {message: 'bao', color: 'green'},
+        ]
+      });
+      test.start();
+    </script>
+
+    
+    <footer>
+      <p>© SEI - Società Editrice Internazionale p.a. - Torino</p>
+    </footer>
+  </body>
+</html>

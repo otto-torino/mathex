@@ -386,16 +386,19 @@ mathex.Shared = {
 /*
  * Router (exercises router)
  */
-mathex.Router = function() {
+mathex.Router = function(options) {
   this.steps = [];
   this.current = null;
+  this.options = typeof options != 'undefined' ? options : { widgets: true };
 
   this.init = function(s) {
-    // widgets
-    if(mathex.config.font_ctrl) {
-      mathex.Shared.fontWidget();
+    if(this.options.widgets) {
+      // widgets
+      if(mathex.config.font_ctrl) {
+        mathex.Shared.fontWidget();
+      }
+      mathex.Shared.calculatorWidget();
     }
-    mathex.Shared.calculatorWidget();
     this.steps = s;
   };
 
@@ -1172,6 +1175,172 @@ mathex.RecoveryRouter = function(recovery) {
   }
 }
 
+/* TESTs */
+/* factory */
+mathex.TestQuestion = function(type, options) {
+  if(type == 'input') {
+    return new mathex.TestInputQuestion(options);
+  }
+  else if(type == 'radio') {
+    return new mathex.TestRadioQuestion(options);
+  }
+  else return null;
+}
+
+mathex.TestInputQuestion = function(options) {
+
+  this.question = options.question;
+  this.inputs = options.inputs;
+
+  this.run = function(test) {
+    var self = this;
+    this.tpl = mathex.Shared.parseTpl(this.question, this.inputs);
+    this.test = test;
+    var div = new Element('div').set('html', this.tpl).inject($('container'), 'bottom');
+    var confirm = new Element('input[type=button][value=conferma]')
+      .addEvent('click', self.checkAnswer.bind(self))
+      .inject(new Element('div').inject($('container'), 'bottom'));
+    MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
+  }
+
+  this.checkAnswer = function() {
+    var result = true;
+    Object.each(this.inputs, function(input, index) {
+      var value = $('field_' + index).get('value');
+      result = result && this.checkResult(input, input.result, value);
+    }.bind(this));
+
+    this.test.saveResult(result);
+    this.test.nextQuestion();
+
+  }
+
+  this.checkResult = function(field, result, value) {
+    if(field.type == 'float') {
+      return parseFloat(result.replace(',', '.')) === parseFloat(value.replace(',', '.'));
+    }
+    else if(field.type == 'int') {
+      return parseInt(result) === parseInt(value);
+    } 
+    else if(field.type == 'string_case') {
+      return result === value;
+    }
+    else {
+      return result.toLowerCase() === value.toLowerCase();
+    }
+  }
+
+
+}
+
+mathex.TestRadioQuestion = function(options) {
+
+  this.question = options.question;
+  this.result = options.result;
+  this.inputs = options.inputs;
+
+  this.run = function(test) {
+    var self = this;
+    this.string = String.uniqueID();
+    this.tpl = mathex.Shared.parseTpl(this.question, this.inputs);
+    var radio_rexp = new RegExp("\\[\\[([0-9]*?)\\]\\]", "gim");
+    this.tpl = this.tpl.replace(radio_rexp, "<input type=\"radio\" name=\"radio_" + this.string + "\" id=\"radio_$1\" />");
+    this.test = test;
+    var div = new Element('div').set('html', this.tpl).inject($('container'), 'bottom');
+    var confirm = new Element('input[type=button][value=conferma]')
+      .addEvent('click', self.checkAnswer.bind(self))
+      .inject(new Element('div').inject($('container'), 'bottom'));
+    MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
+  }
+
+  this.checkAnswer = function() {
+    var result = false;
+    $$('input[type=radio]').each(function(radio, index) {
+      if(radio.checked && index == this.result) {
+        result = true;
+      };
+    }.bind(this));
+
+    this.test.saveResult(result);
+    this.test.nextQuestion();
+
+  }
+
+}
+
+
+mathex.Test = function() {
+
+  this.questions = [];
+  this.current = 0;
+  this.results = [];
+
+  this.init = function(questions, options) {
+    this.options = options;
+    if(options && typeof this.options.widgets != 'undefined') {
+      // widgets
+      if(mathex.config.font_ctrl) {
+        mathex.Shared.fontWidget();
+      }
+      mathex.Shared.calculatorWidget();
+    }
+    this.questions = questions;
+  }
+
+  this.start = function(index) {
+    $('container').empty();
+    index = typeof index != 'undefined' ? index : 0;
+    try {
+      var question = this.questions[index];
+      this.current = index;
+      question.run(this);
+    }
+    catch(err) {
+      console.log(err);
+      console.log('question undefined or not a question');
+    }
+  }
+
+  this.saveResult = function(result) {
+    this.results.push(result ? 1 : 0);
+  }
+
+  this.nextQuestion = function() {
+    if(this.current == this.questions.length - 1) {
+      this.renderResults();
+    }
+    else {
+      this.start(this.current + 1);
+    }
+  }
+
+  this.renderResults = function() {
+    var table = new Element('table.test-result');
+    var tr1 = new Element('tr').inject(table);
+    var tr2 = new Element('tr').inject(table);
+    for(var i = 0, l = this.questions.length; i < l; i++) {
+      tr1.adopt(new Element('th').set('text', 'Quesito ' + (i + 1)));
+      tr2.adopt(new Element('td').set('text', this.results[i]));
+    }
+    tr1.adopt(new Element('th').set('text', 'Totale'));
+    var total = this.results.reduce(function(previousValue, currentValue, index, array){ return previousValue + currentValue; });
+    tr2.adopt(new Element('td').set('text', total));
+
+    // message
+    for(var i = 0, l = this.options.steps.length; i < l; i++) {
+      var limit = this.options.steps[i];
+      if(total <= limit) {
+        var rating = this.options.rating[i];
+        break;
+      }
+    }
+    var rating_element = new Element('p.test-rating').setStyle('color', rating.color).set('text', rating.message);
+
+    $('container').empty();
+    $('container').adopt(new Element('p').set('text', 'Risultati'), table, rating_element);
+  }
+}
+
 // place a top anchor in the header
 window.addEvent('load', function() {
     var anchor = new Element('a', {name: 'top'}).set('text', 'top').setStyles({
@@ -1181,3 +1350,5 @@ window.addEvent('load', function() {
         top: 0
     }).inject($$('header')[0], 'after');
 });
+
+

@@ -654,3 +654,19 @@ span.v {
 	padding: 0 !important;
 	background: url(../img/dd2.jpg) no-repeat 0px 0px;
 }
+
+/* TESTs */
+.test-result {
+  border-collapse: collapse;
+  text-align: center;
+}
+.test-result th, td {
+  border: 1px solid #eee;
+  padding: 10px;
+}
+.test-result th {
+  background: #eee;
+}
+.test-rating {
+  font-weight: bold;
+}
