@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Esercizi di recupero - unità 4</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <script src="../res-otto/js/modernizr.js"></script>
+            
+            <script src="../res-otto/js/mootools-core-yc.js"></script>
+            <script src="../res-otto/js/mootools-more-yc.js"></script>
+            <script src="../res-otto/js/mathex.js"></script>
+            <script type="text/javascript"
+      src="../res-otto/js/MathJax.js?config=custom">
+    </script>
+            <link type="text/css" rel="stylesheet" href="../res-otto/css/style.css" />
+    </head>
+    <body class="aritmetica">
+        <header>
+            <h1 class="left">Io e la matematica - Aritmetica 1</h1>
+            <p class="right" id="widgets"></p>
+            <div class="clear"></div>
+        </header>
+        <p class="info">Dopo aver digitato la risposta premi INVIO</p>
+        <!--    <p class="info">Esegui gli esercizi sul tuo quaderno, poi clicca sul campo giallo e controlla il risultato.</p>-->
+        
+        <h2>Esercizi di recupero - unità 4</h2>
+        <div id="container"></div>
+        <div id="container"><div id="r_nav">
+            <span onclick="location.href='A1_04_esrec_247_1_3.html'">precedente</span>
+            <span onclick="location.href='A1_04_esrec_247_index.html'">indice</span>
+            <span onclick="location.href='A1_04_esrec_247_1_5.html'">successiva</span>
+        </div></div>
+        <script>
+
+<!-- domanda 1.4 -->
+var step1 = new mathex.TextFieldStep(
+           '<h3>4. Scrivi sotto forma di potenza le seguenti operazioni, quando è possibile</h3>' +
+
+           '<p>2 + 2 + 2&nbsp {%\\FormInput0%}&nbsp;</p>',     
+            {
+            0: {
+            size: 5,
+            active: true,
+            result: 'impossibile',
+            type:'text'
+            }
+            }
+            );
+            var router1 = new mathex.Router({widgets:true});
+            router1.init([step1]);
+            router1.startStep(); 
+
+      
+var step2 = new mathex.TextFieldStep(
+'<p>7 + 7 + 7 + 7&nbsp {%\\FormInput1%}&nbsp;</p>',     
+            {
+            1: {
+            size: 5,
+            active: true,
+            result: 'impossibile',
+            type:'text'
+            }
+            }
+            );
+            var router2 = new mathex.Router({widgets:false});
+            router2.init([step2]);
+            router2.startStep(); 
+            
+var step3 = new mathex.TextFieldStep(
+'<p>0,5 + 0,5&nbsp {%\\FormInput2%}&nbsp;</p>',     
+            {
+            2: {
+            size: 5,
+            active: true,
+            result: 'impossibile',
+            type:'text'
+            }
+            }
+            );
+            var router3 = new mathex.Router({widgets:false});
+            router3.init([step3]);
+            router3.startStep(); 
+          
+
+var step4 = new mathex.TextFieldStep(
+'<p>0,1 &times; 0,1 &times; 0,1&nbsp {%\\FormInput3^\\FormInput4%}&nbsp;</p>',     
+            {
+            3: {
+            size: 1,
+            active: true,
+            result: '0,1',
+            type:'float'
+            },
+            4: {
+            size: 1,
+            active: false,
+            }
+            },
+            null,
+            {container: true}
+            );
+            var step5 = new mathex.FieldStep(4, '3', null, {type: 'float'});  
+            
+            var router4 = new mathex.Router({widgets:false});
+            router4.init([step4,step5]);
+            router4.startStep();  
+            
+var step6 = new mathex.TextFieldStep(
+'<p>2 + 2 + 2 + 2 + 2 + 2&nbsp {%\\FormInput5%}&nbsp;</p>',     
+            {
+            5: {
+            size: 5,
+            active: true,
+            result: 'impossibile',
+            type:'text'
+            }
+            }
+            );
+            var router6 = new mathex.Router({widgets:false});
+            router6.init([step6]);
+            router6.startStep();   
+            
+var step7 = new mathex.TextFieldStep(
+'<p>5,6 &times; 5,6 &times; 5,6&nbsp {%\\FormInput6^\\FormInput7%}&nbsp;</p>',     
+            {
+            6: {
+            size: 1,
+            active: true,
+            result: '5,6',
+            type:'float'
+            },
+            7: {
+            size: 1,
+            active: false,
+            }
+            },
+            null,
+            {container: true}
+            );
+            var step8 = new mathex.FieldStep(7, '3', null, {type: 'float'});  
+            
+            var router7 = new mathex.Router({widgets:false});
+            router7.init([step7,step8]);
+            router7.startStep(); 
+            
+
+var step9 = new mathex.TextFieldStep(
+'<p>10 + 10 + 10&nbsp {%\\FormInput8%}&nbsp;</p>',     
+            {
+            8: {
+            size: 5,
+            active: true,
+            result: 'impossibile',
+            type:'text'
+            }
+            }
+            );
+            var router9 = new mathex.Router({widgets:false});
+            router9.init([step9]);
+            router9.startStep();   
+            
+var step10 = new mathex.TextFieldStep(
+'<p>17 &times; 17 &times; 17 &times; 17 &times; 17&nbsp {%\\FormInput9^\\FormInput10%}</p>',     
+            {
+            9: {
+            size: 1,
+            active: true,
+            result: '17',
+            type:'float'
+            },
+            10: {
+            size: 1,
+            active: false,
+            }
+            },
+            null,
+            {container: true}
+            );
+            var step11 = new mathex.FieldStep(10, '5', null, {type: 'float'});  
+            
+            var router10 = new mathex.Router({widgets:false});
+            router10.init([step10,step11]);
+            router10.startStep();   
+
+         </script>
+
+        <footer>
+            <p>© SEI - Società Editrice Internazionale p.a. - Torino</p>
+        </footer>
+    </body>
+</html>
