@@ -670,12 +670,12 @@ mathex.TextChoiceFieldStep.prototype = mathex.Step;
 /**
  * Text plus one active choice field (exercises)
  */
-mathex.TextSelectFieldStep = function(tpl, options, result, end_message, options) {
+mathex.TextSelectFieldStep = function(tpl, select_options, result, end_message, options) {
 
   this.container = options && typeof options.container != 'undefined' ? options.container : true;
 
   this.populateSelect = function() {
-    options.each(function(option) {
+    select_options.each(function(option) {
       var opt = new Element('option[value=' + option +']').set('text', option).inject(document.id('select_' + this.string), 'bottom');
     }.bind(this));
   };

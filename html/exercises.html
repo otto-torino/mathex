@@ -43,14 +43,13 @@
           1: {
             size: 2,
             active: false,
-            result: 16,
             type: 'int'
           }
         },
         'sucaris'
       );
 
-      var step2 = new mathex.FieldStep(1, 16);
+      var step2 = new mathex.FieldStep(1, 16, null, {type: 'int'});
 
       var step3 = new mathex.TextChoiceFieldStep(
       '<h3>Radio cazzo</h3>' + 
@@ -62,8 +61,6 @@
       '</ul>',
         0
       );
-
-      var router = new mathex.Router();
 
       var step4 = new mathex.TextSelectFieldStep(
       '<h3>Radio cazzo</h3>' + 
@@ -79,7 +76,7 @@
 
 
 
-      router.init([step1, step3, step4, step2], 'hai finito');
+      router.init([step1, step2, step3, step4], 'hai finito');
       router.startStep();
 
 
