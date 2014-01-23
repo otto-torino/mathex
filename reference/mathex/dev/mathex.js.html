@@ -1,9 +1,36 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: mathex/res-otto/js/mathex.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: mathex/res-otto/js/mathex.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/**
  * @summary Mathex Library namespace
  * @description This is a library which provides a set of classes which work together with mathjax (http://www.mathjax.org) in order to reproduce interactive math exercises
  * @license MIT-style license
  * @copyright 2014 Otto srl
- * @author abidibo <dev@abidibo.net> (http://www.abidibo.net)
+ * @author abidibo &lt;dev@abidibo.net> (http://www.abidibo.net)
  * @requires mathjax
  * @requires mootools-core>=1.4
  * @requires mootools-more>=1.4
@@ -43,7 +70,7 @@ mathex.Shared = {
     // get mathjax blocks
     var math_rexp = new RegExp("{%(.*?)%}", "gim");
     // substitute with script delimiters
-    var final = tpl.replace(math_rexp, "<script type=\"math/tex\">$1</script>");
+    var final = tpl.replace(math_rexp, "&lt;script type=\"math/tex\">$1&lt;/script>");
     // get inputs
     var inputs_rexp = new RegExp("\\FormInput([0-9]*)", "gm");
     var m_index = 0;
@@ -65,8 +92,8 @@ mathex.Shared = {
     }
 
     // toggle images
-    var img_rexp = new RegExp("<img class=\"toggle\" src=\"(.*?)\"(.*?)>", 'g');
-    final = final.replace(img_rexp, "<img class=\"toggle\" src=\"$1\" onclick=\"mathex.Shared.toggleImage(this)\"$2>");
+    var img_rexp = new RegExp("&lt;img class=\"toggle\" src=\"(.*?)\"(.*?)>", 'g');
+    final = final.replace(img_rexp, "&lt;img class=\"toggle\" src=\"$1\" onclick=\"mathex.Shared.toggleImage(this)\"$2>");
 
     return final;
   },
@@ -131,7 +158,7 @@ mathex.Shared = {
       padding: '10px'
     });
     this.message_container.inject(document.body);
-    this.message_container.set('html', '<p>' + msg + '</p>');
+    this.message_container.set('html', '&lt;p>' + msg + '&lt;/p>');
 
     this.overlay.addEvent('click', function(evt) {
       this.message_container.dispose();
@@ -240,7 +267,7 @@ mathex.Shared = {
       .set('html', 'A+')
       .addEvent('click', function() {
         size = $(document.body).getStyle('font-size').toInt();
-        size = size < 26 ? size + 1 : size;
+        size = size &lt; 26 ? size + 1 : size;
         $(document.body).setStyle('font-size', size);
       })
       .inject($('widgets'));
@@ -266,7 +293,7 @@ mathex.Shared = {
           .adopt(
             new Element('tr').adopt(
               new Element('td.operation').set('text', '√'),
-              new Element('td.operation').set('html', 'x<sup>y</sup>'),
+              new Element('td.operation').set('html', 'x&lt;sup>y&lt;/sup>'),
               new Element('td.operation').set('text', '%'),
               new Element('td.clear').set('text', 'CE')
             ),
@@ -370,7 +397,7 @@ mathex.Shared = {
           }
           else {
             // only 0 or 1 dot character
-            if(this.display.get('text').length < 14 && (target.get('class') != 'dot' || !/\./.test(this.display.get('text')))) {
+            if(this.display.get('text').length &lt; 14 && (target.get('class') != 'dot' || !/\./.test(this.display.get('text')))) {
               this.display.appendText(target.get('text'));
             }
           }
@@ -423,10 +450,10 @@ mathex.Shared = {
             return result.toExponential(8);
         }
         else if(integer && decimal) {
-          if(integer.length + decimal.length < 14) {
+          if(integer.length + decimal.length &lt; 14) {
             return s;
           }
-          else if(integer.length < 14) {
+          else if(integer.length &lt; 14) {
             if(/e/.test(decimal)) {
               return result.toExponential(9 - integer.length);
             }
@@ -599,7 +626,7 @@ mathex.Router = function(options) {
    */
   this.allSteps = function() {
     this.current = 0;
-    while(this.current <= this.steps.length - 1) {
+    while(this.current &lt;= this.steps.length - 1) {
       this.startStep(this.current);
       this.current++;
     }
@@ -670,9 +697,9 @@ mathex.Step = {
  * @memberof mathex
  * @constructs mathex.TextFieldStep
  * @extends mathex.Step
- * @param {String} tpl The exercise template.<br />
- *                        <p>The math to be parsed by mathjax (latex syntax) must be placed inside the tag {%%}, i.e. {% 2^4=16 %}</p>
- *                        <p>The input fields inside the math must be formatted this way: \\FormInput2, where 2 is the id of the input which is described through the inputs parameter.</p>
+ * @param {String} tpl The exercise template.&lt;br />
+ *                        &lt;p>The math to be parsed by mathjax (latex syntax) must be placed inside the tag {%%}, i.e. {% 2^4=16 %}&lt;/p>
+ *                        &lt;p>The input fields inside the math must be formatted this way: \\FormInput2, where 2 is the id of the input which is described through the inputs parameter.&lt;/p>
  * @param {Object} inputs The object describing the inputs in the template
  * @param {String} [end_message] A message to be displayed at the end of the step
  * @param {Object} [options] The step options
@@ -791,9 +818,9 @@ mathex.TextFieldStep.prototype = mathex.Step;
  * @memberof mathex
  * @constructs mathex.TextChoiceFieldStep
  * @extends mathex.Step
- * @param {String} tpl The exercise template.<br />
- *                        <p>The math to be parsed by mathjax must be placed inside the tag {%%}, i.e. {% 2^4=16 %}</p>
- *                        <p>The available choices must be written this way: [[0]] my choice. Then the [[0]] is parsed and a radio buton is created.</p>
+ * @param {String} tpl The exercise template.&lt;br />
+ *                        &lt;p>The math to be parsed by mathjax must be placed inside the tag {%%}, i.e. {% 2^4=16 %}&lt;/p>
+ *                        &lt;p>The available choices must be written this way: [[0]] my choice. Then the [[0]] is parsed and a radio buton is created.&lt;/p>
  * @param {Number} result The index of the correct radio answer
  * @param {String} [end_message] A message to be displayed at the end of the step
  * @param {Object} [options] The step options
@@ -827,7 +854,7 @@ mathex.TextChoiceFieldStep = function(tpl, result, end_message, options) {
     this.string = String.uniqueID();
     this.tpl = mathex.Shared.parseTpl(tpl, []);
     var radio_rexp = new RegExp("\\[\\[([0-9]*?)\\]\\]", "gim");
-    this.tpl = this.tpl.replace(radio_rexp, "<input type=\"radio\" name=\"radio_" + this.string + "\" id=\"radio_$1\" />");
+    this.tpl = this.tpl.replace(radio_rexp, "&lt;input type=\"radio\" name=\"radio_" + this.string + "\" id=\"radio_$1\" />");
     this.result = result;
     this.end_message = typeof end_message == 'undefined' ? null : end_message;
     var self = this;
@@ -934,9 +961,9 @@ mathex.TextChoiceFieldStep.prototype = mathex.Step;
  * @memberof mathex
  * @constructs mathex.TextSelectFieldStep
  * @extends mathex.Step
- * @params {String} tpl The exercise template.<br />
- *                        <p>The math to be parsed by mathjax must be placed inside the tag {%%}, i.e. {% 2^4=16 %}</p>
- *                        <p>The select input field must be inserted this way: [[]]. Its options are described through the select_options parameter.
+ * @params {String} tpl The exercise template.&lt;br />
+ *                        &lt;p>The math to be parsed by mathjax must be placed inside the tag {%%}, i.e. {% 2^4=16 %}&lt;/p>
+ *                        &lt;p>The select input field must be inserted this way: [[]]. Its options are described through the select_options parameter.
  * @params {Array} select_options The select options
  * @params {String} result The correct option
  * @params {String} [end_message] A message to be displayed at the end of the step
@@ -980,7 +1007,7 @@ mathex.TextSelectFieldStep = function(tpl, select_options, result, end_message, 
     this.string = String.uniqueID();
     this.tpl = mathex.Shared.parseTpl(tpl, []);
     var select_rexp = new RegExp("\\[\\[\\]\\]", "gim");
-    this.tpl = this.tpl.replace(select_rexp, "<select id=\"select_" + this.string + "\"><option value=''></option></select>");
+    this.tpl = this.tpl.replace(select_rexp, "&lt;select id=\"select_" + this.string + "\">&lt;option value=''>&lt;/option>&lt;/select>");
     this.result = result;
     this.end_message = typeof end_message == 'undefined' ? null : end_message;
     var self = this;
@@ -1151,8 +1178,8 @@ mathex.FieldStep.prototype = mathex.Step;
  * @memberof mathex
  * @constructs mathex.TextStep
  * @extends mathex.Step
- * @param {String} tpl The step template.<br />
- *                        <p>The math to be parsed by mathjax must be placed inside the tag {%%}, i.e. {% 2^4=16 %}</p>
+ * @param {String} tpl The step template.&lt;br />
+ *                        &lt;p>The math to be parsed by mathjax must be placed inside the tag {%%}, i.e. {% 2^4=16 %}&lt;/p>
  * @param {String} [end_message] A message to be displayed at the end of the step
  * @param {Object} [options] The step options
  * @param {Boolean} [options.container=true] Whether or not to insert the exercise text inside a div container
@@ -1204,7 +1231,7 @@ mathex.TextStep.prototype = mathex.Step;
  * @constructs mathex.Question
  * @param {Object} prop Properties object
  * @param {String} prop.text The question text
- *                              <p>The math to be parsed by mathjax must be placed inside the tag {%%}, i.e. {% 2^4=16 %}</p>
+ *                              &lt;p>The math to be parsed by mathjax must be placed inside the tag {%%}, i.e. {% 2^4=16 %}&lt;/p>
  * @param {Array} prop.answers Proposed answers. Each answer can contain mathjsx math.
  * @param {Number} prop.correct_answer Index of the correct answer
  * @return {Object} mathex.Question instance
@@ -1251,7 +1278,7 @@ mathex.Question = function(prop) {
     this.text = mathex.Shared.parseTpl(this.text, []);
     var div = new Element('div').set('html', this.text).inject($('answers_container'), 'bottom');
     this.list = new Element('ul.test');
-    for(var i = 0; i < this.answers.length; i++) {
+    for(var i = 0; i &lt; this.answers.length; i++) {
       var answer = this.answers[i];
       var answer_text = new Element('label[for=answ' + i + ']').set('html', mathex.Shared.parseTpl(answer, []));
       var line = new Element('li');
@@ -1346,7 +1373,7 @@ mathex.QuestionRouter = function() {
     this.steps[s.length - 1].setLast();
     var answer_div = new Element('div#answers_container').inject($('container'), 'bottom');
     var nav_div = new Element('div#answers_nav').inject($('container'), 'bottom');
-    for(var i = 1, l = s.length; i < l + 1; i++) {
+    for(var i = 1, l = s.length; i &lt; l + 1; i++) {
       var navel = new Element('span#nav' + i).set('text', i).inject(nav_div);
     }
     this.points = 0;
@@ -1394,16 +1421,16 @@ mathex.QuestionRouter = function() {
   this.getEndMessage = function() {
     var points = Math.floor(this.points);
     var message = "Il tuo punteggio è " + points + '.\n';
-    if(points < 4) {
+    if(points &lt; 4) {
       message += "Numerosissime lacune.\nRistudia tutto l'argomento.";
     }
-    else if(points < 6) {
+    else if(points &lt; 6) {
       message += "La preparazione è lacunosa.\nRipassa tutto l'argomento.";
     }
     else if(points == 6) {
       message += "La prova evidenzia alcune lacune da colmare con esercizi di recupero.";
     }
-    else if(points < 9) {
+    else if(points &lt; 9) {
       message += "Nel complesso la preparazione è completa, puoi migliorare con esercizi di potenziamento.";
     }
     else {
@@ -1428,11 +1455,11 @@ mathex.QuestionRouter.prototype = new mathex.Router();
  * @constructs mathex.Faq
  * @memberof mathex
  * @param {Array} items The array describing all items. Each item is an object with properties:
- *                      <ul>
- *                        <li><b>question</b>: string. The question, can contain mathjax math inside the tag {% LATEX MATH HERE %}</li>
- *                        <li><b>answer</b>: string. The answer, can contain mathjax math inside the tag {% LATEX MATH HERE %}</li>
- *                        <li><b>audio</b>: object. The audio object for the question and answer, it has the 'mp3' and 'ogg' properties storing the files' paths</li>
- *                      </ul>
+ *                      &lt;ul>
+ *                        &lt;li>&lt;b>question&lt;/b>: string. The question, can contain mathjax math inside the tag {% LATEX MATH HERE %}&lt;/li>
+ *                        &lt;li>&lt;b>answer&lt;/b>: string. The answer, can contain mathjax math inside the tag {% LATEX MATH HERE %}&lt;/li>
+ *                        &lt;li>&lt;b>audio&lt;/b>: object. The audio object for the question and answer, it has the 'mp3' and 'ogg' properties storing the files' paths&lt;/li>
+ *                      &lt;/ul>
  * @return {Object} mathex.Faq instance
  * @example
  *  var faq = new mathex.Faq([
@@ -1535,7 +1562,7 @@ mathex.FaqRouter = function(faq) {
     this.faq_nav.empty();
     var answer = mathex.Shared.parseTpl(item.answer, []);
     var link_rexp = new RegExp("{{\s*(.*?):([0-9]+):?(layer)?\s*}}", "gim");
-    var answer = answer.replace(link_rexp, "<span class=\"link\" onclick=\"router.goto($2, '$3')\">$1</span>");
+    var answer = answer.replace(link_rexp, "&lt;span class=\"link\" onclick=\"router.goto($2, '$3')\">$1&lt;/span>");
     this.faq_div.adopt(select, new Element('div').set('html', answer));
 
     MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
@@ -1552,7 +1579,7 @@ mathex.FaqRouter = function(faq) {
       window.location.hash = 'top';
     }.bind(this)).inject(this.faq_nav);
 
-    if(index < this.faq.items.length - 1) {
+    if(index &lt; this.faq.items.length - 1) {
       next = new Element('span').set('text', 'successiva').addEvent('click', function() {
         this.renderFaq(index + 1);
         window.location.hash = 'top';
@@ -1581,7 +1608,7 @@ mathex.FaqRouter = function(faq) {
       var item = this.faq.items[index];
       var answer = mathex.Shared.parseTpl(item.answer, []);
       var link_rexp = new RegExp("{{\s*(.*?):([0-9]+):?(layer)?\s*}}", "gim");
-      var answer = answer.replace(link_rexp, "<span class=\"link\" onclick=\"router.goto($2, '$3')\">$1</span>");
+      var answer = answer.replace(link_rexp, "&lt;span class=\"link\" onclick=\"router.goto($2, '$3')\">$1&lt;/span>");
       var viewport = mathex.Shared.getViewport();
       var layer = new Element('div.layer').setStyles({
         'position': 'absolute',
@@ -1623,10 +1650,10 @@ mathex.FaqRouter = function(faq) {
  * @memberof mathex
  * @constructs mathex.Recovery
  * @param {Array} items The array describing all items. Each item is an object with properties:
- *                      <ul>
- *                        <li><b>title</b>: string. The item title (for the index), can contain mathjax math inside the tag {% LATEX MATH HERE %}</li>
- *                        <li><b>tpl</b>: string. The item tpl, can contain mathjax math inside the tag {% LATEX MATH HERE %}. Initially hidden boxes shown at mouse click must be in the form: [[x]]</li>
- *                      </ul>
+ *                      &lt;ul>
+ *                        &lt;li>&lt;b>title&lt;/b>: string. The item title (for the index), can contain mathjax math inside the tag {% LATEX MATH HERE %}&lt;/li>
+ *                        &lt;li>&lt;b>tpl&lt;/b>: string. The item tpl, can contain mathjax math inside the tag {% LATEX MATH HERE %}. Initially hidden boxes shown at mouse click must be in the form: [[x]]&lt;/li>
+ *                      &lt;/ul>
  * @return {Object} mathex.Recovery instance
  * @example
  *  var recovery = new mathex.Recovery([
@@ -1711,8 +1738,8 @@ mathex.RecoveryRouter = function(recovery) {
 
     // parse for hidden results
     var hidden_rexp = new RegExp("\\[\\[(.*?)\\]\\]", "gim");
-    tpl = tpl.replace(hidden_rexp, "<span class=\"recovery-hidden\">$1</span>");
-    this.r_div.set('html', "<h2>" + mathex.Shared.parseTpl(item.title, []) + "</h2>" + tpl);
+    tpl = tpl.replace(hidden_rexp, "&lt;span class=\"recovery-hidden\">$1&lt;/span>");
+    this.r_div.set('html', "&lt;h2>" + mathex.Shared.parseTpl(item.title, []) + "&lt;/h2>" + tpl);
 
     document.getElements('.recovery-hidden').addEvent('click', function() {
       this.removeClass('recovery-hidden');
@@ -1732,7 +1759,7 @@ mathex.RecoveryRouter = function(recovery) {
       window.location.hash = 'top';
     }.bind(this)).inject(this.r_nav);
 
-    if(index < this.recovery.items.length - 1) {
+    if(index &lt; this.recovery.items.length - 1) {
       next = new Element('span').set('text', 'successiva').addEvent('click', function() {
         this.renderRecovery(index + 1);
         window.location.hash = 'top';
@@ -1781,14 +1808,14 @@ mathex.TestQuestion = function(type, options) {
  * @constructs mathex.TestInputQuestion
  * @param {Object} [options] Options
  * @param {String} [options.question] The question and answer template to be parsed.
- *                                    <p>The math to be parsed by mathjax (latex syntax) must be placed inside the tag {%%}, i.e. {% 2^4=16 %}</p>
- *                                    <p>The input fields inside the math must be formatted this way: \\FormInput2, where 2 is the id of the input which is described through the inputs parameter.</p>
+ *                                    &lt;p>The math to be parsed by mathjax (latex syntax) must be placed inside the tag {%%}, i.e. {% 2^4=16 %}&lt;/p>
+ *                                    &lt;p>The input fields inside the math must be formatted this way: \\FormInput2, where 2 is the id of the input which is described through the inputs parameter.&lt;/p>
  * @param {String} [options.inputs] Object storing ll the inputs description. Each input object has the properties:
- *                                  <ul>
- *                                    <li><b>size</b>: number. The input field size</li>
- *                                    <li><b>result</b>: string. The input field result</li>
- *                                    <li><b>type</b>: string. The input field result type ('float', 'int', 'string_case')</li>
- *                                  </ul>
+ *                                  &lt;ul>
+ *                                    &lt;li>&lt;b>size&lt;/b>: number. The input field size&lt;/li>
+ *                                    &lt;li>&lt;b>result&lt;/b>: string. The input field result&lt;/li>
+ *                                    &lt;li>&lt;b>type&lt;/b>: string. The input field result type ('float', 'int', 'string_case')&lt;/li>
+ *                                  &lt;/ul>
  * @return {Object} mathex.TestInputQuestion instance
  * @example
  *  var question1 = new mathex.TestQuestion('input', {
@@ -1852,8 +1879,8 @@ mathex.TestInputQuestion = function(options) {
  * @constructs mathex.TestRadioQuestion
  * @param {Object} options Options
  * @param {String} options.question The question and answer template to be parsed
- *                                    <p>The math to be parsed by mathjax (latex syntax) must be placed inside the tag {%%}, i.e. {% 2^4=16 %}</p>
- *                                    <p>The radio choices must be written this way: [[1]] choice, where 1 is the index of the choice.</p>
+ *                                    &lt;p>The math to be parsed by mathjax (latex syntax) must be placed inside the tag {%%}, i.e. {% 2^4=16 %}&lt;/p>
+ *                                    &lt;p>The radio choices must be written this way: [[1]] choice, where 1 is the index of the choice.&lt;/p>
  * @param {Number} options.result The index of the correct answer
  * @return {Object} mathex.TestRadioQuestion instance
  * @example
@@ -1885,7 +1912,7 @@ mathex.TestRadioQuestion = function(options) {
     this.string = String.uniqueID();
     this.tpl = mathex.Shared.parseTpl(this.question, {});
     var radio_rexp = new RegExp("\\[\\[([0-9]*?)\\]\\]", "gim");
-    this.tpl = this.tpl.replace(radio_rexp, "<input type=\"radio\" name=\"radio_" + this.string + "\" id=\"radio_$1\" />");
+    this.tpl = this.tpl.replace(radio_rexp, "&lt;input type=\"radio\" name=\"radio_" + this.string + "\" id=\"radio_$1\" />");
     this.test = test;
     var div = new Element('div').set('html', this.tpl).inject($('container'), 'bottom');
     var confirm = new Element('input[type=button][value=conferma]')
@@ -1931,7 +1958,7 @@ mathex.Test = function() {
    * @method init
    * @param {Array} questions Array of test question objects
    * @param {Object} options Options
-   * @param {Array} options.steps The steps used for the rating, in asc order, check is made this way: if result <= step sup limit
+   * @param {Array} options.steps The steps used for the rating, in asc order, check is made this way: if result &lt;= step sup limit
    * @param {Array} options.rating Array of objects describing the rating of the steps previously defined. Each object has a message property (text to be shown) and a color property (text color)
    * @param {Boolean} [options.widgets=false] Whether or not to create the widgets @see mathex.Shared
    * @return void
@@ -2011,7 +2038,7 @@ mathex.Test = function() {
     var table = new Element('table.test-result');
     var tr1 = new Element('tr').inject(table);
     var tr2 = new Element('tr').inject(table);
-    for(var i = 0, l = this.questions.length; i < l; i++) {
+    for(var i = 0, l = this.questions.length; i &lt; l; i++) {
       tr1.adopt(new Element('th').set('text', 'Quesito ' + (i + 1)));
       tr2.adopt(new Element('td').set('text', this.results[i]));
     }
@@ -2020,9 +2047,9 @@ mathex.Test = function() {
     tr2.adopt(new Element('td').set('text', total));
 
     // message
-    for(var i = 0, l = this.options.steps.length; i < l; i++) {
+    for(var i = 0, l = this.options.steps.length; i &lt; l; i++) {
       var limit = this.options.steps[i];
-      if(total <= limit) {
+      if(total &lt;= limit) {
         var rating = this.options.rating[i];
         break;
       }
@@ -2046,3 +2073,25 @@ window.addEvent('load', function() {
         top: 0
     }).inject($$('header')[0], 'after');
 });
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="flowchart.Chart.html">Chart</a></li><li><a href="flowchart.ConditionalBlock.html">ConditionalBlock</a></li><li><a href="flowchart.EndBlock.html">EndBlock</a></li><li><a href="flowchart.ErrorBlock.html">ErrorBlock</a></li><li><a href="flowchart.EventDispatcher.html">EventDispatcher</a></li><li><a href="flowchart.StraightBlock.html">StraightBlock</a></li><li><a href="mathex.Faq.html">Faq</a></li><li><a href="mathex.FaqRouter.html">FaqRouter</a></li><li><a href="mathex.FieldStep.html">FieldStep</a></li><li><a href="mathex.Question.html">Question</a></li><li><a href="mathex.QuestionRouter.html">QuestionRouter</a></li><li><a href="mathex.Recovery.html">Recovery</a></li><li><a href="mathex.RecoveryRouter.html">RecoveryRouter</a></li><li><a href="mathex.Router.html">Router</a></li><li><a href="mathex.Test.html">Test</a></li><li><a href="mathex.TestInputQuestion.html">TestInputQuestion</a></li><li><a href="mathex.TestQuestion.html">TestQuestion</a></li><li><a href="mathex.TestRadioQuestion.html">TestRadioQuestion</a></li><li><a href="mathex.TextChoiceFieldStep.html">TextChoiceFieldStep</a></li><li><a href="mathex.TextFieldStep.html">TextFieldStep</a></li><li><a href="mathex.TextSelectFieldStep.html">TextSelectFieldStep</a></li><li><a href="mathex.TextStep.html">TextStep</a></li></ul><h3>Namespaces</h3><ul><li><a href="flowchart.html">flowchart</a></li><li><a href="flowchart.Block.html">flowchart.Block</a></li><li><a href="mathex.html">mathex</a></li><li><a href="mathex.Shared.html">mathex.Shared</a></li><li><a href="mathex.Step.html">mathex.Step</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Jan 23 2014 17:28:30 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>

@@ -1,10 +1,37 @@
-"use strict";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: flowchart/js/flowchart.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: flowchart/js/flowchart.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>"use strict";
 /**
  * @summary Flowchart Library namespace
  * @description This is a library which provides a way to render interactive flowcharts starting from a well formatted xml
  * @license MIT-style license
  * @copyright 2014 Otto srl
- * @author abidibo <dev@abidibo.net> (http://www.abidibo.net)
+ * @author abidibo &lt;dev@abidibo.net> (http://www.abidibo.net)
  * @requires jQuery>=v2.0.3
  * @requires mootools-core>=1.4
  * @requires mootools-more>=1.4
@@ -49,7 +76,7 @@ flowchart.EventDispatcher = {
   emit: function(evt_name, params) {
     var _evt_name = this._prefix + evt_name;
     if(typeof this.listeners[_evt_name] != 'undefined') {
-      for(var i = 0, l = this.listeners[_evt_name].length; i < l; i++) {
+      for(var i = 0, l = this.listeners[_evt_name].length; i &lt; l; i++) {
         this.listeners[_evt_name][i][1].call(this.listeners[_evt_name][i][0], evt_name, params);
       }
     }
@@ -125,12 +152,12 @@ flowchart.StraightBlock = function(node) {
 
     var self = this;
 
-    var block_content = jQuery('<div/>', {
+    var block_content = jQuery('&lt;div/>', {
       'class': 'block-content',
       html: node.children('html').text()
     });
 
-    var block_arrow = jQuery('<span/>', {
+    var block_arrow = jQuery('&lt;span/>', {
       'class': 'fa fa-3x fa-arrow-down link'
     }).bind('click', function() {
       self.updateStatus('selected');
@@ -140,11 +167,11 @@ flowchart.StraightBlock = function(node) {
       });
     });
 
-    var block_controllers = jQuery('<div/>', {
+    var block_controllers = jQuery('&lt;div/>', {
       'class': 'block-controllers',
     }).append(block_arrow);
 
-    this._block_container = jQuery('<div/>', {
+    this._block_container = jQuery('&lt;div/>', {
       'id': 'block_' + self._id,
       'class': 'block straight'
     }).append(block_content, block_controllers);
@@ -190,18 +217,18 @@ flowchart.ConditionalBlock = function(node) {
 
     var self = this;
 
-    var block_content = jQuery('<div/>', {
+    var block_content = jQuery('&lt;div/>', {
       'class': 'block-content',
       html: node.children('html').text()
     });
 
-    var block_arrows_row = jQuery('<tr/>');
-    var block_answers_row = jQuery('<tr/>');
-    var block_controllers_table = jQuery('<table/>').append(block_answers_row, block_arrows_row);
+    var block_arrows_row = jQuery('&lt;tr/>');
+    var block_answers_row = jQuery('&lt;tr/>');
+    var block_controllers_table = jQuery('&lt;table/>').append(block_answers_row, block_arrows_row);
 
-    for(var i = 0, l = this._answers.length; i < l; i++) {
+    for(var i = 0, l = this._answers.length; i &lt; l; i++) {
       var answer = jQuery(this._answers[i]);
-      var block_arrow = jQuery('<span/>', {
+      var block_arrow = jQuery('&lt;span/>', {
         'class': 'fa fa-3x fa-arrow-down link'
       }).attr('data-index', i).bind('click', function() {
         var index = jQuery(this).attr('data-index');
@@ -210,18 +237,18 @@ flowchart.ConditionalBlock = function(node) {
           from: self._id,
           next: jQuery(self._answers[index]).attr('next')
         });
-      }).appendTo(jQuery('<td style="width: ' + (100 / l) + '%">').appendTo(block_arrows_row));
-      var block_answer = jQuery('<div/>', {
+      }).appendTo(jQuery('&lt;td style="width: ' + (100 / l) + '%">').appendTo(block_arrows_row));
+      var block_answer = jQuery('&lt;div/>', {
         'class': 'answer',
         html: answer.children('html').text()
-      }).attr('data-answer', i).appendTo(jQuery('<td/>').appendTo(block_answers_row))
+      }).attr('data-answer', i).appendTo(jQuery('&lt;td/>').appendTo(block_answers_row))
     }
 
-    var block_controllers = jQuery('<div/>', {
+    var block_controllers = jQuery('&lt;div/>', {
       'class': 'block-controllers',
     }).append(block_controllers_table);
 
-    this._block_container = jQuery('<div/>', {
+    this._block_container = jQuery('&lt;div/>', {
       'id': 'block_' + self._id,
       'class': 'block conditional'
     }).append(block_content, block_controllers);
@@ -268,12 +295,12 @@ flowchart.ErrorBlock = function(node) {
 
     var self = this;
 
-    var block_content = jQuery('<div/>', {
+    var block_content = jQuery('&lt;div/>', {
       'class': 'block-content',
       html: node.children('html').text()
     });
 
-    this._block_container = jQuery('<div/>', {
+    this._block_container = jQuery('&lt;div/>', {
       'id': 'block_' + self._id,
       'class': 'block error'
     }).append(block_content);
@@ -305,12 +332,12 @@ flowchart.EndBlock = function(node) {
 
     var self = this;
 
-    var block_content = jQuery('<div/>', {
+    var block_content = jQuery('&lt;div/>', {
       'class': 'block-content',
       html: node.children('html').text()
     });
 
-    this._block_container = jQuery('<div/>', {
+    this._block_container = jQuery('&lt;div/>', {
       'id': 'block_' + self._id,
       'class': 'block end'
     }).append(block_content);
@@ -367,7 +394,7 @@ flowchart.Chart = function() {
     // retrieve xml object
     this._xml_object = this.getXmlObject(path);
     // create html container element
-    this._chart = jQuery('<div id="chart"></div>').appendTo('body');
+    this._chart = jQuery('&lt;div id="chart">&lt;/div>').appendTo('body');
     // retrieve root element
     this._root = jQuery(this._xml_object).children('chart');
     // register event listening
@@ -427,3 +454,25 @@ flowchart.Chart = function() {
 
 }
 
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="flowchart.Chart.html">Chart</a></li><li><a href="flowchart.ConditionalBlock.html">ConditionalBlock</a></li><li><a href="flowchart.EndBlock.html">EndBlock</a></li><li><a href="flowchart.ErrorBlock.html">ErrorBlock</a></li><li><a href="flowchart.EventDispatcher.html">EventDispatcher</a></li><li><a href="flowchart.StraightBlock.html">StraightBlock</a></li><li><a href="mathex.Faq.html">Faq</a></li><li><a href="mathex.FaqRouter.html">FaqRouter</a></li><li><a href="mathex.FieldStep.html">FieldStep</a></li><li><a href="mathex.Question.html">Question</a></li><li><a href="mathex.QuestionRouter.html">QuestionRouter</a></li><li><a href="mathex.Recovery.html">Recovery</a></li><li><a href="mathex.RecoveryRouter.html">RecoveryRouter</a></li><li><a href="mathex.Router.html">Router</a></li><li><a href="mathex.Test.html">Test</a></li><li><a href="mathex.TestInputQuestion.html">TestInputQuestion</a></li><li><a href="mathex.TestQuestion.html">TestQuestion</a></li><li><a href="mathex.TestRadioQuestion.html">TestRadioQuestion</a></li><li><a href="mathex.TextChoiceFieldStep.html">TextChoiceFieldStep</a></li><li><a href="mathex.TextFieldStep.html">TextFieldStep</a></li><li><a href="mathex.TextSelectFieldStep.html">TextSelectFieldStep</a></li><li><a href="mathex.TextStep.html">TextStep</a></li></ul><h3>Namespaces</h3><ul><li><a href="flowchart.html">flowchart</a></li><li><a href="flowchart.Block.html">flowchart.Block</a></li><li><a href="mathex.html">mathex</a></li><li><a href="mathex.Shared.html">mathex.Shared</a></li><li><a href="mathex.Step.html">mathex.Step</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Jan 23 2014 17:28:30 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>
