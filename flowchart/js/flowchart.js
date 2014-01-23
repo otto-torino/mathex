@@ -1,10 +1,36 @@
 "use strict";
-
-var flowchart = {};
-
+/**
+ * @summary Flowchart Library namespace
+ * @description This is a library which provides a way to render interactive flowcharts starting from a well formatted xml
+ * @license MIT-style license
+ * @copyright 2014 Otto srl
+ * @author abidibo <dev@abidibo.net> (http://www.abidibo.net)
+ * @requires jQuery v2.0.3 or above
+ * @requires mootools core 1.4 or above
+ * @requires mootools more 1.4 or above
+ * @namespace
+ */
+var flowchart;
+if (!flowchart) flowchart = {};
+else if( typeof flowchart != 'object') {
+  throw new Error('flowchart already exists and is not an object');
+}
+/**
+ * @summary Event dispatcher Object
+ * @memberof flowchart
+ * @property {Object} Event dispatcher used to make other objects communicate each other
+ */
 flowchart.EventDispatcher = {
   _prefix: 'on_',
   listeners: {},
+  /**
+   * @summary Registers a listener
+   * @memberof flowchart.EventDispatcher
+   * @param {String} [evt_name] The event name
+   * @param {Mixed} [bind] The context passed to the callback function
+   * @param {Function} [callback] Function executed when the event occurres, the event name and an object of properties are the arguiments passed to the function.
+   * @return void
+   */
   register: function(evt_name, bind, callback) {
     var _evt_name = this._prefix + evt_name;
     if(typeof this.listeners[_evt_name] == 'undefined') {
@@ -12,6 +38,13 @@ flowchart.EventDispatcher = {
     }
     this.listeners[_evt_name].push([bind === null ? this : bind, callback]);
   },
+  /**
+   * @summary Emits an event
+   * @memberof flowchart.EventDispatcher
+   * @param {String} [evt_name] The event name
+   * @param {Object} [params] Object parameter to be passed to the invoked function listening to the event
+   * @return void
+   */
   emit: function(evt_name, params) {
     var _evt_name = this._prefix + evt_name;
     if(typeof this.listeners[_evt_name] != 'undefined') {
@@ -21,7 +54,13 @@ flowchart.EventDispatcher = {
     }
   }
 }
-
+/**
+ * @summary Factory Class which creates block objects
+ * @memberof flowchart
+ * @param {String} [type] The block type
+ * @param {Object} [node] The xml node object
+ * @return {Object} a specific Block instance
+ */
 flowchart.BlockFactory = function(type, node) {
   if(type == 'straight') {
     return new flowchart.StraightBlock(node);
@@ -38,26 +77,45 @@ flowchart.BlockFactory = function(type, node) {
 }
 
 /**
- * Block ancestor class
+ * @summary Block Class which acts as a prototype for all specific block classes
+ * @memberof flowchart
  */
 flowchart.Block = {
   _status: 'idle',
+  /**
+   * @summary Initializes the Block instance
+   * @memberof flowchart.Block
+   * @param {Object} [node] The xml node object
+   * @return void
+   */
   init: function(node) {
     this._id = node.attr('id');
   },
+  /**
+   * @summary Removes the block
+   * @memberof flowchart.Block
+   * @return void
+   */
   remove: function() {
     jQuery(this._block_container).remove();
   }
 }
 
 /**
- * Straight Block, no choices
+ * @summary Straight Block, no choices
+ * @memberof flowchart
+ * @param {Object} [node] The xml node object
+ * @return {Object} A flowchart.StraightBlock instance
  */
 flowchart.StraightBlock = function(node) {
 
   this.init(node);
   this._next = node.attr('next');
-
+  /**
+   * @summary Renders the block
+   * @memberof flowchart.StraightBlock.prototype
+   * @return void
+   */
   this.render = function() {
 
     var self = this;
@@ -88,7 +146,12 @@ flowchart.StraightBlock = function(node) {
 
     return this._block_container;
   }
-
+  /**
+   * @summary updates the block status
+   * @memberof flowchart.StraightBlock.prototype
+   * @param {String} [status] the status
+   * @return void
+   */
   this.updateStatus = function(status) {
     if(status == 'selected') {
       this._block_container.find('.selected').removeClass('selected');
@@ -96,18 +159,24 @@ flowchart.StraightBlock = function(node) {
       this._block_container.find('.fa-arrow-down').addClass(status);
     }
   }
-
 }
 flowchart.StraightBlock.prototype = flowchart.Block;
 
 /**
- * Conditional Block
+ * @summary Conditional Block, n choices
+ * @memberof flowchart
+ * @param {Object} [node] The xml node object
+ * @return {Object} A flowchart.ConditionalBlock instance
  */
 flowchart.ConditionalBlock = function(node) {
 
   this.init(node);
   this._answers = node.children('answer');
-
+  /**
+   * @summary Renders the block
+   * @memberof flowchart.ConditionalBlock.prototype
+   * @return void
+   */
   this.render = function() {
 
     var self = this;
@@ -150,7 +219,12 @@ flowchart.ConditionalBlock = function(node) {
 
     return this._block_container;
   }
-
+  /**
+   * @summary updates the block status
+   * @memberof flowchart.ConditionalBlock.prototype
+   * @param {String} [status] the status
+   * @return void
+   */
   this.updateStatus = function(status) {
     if(/selected-.*/.test(status)) {
       this._block_container.addClass('selected');
@@ -164,12 +238,19 @@ flowchart.ConditionalBlock = function(node) {
 flowchart.ConditionalBlock.prototype = flowchart.Block;
 
 /**
- * Error Block
+ * @summary Error Block
+ * @memberof flowchart
+ * @param {Object} [node] The xml node object
+ * @return {Object} A flowchart.ErrorBlock instance
  */
 flowchart.ErrorBlock = function(node) {
 
   this.init(node);
-
+  /**
+   * @summary Renders the block
+   * @memberof flowchart.ErrorBlock.prototype
+   * @return void
+   */
   this.render = function() {
 
     var self = this;
@@ -191,12 +272,19 @@ flowchart.ErrorBlock = function(node) {
 flowchart.ErrorBlock.prototype = flowchart.Block;
 
 /**
- * End Block
+ * @summary End Block
+ * @memberof flowchart
+ * @param {Object} [node] The xml node object
+ * @return {Object} A flowchart.EndBlock instance
  */
 flowchart.EndBlock = function(node) {
 
   this.init(node);
-
+  /**
+   * @summary Renders the block
+   * @memberof flowchart.EndBlock.prototype
+   * @return void
+   */
   this.render = function() {
 
     var self = this;
@@ -218,15 +306,21 @@ flowchart.EndBlock = function(node) {
 flowchart.EndBlock.prototype = flowchart.Block;
 
 /**
- * Chart class
+ * @summary Chart class
+ * @description Loads, renders and handles the chart flow
+ * @memberof flowchart
+ * @return {Object} A flowchart.Chart instance
  */
 flowchart.Chart = function() {
 
   this._history = [];
   this._history_obj = {};
-
   /**
-   * Loads the xml object from path
+   * @summary Loads the xml from path
+   * @memberof flowchart.Chart.prototype
+   * @method
+   * @param {String} [path] The xml path
+   * @return {Object} The xml object
    */
   this.getXmlObject = function(path) {
     var xml_object = null;
@@ -244,7 +338,13 @@ flowchart.Chart = function() {
     return xml_object;
 
   }
-
+  /**
+   * @summary Starts the chart flow
+   * @memberof flowchart.Chart.prototype
+   * @method
+   * @param {String} [path] The xml path
+   * @return void
+   */
   this.start = function(path) {
 
     // retrieve xml object
@@ -258,11 +358,27 @@ flowchart.Chart = function() {
     // run the first block
     this.run(0, 1);
   }
-
+  /**
+   * @summary Callback called when passing from a block to the next one @see flowchart.EventDispatcher
+   * @memberof flowchart.Chart.prototype
+   * @method
+   * @param {String} [evt_name] The event name
+   * @param {Object} [params] The params passed by the EventDispatcher
+   * @param {String} [params.from] The id of the previous block
+   * @param {String} [params.next] The id of the next block
+   * @return void
+   */
   this.listen = function(evt_name, params) {
     this.run(params.from, params.next);
   }
-
+  /**
+   * @summary Renders a block
+   * @memberof flowchart.Chart.prototype
+   * @method
+   * @param {String} [from] The id of the previous block
+   * @param {String} [id] The id of the next block
+   * @return void
+   */
   this.run = function(from, id) {
 
     id = parseInt(id);

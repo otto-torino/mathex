@@ -1,0 +1,40 @@
+{
+  "name": "mathex",
+  "version": "dev",
+  "authors": [
+    {
+      "name": "abidibo",
+      "email": "dev@abidibo.net",
+      "url": "http://www.abidibo.net"
+    }
+  ],
+  "revision": "1",
+  "description": "A set of javascript classes to deal with interactive math exercises and flowcharts",
+  "keywords": [ "javascript", "math", "otto", "flowchart" ],
+  "copyright": "2014 Otto srl",
+  "licenses": [
+    {
+      "type": "MIT license",
+      "url": "http://www.opensource.org/licenses/mit-license.php"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/otto-torino/mathex"
+    }
+  ],
+  "bugs": "https://github.com/otto-torino/mathex/issues",
+  "contributors" : [
+    {
+      "name": "abidibo",
+      "email": "dev@abidibo.net"
+    }
+  ],
+  "maintainers": [
+    {
+      "name": "abidibo",
+      "email": "dev@abidibo.net"
+    } 
+  ]
+}
