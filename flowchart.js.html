@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: flowchart/js/flowchart.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: flowchart/js/flowchart.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>"use strict";
+/**
+ * @summary Flowchart Library namespace
+ * @description This is a library which provides a way to render interactive flowcharts starting from a well formatted xml
+ * @license MIT-style license
+ * @copyright 2014 Otto srl
+ * @author abidibo &lt;dev@abidibo.net> (http://www.abidibo.net)
+ * @requires jQuery>=v2.0.3
+ * @requires mootools-core>=1.4
+ * @requires mootools-more>=1.4
+ * @namespace
+ */
+var flowchart;
+if (!flowchart) flowchart = {};
+else if( typeof flowchart != 'object') {
+  throw new Error('flowchart already exists and is not an object');
+}
+/**
+ * @summary Event dispatcher Object
+ * @classdesc Class used to make communicate each other different objects
+ * @constructs flowchart.EventDispatcher
+ * @memberof flowchart
+ */
+flowchart.EventDispatcher = {
+  _prefix: 'on_',
+  listeners: {},
+  /**
+   * @summary Registers a listener
+   * @memberof flowchart.EventDispatcher.prototype
+   * @param {String} evt_name The event name
+   * @param {Mixed} bind The context passed to the callback function
+   * @param {Function} callback Function executed when the event occurres, the event name and an object of properties are the arguiments passed to the function.
+   * @return void
+   */
+  register: function(evt_name, bind, callback) {
+    var _evt_name = this._prefix + evt_name;
+    if(typeof this.listeners[_evt_name] == 'undefined') {
+      this.listeners[_evt_name] = [];
+    }
+    this.listeners[_evt_name].push([bind === null ? this : bind, callback]);
+  },
+  /**
+   * @summary Emits an event
+   * @memberof flowchart.EventDispatcher.prototype
+   * @param {String} evt_name The event name
+   * @param {Object} params Object parameter to be passed to the invoked function listening to the event
+   * @return void
+   */
+  emit: function(evt_name, params) {
+    var _evt_name = this._prefix + evt_name;
+    if(typeof this.listeners[_evt_name] != 'undefined') {
+      for(var i = 0, l = this.listeners[_evt_name].length; i &lt; l; i++) {
+        this.listeners[_evt_name][i][1].call(this.listeners[_evt_name][i][0], evt_name, params);
+      }
+    }
+  }
+}
+/**
+ * @summary Factory method which creates block objects
+ * @memberof flowchart
+ * @param {String} type The block type
+ * @param {Object} node The xml node object
+ * @return {Object} a specific Block instance
+ */
+flowchart.BlockFactory = function(type, node) {
+  if(type == 'straight') {
+    return new flowchart.StraightBlock(node);
+  }
+  else if(type == 'conditional') {
+    return new flowchart.ConditionalBlock(node);
+  }
+  else if(type == 'error') {
+    return new flowchart.ErrorBlock(node);
+  }
+  else if(type == 'end') {
+    return new flowchart.EndBlock(node);
+  }
+}
+
+/**
+ * @namespace
+ * @description Block class which acts as a prototype for all specific block classes
+ * @memberof flowchart
+ */
+flowchart.Block = {
+  _status: 'idle',
+  /**
+   * @summary Initializes the Block instance
+   * @memberof flowchart.Block
+   * @param {Object} node The xml node object
+   * @return void
+   */
+  init: function(node) {
+    this._id = node.attr('id');
+  },
+  /**
+   * @summary Removes the block
+   * @memberof flowchart.Block
+   * @return void
+   */
+  remove: function() {
+    jQuery(this._block_container).remove();
+  }
+}
+
+/**
+ * @summary Straight Block, no choices
+ * @memberof flowchart
+ * @constructs flowchart.StraightBlock
+ * @extends flowchart.Block
+ * @param {Object} node The xml node object
+ * @return {Object} A flowchart.StraightBlock instance
+ */
+flowchart.StraightBlock = function(node) {
+
+  this.init(node);
+  this._next = node.attr('next');
+  /**
+   * @summary Renders the block
+   * @memberof flowchart.StraightBlock.prototype
+   * @method render
+   * @return void
+   */
+  this.render = function() {
+
+    var self = this;
+
+    var block_content = jQuery('&lt;div/>', {
+      'class': 'block-content',
+      html: node.children('html').text()
+    });
+
+    var block_arrow = jQuery('&lt;span/>', {
+      'class': 'fa fa-3x fa-arrow-down link'
+    }).bind('click', function() {
+      self.updateStatus('selected');
+      flowchart.EventDispatcher.emit('block-click', {
+        from: self._id,
+        next: self._next
+      });
+    });
+
+    var block_controllers = jQuery('&lt;div/>', {
+      'class': 'block-controllers',
+    }).append(block_arrow);
+
+    this._block_container = jQuery('&lt;div/>', {
+      'id': 'block_' + self._id,
+      'class': 'block straight'
+    }).append(block_content, block_controllers);
+
+    return this._block_container;
+  }
+  /**
+   * @summary updates the block status
+   * @memberof flowchart.StraightBlock.prototype
+   * @method updateStatus
+   * @param {String} status the status
+   * @return void
+   */
+  this.updateStatus = function(status) {
+    if(status == 'selected') {
+      this._block_container.find('.selected').removeClass('selected');
+      this._block_container.addClass(status);
+      this._block_container.find('.fa-arrow-down').addClass(status);
+    }
+  }
+}
+flowchart.StraightBlock.prototype = flowchart.Block;
+
+/**
+ * @summary Conditional Block, n choices
+ * @memberof flowchart
+ * @constructs flowchart.ConditionalBlock
+ * @extends flowchart.Block
+ * @param {Object} node The xml node object
+ * @return {Object} A flowchart ConditionalBlock instance
+ */
+flowchart.ConditionalBlock = function(node) {
+
+  this.init(node);
+  this._answers = node.children('answer');
+  /**
+   * @summary Renders the block
+   * @memberof flowchart.ConditionalBlock.prototype
+   * @method render
+   * @return void
+   */
+  this.render = function() {
+
+    var self = this;
+
+    var block_content = jQuery('&lt;div/>', {
+      'class': 'block-content',
+      html: node.children('html').text()
+    });
+
+    var block_arrows_row = jQuery('&lt;tr/>');
+    var block_answers_row = jQuery('&lt;tr/>');
+    var block_controllers_table = jQuery('&lt;table/>').append(block_answers_row, block_arrows_row);
+
+    for(var i = 0, l = this._answers.length; i &lt; l; i++) {
+      var answer = jQuery(this._answers[i]);
+      var block_arrow = jQuery('&lt;span/>', {
+        'class': 'fa fa-3x fa-arrow-down link'
+      }).attr('data-index', i).bind('click', function() {
+        var index = jQuery(this).attr('data-index');
+        self.updateStatus('selected-' + index);
+        flowchart.EventDispatcher.emit('block-click', {
+          from: self._id,
+          next: jQuery(self._answers[index]).attr('next')
+        });
+      }).appendTo(jQuery('&lt;td style="width: ' + (100 / l) + '%">').appendTo(block_arrows_row));
+      var block_answer = jQuery('&lt;div/>', {
+        'class': 'answer',
+        html: answer.children('html').text()
+      }).attr('data-answer', i).appendTo(jQuery('&lt;td/>').appendTo(block_answers_row))
+    }
+
+    var block_controllers = jQuery('&lt;div/>', {
+      'class': 'block-controllers',
+    }).append(block_controllers_table);
+
+    this._block_container = jQuery('&lt;div/>', {
+      'id': 'block_' + self._id,
+      'class': 'block conditional'
+    }).append(block_content, block_controllers);
+
+    return this._block_container;
+  }
+  /**
+   * @summary updates the block status
+   * @memberof flowchart.ConditionalBlock.prototype
+   * @method updateStatus
+   * @param {String} status the status
+   * @return void
+   */
+  this.updateStatus = function(status) {
+    if(/selected-.*/.test(status)) {
+      this._block_container.addClass('selected');
+      this._block_container.find('.selected').removeClass('selected');
+      this._block_container.find('[data-answer=' + status.replace(/^selected-/, '') + ']').addClass('selected');
+      this._block_container.find('[data-index=' + status.replace(/^selected-/, '') + ']').addClass('selected');
+    }
+  }
+
+}
+flowchart.ConditionalBlock.prototype = flowchart.Block;
+
+/**
+ * @summary Error Block
+ * @memberof flowchart
+ * @constructs flowchart.ErrorBlock
+ * @extends flowchart.Block
+ * @param {Object} node The xml node object
+ * @return {Object} A flowchart.ErrorBlock instance
+ */
+flowchart.ErrorBlock = function(node) {
+
+  this.init(node);
+  /**
+   * @summary Renders the block
+   * @memberof flowchart.ErrorBlock.prototype
+   * @method render
+   * @return void
+   */
+  this.render = function() {
+
+    var self = this;
+
+    var block_content = jQuery('&lt;div/>', {
+      'class': 'block-content',
+      html: node.children('html').text()
+    });
+
+    this._block_container = jQuery('&lt;div/>', {
+      'id': 'block_' + self._id,
+      'class': 'block error'
+    }).append(block_content);
+
+    return this._block_container;
+  }
+
+}
+flowchart.ErrorBlock.prototype = flowchart.Block;
+
+/**
+ * @summary End Block
+ * @memberof flowchart
+ * @constructs flowchart.EndBlock
+ * @extends flowchart.Block
+ * @param {Object} node The xml node object
+ * @return {Object} A flowchart.EndBlock instance
+ */
+flowchart.EndBlock = function(node) {
+
+  this.init(node);
+  /**
+   * @summary Renders the block
+   * @memberof flowchart.EndBlock.prototype
+   * @method render
+   * @return void
+   */
+  this.render = function() {
+
+    var self = this;
+
+    var block_content = jQuery('&lt;div/>', {
+      'class': 'block-content',
+      html: node.children('html').text()
+    });
+
+    this._block_container = jQuery('&lt;div/>', {
+      'id': 'block_' + self._id,
+      'class': 'block end'
+    }).append(block_content);
+
+    return this._block_container;
+  }
+
+}
+flowchart.EndBlock.prototype = flowchart.Block;
+
+/**
+ * @summary Chart class
+ * @classdesc Loads, renders and handles the chart flow
+ * @memberof flowchart
+ * @constructs flowchart.Chart
+ * @return {Object} A flowchart.Chart instance
+ */
+flowchart.Chart = function() {
+
+  this._history = [];
+  this._history_obj = {};
+  /**
+   * @summary Loads the xml from path
+   * @memberof flowchart.Chart.prototype
+   * @method getXmlObject
+   * @param {String} path The xml path
+   * @return {Object} The xml object
+   */
+  this.getXmlObject = function(path) {
+    var xml_object = null;
+    var xmltext = jQuery.ajax({
+        async: false,
+        type:"GET",
+        context: this,
+        url: path,
+        dataType:"xml"
+      }).responseText;
+
+    var parser = new DOMParser();
+    xml_object = parser.parseFromString(xmltext, "text/xml");
+
+    return xml_object;
+
+  }
+  /**
+   * @summary Starts the chart flow
+   * @memberof flowchart.Chart.prototype
+   * @method start
+   * @param {String} path The xml path
+   * @return void
+   */
+  this.start = function(path) {
+
+    // retrieve xml object
+    this._xml_object = this.getXmlObject(path);
+    // create html container element
+    this._chart = jQuery('&lt;div id="chart">&lt;/div>').appendTo('body');
+    // retrieve root element
+    this._root = jQuery(this._xml_object).children('chart');
+    // register event listening
+    flowchart.EventDispatcher.register('block-click', this, this.listen);
+    // run the first block
+    this.run(0, 1);
+  }
+  /**
+   * @summary Callback called when passing from a block to the next one @see flowchart.EventDispatcher
+   * @memberof flowchart.Chart.prototype
+   * @method listen
+   * @param {String} evt_name The event name
+   * @param {Object} params The params passed by the EventDispatcher
+   * @param {String} params.from The id of the previous block
+   * @param {String} params.next The id of the next block
+   * @return void
+   */
+  this.listen = function(evt_name, params) {
+    this.run(params.from, params.next);
+  }
+  /**
+   * @summary Renders a block
+   * @memberof flowchart.Chart.prototype
+   * @method run
+   * @param {String} from The id of the previous block
+   * @param {String} id The id of the next block
+   * @return void
+   */
+  this.run = function(from, id) {
+
+    id = parseInt(id);
+    from = parseInt(from);
+
+    var history_index = jQuery(this._history).index(from);
+
+    if(history_index > -1) {
+      // second time click, delete all story backward till there
+      var l = this._history.length;
+      for(var i = l - 1; i > history_index; i--) {
+        var index = this._history.pop();
+        this._history_obj[index].remove();
+        delete this._history_obj[index];
+      }
+      //
+    }
+
+    var node = this._root.children('block[id=' + id + ']');
+    var type = node.attr('type');
+    var block_obj = flowchart.BlockFactory(type, node);
+
+    var block_element = block_obj.render();
+    block_element.appendTo(this._chart);
+
+    this._history.push(id);
+    this._history_obj[id] = block_obj;
+  }
+
+}
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="flowchart.Chart.html">Chart</a></li><li><a href="flowchart.ConditionalBlock.html">ConditionalBlock</a></li><li><a href="flowchart.EndBlock.html">EndBlock</a></li><li><a href="flowchart.ErrorBlock.html">ErrorBlock</a></li><li><a href="flowchart.EventDispatcher.html">EventDispatcher</a></li><li><a href="flowchart.StraightBlock.html">StraightBlock</a></li><li><a href="mathex.Faq.html">Faq</a></li><li><a href="mathex.FaqRouter.html">FaqRouter</a></li><li><a href="mathex.FieldStep.html">FieldStep</a></li><li><a href="mathex.Question.html">Question</a></li><li><a href="mathex.QuestionRouter.html">QuestionRouter</a></li><li><a href="mathex.Recovery.html">Recovery</a></li><li><a href="mathex.RecoveryRouter.html">RecoveryRouter</a></li><li><a href="mathex.Router.html">Router</a></li><li><a href="mathex.Test.html">Test</a></li><li><a href="mathex.TestInputQuestion.html">TestInputQuestion</a></li><li><a href="mathex.TestQuestion.html">TestQuestion</a></li><li><a href="mathex.TestRadioQuestion.html">TestRadioQuestion</a></li><li><a href="mathex.TextChoiceFieldStep.html">TextChoiceFieldStep</a></li><li><a href="mathex.TextFieldStep.html">TextFieldStep</a></li><li><a href="mathex.TextSelectFieldStep.html">TextSelectFieldStep</a></li><li><a href="mathex.TextStep.html">TextStep</a></li></ul><h3>Namespaces</h3><ul><li><a href="flowchart.html">flowchart</a></li><li><a href="flowchart.Block.html">flowchart.Block</a></li><li><a href="mathex.html">mathex</a></li><li><a href="mathex.Shared.html">mathex.Shared</a></li><li><a href="mathex.Step.html">mathex.Step</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Jan 23 2014 17:28:30 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>

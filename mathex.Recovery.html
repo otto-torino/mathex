@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: Recovery</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Class: Recovery</h1>
+    
+    
+
+
+
+<section>
+    
+<header>
+    <h2>
+        <span class="ancestors"><a href="mathex.html">mathex</a>.</span>
+    
+    Recovery
+    </h2>
+    
+        <div class="class-description">Stores an array containing all the recovery items</div>
+    
+</header>  
+
+<article>
+    <div class="container-overview">
+    
+    
+    
+        
+<dt>
+    <h4 class="name" id="Recovery"><span class="type-signature"></span>new Recovery<span class="signature">(items)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+    
+    <p class="summary">Recovery - Recovery Class</p>
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>items</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">The array describing all items. Each item is an object with properties:
+                     <ul>
+                       <li><b>title</b>: string. The item title (for the index), can contain mathjax math inside the tag {% LATEX MATH HERE %}</li>
+                       <li><b>tpl</b>: string. The item tpl, can contain mathjax math inside the tag {% LATEX MATH HERE %}. Initially hidden boxes shown at mouse click must be in the form: [[x]]</li>
+                     </ul></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 1646
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    mathex.Recovery instance
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Object</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code> var recovery = new mathex.Recovery([
+   {
+     title: "Exercises page 3",
+     tpl: '&lt;img class="toggle" src="img/img.png" width="200" /&gt;' +
+          '&lt;img class="toggle" src="img/img.png" /&gt;' +
+          '&lt;p&gt;{% 1 + 1 %} = [[2]]&lt;/p&gt;' +
+          '&lt;p&gt;{% 2 + 1 %} = [[3]]&lt;/p&gt;'
+   },
+   {
+     title: "Problem",
+     tpl: "&lt;p&gt;Bla bla &lt;/p&gt;{% 3x -5 = x + 7 %}&lt;p&gt;Meow meow...&lt;/p&gt;"
+   }
+ ]);</code></pre>
+
+    
+</dd>
+
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</article>
+
+</section>  
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="flowchart.Chart.html">Chart</a></li><li><a href="flowchart.ConditionalBlock.html">ConditionalBlock</a></li><li><a href="flowchart.EndBlock.html">EndBlock</a></li><li><a href="flowchart.ErrorBlock.html">ErrorBlock</a></li><li><a href="flowchart.EventDispatcher.html">EventDispatcher</a></li><li><a href="flowchart.StraightBlock.html">StraightBlock</a></li><li><a href="mathex.Faq.html">Faq</a></li><li><a href="mathex.FaqRouter.html">FaqRouter</a></li><li><a href="mathex.FieldStep.html">FieldStep</a></li><li><a href="mathex.Question.html">Question</a></li><li><a href="mathex.QuestionRouter.html">QuestionRouter</a></li><li><a href="mathex.Recovery.html">Recovery</a></li><li><a href="mathex.RecoveryRouter.html">RecoveryRouter</a></li><li><a href="mathex.Router.html">Router</a></li><li><a href="mathex.Test.html">Test</a></li><li><a href="mathex.TestInputQuestion.html">TestInputQuestion</a></li><li><a href="mathex.TestQuestion.html">TestQuestion</a></li><li><a href="mathex.TestRadioQuestion.html">TestRadioQuestion</a></li><li><a href="mathex.TextChoiceFieldStep.html">TextChoiceFieldStep</a></li><li><a href="mathex.TextFieldStep.html">TextFieldStep</a></li><li><a href="mathex.TextSelectFieldStep.html">TextSelectFieldStep</a></li><li><a href="mathex.TextStep.html">TextStep</a></li></ul><h3>Namespaces</h3><ul><li><a href="flowchart.html">flowchart</a></li><li><a href="flowchart.Block.html">flowchart.Block</a></li><li><a href="mathex.html">mathex</a></li><li><a href="mathex.Shared.html">mathex.Shared</a></li><li><a href="mathex.Step.html">mathex.Step</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Jan 23 2014 17:28:30 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>
