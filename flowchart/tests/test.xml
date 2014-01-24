@@ -1,0 +1,29 @@
+<chart>
+  <block id="1" type="straight" next="2">
+    <html>This is the first block, a straight block</html>
+  </block>
+  <block id="2" type="conditional">
+    <html>This is a conditional block, with 3 possible choices</html>
+    <answer next="3">
+      <html>First choice</html>
+    </answer>
+    <answer next="4">
+      <html>Second choice</html>
+    </answer>
+    <answer next="5">
+      <html>Third choice</html>
+    </answer>
+  </block>
+  <block id="3" type="straight" next="6">
+    <html>This is the a straight block, leds to the end of the chart</html>
+  </block>
+  <block id="4" type="error">
+    <html>Error</html>
+  </block>
+  <block id="5" type="error">
+    <html>Error</html>
+  </block>
+  <block id="6" type="end">
+    <html>This is the end, my awful friend the end</html>
+  </block>
+</chart>

@@ -1,0 +1,127 @@
+<!DOCTYPE html5>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flowchart</title>
+    <script src="../js/flowchart.js"></script>
+    <script src="../js/modernizr.js"></script>
+    <script src="../js/mootools-core-yc.js"></script>
+    <script src="../js/mootools-more-yc.js"></script>
+    <script src="../js/jquery.js"></script>
+    <script>jQuery.noConflict();</script>
+    <script src="../js/mathex.js"></script>
+    <script src="ajsut.js"></script>
+    <link rel="stylesheet" href="./../css/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/flowchart.css" />
+    <link rel="stylesheet" type="text/css" href="ajsut.css" />
+  </head>
+  <body class="aritmetica">
+    <header>
+      <h1 class="left">Title</h1>
+      <p class="right" id="widgets"></p>
+      <div class="clear"></div>
+    </header>
+    <script>
+      alert('sit down and keep calm');
+      /** init **/
+      mathex.Shared.fontWidget();
+      mathex.Shared.calculatorWidget();
+      var chart = new flowchart.Chart();
+      chart.start('test.xml');
+
+      /** was the xml loaded correctly? **/
+      ajsut.test('Checking xml loading', function() {
+        // not all browsers have to __proto__ property
+        if(typeof chart._xml_object.__proto__ != 'undefined') {
+          ajsut.assert(chart._xml_object.__proto__.toString() == '[object XMLDocumentPrototype]', '_xml_object is an xml document object');
+        }
+        ajsut.assert(chart._xml_object.contentType == 'text/xml', '_xml_object has a text/xml content type');
+        ajsut.assert(jQuery(chart._xml_object).children('chart').children('block').length == 6, 'the chart has 6 blocks');
+      })
+
+      /** Has the flowchart started? **/
+      ajsut.test('Checking flowchart starting phase', function() {
+        ajsut.pause();
+        setTimeout(function() {
+          ajsut.assert(typeOf(document.id('block_1')) == 'element', 'block 1 has been rendered');
+          ajsut.assert(document.id('block_1').get('text') == 'This is the first block, a straight block', 'block 1 text is: This is the first block, a straight block');
+          ajsut.resume();
+        }, 1000);
+      })
+
+      /** click over the block 1 arrow **/
+      ajsut.test('After clicking the block1 arrow', function() {
+        ajsut.pause();
+        setTimeout(function() {
+          jQuery('#block_1 .fa')[0].click();
+          ajsut.assert(typeOf(document.id('block_2')) == 'element', 'block 2 has been rendered');
+          ajsut.assert($$('#block_2 .answer').length == 3, 'block 2 has 3 possible answers');
+          ajsut.resume();
+        }, 2000);
+      })
+
+      /** click the second answer **/
+      ajsut.test('After clicking the second choice', function() {
+        ajsut.pause();
+        setTimeout(function() {
+          jQuery('#block_2 .fa[data-index=1]')[0].click();
+          ajsut.assert(document.id('block_2').hasClass('selected'), 'block 2 was selected');
+          ajsut.assert($$('#block_2 .answer[data-answer=1]')[0].hasClass('selected'), 'Second choice answer was selected');
+          ajsut.assert(typeOf(document.id('block_4')) == 'element', 'block 4 has been rendered');
+          ajsut.assert($('block_4').hasClass('error'), 'block 4 is an error block');
+          ajsut.assert($$('#block_4 .answer').length == 0, 'block 4 blocks the flow');
+          ajsut.resume();
+        }, 2000);
+      })
+
+      /** click over the block 1 arrow again **/
+      ajsut.test('After clicking the block1 arrow again', function() {
+        ajsut.pause();
+        setTimeout(function() {
+          jQuery('#block_1 .fa')[0].click();
+          ajsut.assert(typeOf(document.id('block_4')) == 'null', 'block 4 was removed');
+          ajsut.assert(typeOf(document.id('block_2')) == 'element', 'block 2 has been rendered');
+          ajsut.assert($$('#block_2 .answer').length == 3, 'block 2 has 3 possible answers');
+          ajsut.assert($$('#block_2 .fa[data-index=1]')[0].hasClass('selected') == false, 'the block 2 previous choice is now unselected');
+          ajsut.resume();
+        }, 2000);
+      })
+
+      /** click the first answer of second block **/
+      ajsut.test('After clicking the first voice of the second block', function() {
+        ajsut.pause();
+        setTimeout(function() {
+          jQuery('#block_2 .fa[data-index=0]')[0].click();
+          ajsut.assert(typeOf(document.id('block_3')) == 'element', 'block 3 has been rendered');
+          ajsut.resume();
+        }, 2000);
+      })
+
+      /** click the block 3 arrow **/
+      ajsut.test('After clicking the block 3 arrow', function() {
+        ajsut.pause();
+        setTimeout(function() {
+          jQuery('#block_3 .fa')[0].click();
+          ajsut.assert(typeOf(document.id('block_6')) == 'element', 'block 6 has been rendered');
+          ajsut.assert(document.id('block_6').hasClass('end'), 'block 6 is an end block');
+          ajsut.assert(document.id('block_6').get('text') == 'This is the end, my awful friend the end', 'block 6 text is correct');
+
+          var tests = $$('#results li li').length;
+          var passed = $$('#results li li.passed').length;
+          var failed = $$('#results li li.failed').length;
+
+          var result = tests + ' tests executed.\n' + passed + ' passed.\n' + failed + ' failed.';
+          if(failed) result += '\nThat\'s bad.';
+          else result += '\nThat\'s good dude.';
+          alert(result);
+
+          ajsut.resume();
+        }, 2000);
+      })
+
+
+
+    </script>
+  </body>
+</html>
