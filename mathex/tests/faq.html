@@ -1,0 +1,157 @@
+<!DOCTYPE html5>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathex faq tests</title>
+    <script src="../res-otto/js/modernizr.js"></script>
+    <script src="../res-otto/js/mootools-core-yc.js"></script>
+    <script src="../res-otto/js/mootools-more-yc.js"></script>
+    <script src="../res-otto/js/mathex.js"></script>
+    <script type="text/javascript"
+      src="../res-otto/js/MathJax.js?config=custom">
+    </script>
+    <script src="ajsut.js"></script>
+    <link rel="stylesheet" type="text/css" href="../res-otto/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="ajsut.css" />
+  </head>
+  <body class="aritmetica">
+    <header>
+      <h1 class="left">Mathex faq tests</h1>
+      <p class="right" id="widgets"></p>
+      <div class="clear"></div>
+    </header>
+    <h2>FAQ</h2>
+    <div id="container"></div>
+
+    <script>
+
+      alert('sit down and keep calm');
+
+      mathex.config.font_ctrl = true;
+
+      var faq = new mathex.Faq([
+        {
+          question: "Question1 with audio?",
+          answer: 'Answer 1',
+          audio: {
+            mp3: '../html/audio/bird_of_sorrow.mp3',
+            ogg: '../html/audio/bird_of_sorrow.ogg',
+          }
+        },
+        {
+          question: "Question 2?",
+          answer: "<p>A link {{risolvere:2:layer}} and some math </p>{% 3x -5 = x + 7 %}<p>Meow</p>"
+        },
+        {
+          question: 'Linked question?',
+          answer: '<p>Today is the day.</p>',
+          index: false
+        }
+      ])
+
+      var router = new mathex.FaqRouter(faq);
+      router.start();
+
+      // checking index
+      ajsut.test('Checking faq index', function() {
+        ajsut.assert($$('#faq_container ul li').length == 2, 'index has 2 items');
+      })
+
+      // clicking first index voice
+      ajsut.test('Clicking the first index voice', function() {
+        ajsut.pause();
+        setTimeout(function(){
+          var evObj = document.createEvent('MouseEvents');
+          evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
+          $$('#faq_container ul li')[0].fireEvent('click', evObj);
+          ajsut.assert($$('#container audio').length == 1, 'The audio element has been rendered');
+          ajsut.assert($$('#container audio source').length == 2, 'The audio element has 2 sources');
+          ajsut.assert($$('#faq_container div')[0].get('text') == 'Answer 1', 'The faq answer text is correct');
+          ajsut.assert($$('#faq_nav span')[0].get('text') == 'indice', 'The first nav button is the index button');
+          ajsut.assert($$('#faq_nav span')[1].get('text') == 'successiva', 'The second nav button is the nect button');
+          ajsut.assert($$('#faq_nav span').length == 2, 'The are only 2 nav buttons');
+          ajsut.assert($$('#faq_container ul.select')[0].getStyle('display') == 'none', 'The fake select list is hidden');
+          ajsut.resume();
+        }, 1000);
+      })
+
+      // clicking the fake select
+      ajsut.test('Opening the fake select', function() {
+        ajsut.pause();
+        setTimeout(function(){
+          var evObj = document.createEvent('MouseEvents');
+          evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
+          $$('#faq_container h3')[0].fireEvent('click', evObj);
+          ajsut.assert($$('#faq_container ul.select')[0].getStyle('display') != 'none', 'The fake select list is visible');
+          ajsut.assert($$('#faq_container ul.select li').length == 1, '... and it contains only one element');
+          ajsut.resume();
+        }, 1000);
+      })
+
+      // clicking the fake select voice
+      ajsut.test('Clicking the fake select voice', function() {
+        ajsut.pause();
+        setTimeout(function(){
+          var evObj = document.createEvent('MouseEvents');
+          evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
+          $$('#faq_container ul.select li')[0].fireEvent('click', evObj);
+          ajsut.assert($$('#faq_container h3')[0].get('text') == 'Question 2?', 'we\'ve moved to the second faq');
+          ajsut.assert($$('#faq_container span.link')[0].get('text') == 'risolvere', 'the link was parsed and rendered');
+          ajsut.assert($$('#faq_nav span').length == 2, 'The are 2 nav buttons');
+          ajsut.resume();
+        }, 1000);
+      })
+
+      // clicking the link
+      ajsut.test('Clicking the link', function() {
+        ajsut.pause();
+        setTimeout(function(){
+          var evObj = document.createEvent('MouseEvents');
+          evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
+          $$('#faq_container span.link')[0].dispatchEvent(evObj);
+          ajsut.assert($$('.layer').length == 1, 'the layer was rendered');
+          ajsut.assert($$('.layer h2')[0].get('text') == 'Linked question?', 'the layer question is the right one');
+          ajsut.resume();
+        }, 1000);
+      })
+
+      // closing the layer and going to previous faq
+      ajsut.test('Closing the layer', function() {
+        ajsut.pause();
+        setTimeout(function(){
+          var evObj = document.createEvent('MouseEvents');
+          evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
+          $$('.layer .button-close')[0].fireEvent('click', evObj);
+          ajsut.assert($$('.layer').length == 0, 'the layer was disposed');
+          $$('#faq_nav span')[0].fireEvent('click', evObj);
+          ajsut.assert($$('#faq_container h3')[0].get('text') == 'Question1 with audio?', 'we\'ve moved to the first faq');
+          ajsut.resume();
+        }, 1000);
+      })
+
+      // returning to index
+      ajsut.test('Returning to index', function() {
+        ajsut.pause();
+        setTimeout(function(){
+          var evObj = document.createEvent('MouseEvents');
+          evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
+          $$('#faq_nav span')[0].fireEvent('click', evObj);
+          ajsut.assert($$('#faq_container ul li').length == 2, 'back to index');
+
+          var tests = $$('#results li li').length;
+          var passed = $$('#results li li.passed').length;
+          var failed = $$('#results li li.failed').length;
+
+          var result = tests + ' tests executed.\n' + passed + ' passed.\n' + failed + ' failed.';
+          if(failed) result += '\nThat\'s bad.';
+          else result += '\nThat\'s good dude.';
+          alert(result);
+
+          ajsut.resume();
+        }, 1000);
+      })
+          
+    </script>
+  </body>
+</html>

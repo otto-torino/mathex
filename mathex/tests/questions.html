@@ -1,0 +1,149 @@
+<!DOCTYPE html5>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathex questions tests</title>
+    <script src="../res-otto/js/modernizr.js"></script>
+    <script src="../res-otto/js/mootools-core-yc.js"></script>
+    <script src="../res-otto/js/mootools-more-yc.js"></script>
+    <script src="../res-otto/js/mathex.js"></script>
+    <script type="text/javascript"
+      src="../res-otto/js/MathJax.js?config=custom">
+    </script>
+    <script src="ajsut.js"></script>
+    <link rel="stylesheet" type="text/css" href="../res-otto/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="ajsut.css" />
+  </head>
+  <body class="aritmetica">
+    <header>
+      <h1 class="left">Mathex questions tests</h1>
+      <p class="right" id="widgets"></p>
+      <div class="clear"></div>
+    </header>
+    <h2>Autoverifica</h2>
+    <div id="container"></div>
+
+    <script>
+
+      alert('sit down and keep calm');
+
+      mathex.config.font_ctrl = true;
+
+      var question1 = new mathex.Question({
+        text: 'Which is the correct result of the equation {% x = 2 + 2 %}?',
+        answers: [
+          '6',
+          'for',
+          '4',
+          '2'
+        ],
+        correct_answer: 2
+      })
+
+      var question2 = new mathex.Question({
+        text: '2. Which of the following equations is an identity?',
+        answers: [
+        '{% 3x = 9 %}',
+        '{% 2a = 5 %}',
+        '{% 7 + 8 = 16 %}',
+        '{% 15 - 9 = 6 %}'
+        ],
+        correct_answer: 3
+      })
+
+      var router = new mathex.QuestionRouter();
+      router.init([question1, question2])
+      router.startStep();
+
+      // checking some router properties
+      ajsut.test('Checking some router properties', function() {
+        ajsut.assert(router.getSteps().length == 2, 'The test has 2 steps');
+        ajsut.assert(router.getCurrent() == 0, 'First index is zero');
+        ajsut.assert(router.getSteps()[0] instanceof mathex.Question, 'First loaded step is instance of mathex.Question');
+      })
+
+      // checking the first step an giving the wrong answer
+      ajsut.test('Checking some router properties', function() {
+        ajsut.pause();
+        setTimeout(function() {
+          ajsut.assert($$('#answers_container input[type=radio]').length == 4, 'First step has 4 answers');
+          ajsut.assert($('nav1').hasClass('current'), 'The navigation first item is the current one');
+          $('answ3').setProperty('checked', 'checked');
+          $('answ3').fireEvent('click',  {});
+          ajsut.assert($('message').getElements('p')[0].get('text') == 'Risposta errata, riprova', 'Risposta errata, riprova');
+          ajsut.resume();
+        }, 1000);
+      })
+
+      // giving the right answer
+      ajsut.test('Checking some router properties', function() {
+        ajsut.pause();
+        setTimeout(function() {
+          var evObj = document.createEvent('MouseEvents');
+          evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
+          $('message').fireEvent('click', evObj);
+          ajsut.assert(typeOf($('message')) == 'null', 'message was disposed');
+          $('answ2').setProperty('checked', 'checked');
+          $('answ2').fireEvent('click',  {});
+          ajsut.assert($('message').getElements('p')[0].get('text') == 'Risposta esatta', 'Risposta esatta');
+          ajsut.resume();
+        }, 1000);
+      })
+
+      // to the next question, right anwer
+      ajsut.test('To the second question', function() {
+        ajsut.pause();
+        setTimeout(function() {
+          var evObj = document.createEvent('MouseEvents');
+          evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
+          $('message').fireEvent('click', evObj);
+          ajsut.assert(router.points == 0.5, '0.5 points from prev question');
+          ajsut.assert($('nav1').hasClass('sattempt'), 'first item of the navigation has the sattempt class');
+          ajsut.assert($$('#answers_container > div')[0].get('text') == '2. Which of the following equations is an identity?', 'second question loaded');
+          $('answ3').setProperty('checked', 'checked');
+          $('answ3').fireEvent('click',  {});
+          ajsut.assert($$('label[for=answ3]')[0].getPrevious('span').hasClass('v'), 'Check sign rendered');
+          ajsut.assert($('message').getElements('p')[0].get('text') == 'Risposta esatta', 'Risposta esatta');
+          ajsut.resume();
+        }, 1000);
+      })
+
+      // Closing the message
+      ajsut.test('To the second question', function() {
+        ajsut.pause();
+        setTimeout(function() {
+          var evObj = document.createEvent('MouseEvents');
+          evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
+          $('message').fireEvent('click', evObj);
+          ajsut.assert($('message').getElements('p')[0].get('text') == 'Il tuo punteggio è 1.\nNumerosissime lacune.\nRistudia tutto l\'argomento.', 'Final message is correct');
+          ajsut.assert($('nav2').hasClass('success'), 'The navigation second item has class success');
+          ajsut.resume();
+        }, 1000);
+      })
+
+      // ending
+      ajsut.test('Ending', function() {
+        ajsut.pause();
+        setTimeout(function() {
+          var evObj = document.createEvent('MouseEvents');
+          evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
+          $('message').fireEvent('click', evObj);
+          ajsut.assert(router.points == 1.5, 'final not rounded rating: 1.5');
+
+          var tests = $$('#results li li').length;
+          var passed = $$('#results li li.passed').length;
+          var failed = $$('#results li li.failed').length;
+
+          var result = tests + ' tests executed.\n' + passed + ' passed.\n' + failed + ' failed.';
+          if(failed) result += '\nThat\'s bad.';
+          else result += '\nThat\'s good dude.';
+          alert(result);
+
+          ajsut.resume();
+        }, 1000);
+      })
+              
+    </script>
+  </body>
+</html>

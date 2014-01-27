@@ -1,0 +1,140 @@
+<!DOCTYPE html5>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathex test tests</title>
+    <script src="../res-otto/js/modernizr.js"></script>
+    <script src="../res-otto/js/mootools-core-yc.js"></script>
+    <script src="../res-otto/js/mootools-more-yc.js"></script>
+    <script src="../res-otto/js/mathex.js"></script>
+    <script type="text/javascript"
+      src="../res-otto/js/MathJax.js?config=custom">
+    </script>
+    <script src="ajsut.js"></script>
+    <link rel="stylesheet" type="text/css" href="../res-otto/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="ajsut.css" />
+  </head>
+  <body class="aritmetica">
+    <header>
+      <h1 class="left">Mathex test tests</h1>
+      <p class="right" id="widgets"></p>
+      <div class="clear"></div>
+    </header>
+    <h2>Autoverifica</h2>
+    <div id="container"></div>
+
+    <script>
+
+      alert('sit down and keep calm');
+
+      mathex.config.font_ctrl = true;
+
+      var question1 = new mathex.TestQuestion('input', {
+        question: '<p>Pow with exponent 3 and base 20?</p><p>{%\\FormInput0 ^ \\FormInput1%}</p>',
+        inputs: {
+          0: {
+            size: 2,
+            result: '20',
+            type: 'int'
+          },
+          1: {
+            size: 1,
+            result: 3,
+            type: 'int'
+          }
+        }
+      });
+
+      var question2 = new mathex.TestQuestion('input', {
+        question: '<p>Value of the pow {% 0.3 ^ 4 %}?</p><p>{%\\FormInput0%}</p>',
+        inputs: {
+          0: {
+            size: 6,
+            result: '0.0081',
+            type: 'float'
+          }
+        }
+      });
+
+      var question3 = new mathex.TestQuestion('radio', {
+        question: 'Which is wrong?' + 
+          '<ul>' +
+            '<li>[[0]] {% 5^3 * 5^4 = 5^7 %}</li>' +
+            '<li>[[1]] {% 2^5 * 3^5 = 6^5 %}</li>' +
+            '<li>[[2]] {% 9^6 + 9^2 = 9^8 %}</li>' +
+            '<li>[[3]] {% 7^8 : 7 = 7^7 %}</li>' +
+          '</ul>',
+        result: 2,
+      });
+
+      var test = new mathex.Test();
+      test.init([question1, question2, question3], {
+        steps: [1, 2, 3],
+        rating: [
+          {message: 'meow', color: 'red'},
+          {message: 'miao', color: 'yellow'},
+          {message: 'bao', color: 'green'},
+        ]
+      });
+      test.start();
+
+      // checking first question
+      ajsut.test('Checking first question, right answer', function() {
+        ajsut.pause();
+        setTimeout(function() {
+          ajsut.assert(typeOf($('MathJax-Element-1-Frame')) == 'element', 'Mathjax was rendered');
+          $('field_0').set('value', 20);
+          $('field_1').set('value', 3);
+          ajsut.resume();
+        }, 2000);
+      })
+
+      // to second question, wrong answer
+      ajsut.test('To second question', function() {
+        ajsut.pause();
+        setTimeout(function() {
+          $$('#container input[type=button]')[0].fireEvent('click', {});
+          $('field_0').set('value', 2);
+          ajsut.resume();
+        }, 2000);
+      })
+
+      // to third question, right answer
+      ajsut.test('To third question', function() {
+        ajsut.pause();
+        setTimeout(function() {
+          $$('#container input[type=button]')[0].fireEvent('click', {});
+          ajsut.assert($$('#container input[type=radio]').length == 4, '4 radio buttons');
+          $('radio_2').setProperty('checked', 'checked');
+          ajsut.resume();
+        }, 2000);
+      })
+
+      // to the end
+      ajsut.test('To the end, checking final results', function() {
+        ajsut.pause();
+        setTimeout(function() {
+          $$('#container input[type=button]')[0].fireEvent('click', {});
+          ajsut.assert(test.results[0] == 1, 'results: first ok');
+          ajsut.assert(test.results[1] == 0, 'results: second ko');
+          ajsut.assert(test.results[2] == 1, 'results: third ok');
+          ajsut.assert($$('.test-rating')[0].get('text') == 'miao', 'final rating message is correct');
+          ajsut.assert($$('.test-rating')[0].getStyle('color') == 'yellow', 'final rating message is yellow');
+
+          var tests = $$('#results li li').length;
+          var passed = $$('#results li li.passed').length;
+          var failed = $$('#results li li.failed').length;
+
+          var result = tests + ' tests executed.\n' + passed + ' passed.\n' + failed + ' failed.';
+          if(failed) result += '\nThat\'s bad.';
+          else result += '\nThat\'s good dude.';
+          alert(result);
+
+          ajsut.resume();
+        }, 2000);
+      })
+
+    </script>
+  </body>
+</html>

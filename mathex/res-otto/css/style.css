@@ -450,6 +450,30 @@ span.v {
   background: #3399cc;
   color: #fff;
 }
+h3.select {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+h3.select:after {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-top: 8px solid #333;
+  border-right: 8px solid transparent;
+  border-left: 8px solid transparent;
+  margin-left: 10px;
+}
+ul.select {
+  display: none;
+  background: #eee;
+  margin-top: 0;
+  padding-top: 0ù;
+}
+ul.select li {
+  border-bottom: 1px dotted #ddd;
+  padding: 5px;
+}
 
 /* recovery */
 #r_nav {

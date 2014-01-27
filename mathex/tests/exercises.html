@@ -1,0 +1,234 @@
+<!DOCTYPE html5>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathex exercises tests</title>
+    <script src="../res-otto/js/modernizr.js"></script>
+    <script src="../res-otto/js/mootools-core-yc.js"></script>
+    <script src="../res-otto/js/mootools-more-yc.js"></script>
+    <script src="../res-otto/js/mathex.js"></script>
+    <script type="text/javascript"
+      src="../res-otto/js/MathJax.js?config=custom">
+    </script>
+    <script src="ajsut.js"></script>
+    <link rel="stylesheet" type="text/css" href="../res-otto/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="ajsut.css" />
+  </head>
+  <body class="aritmetica">
+    <header>
+      <h1 class="left">Mathex exercises tests</h1>
+      <p class="right" id="widgets"></p>
+      <div class="clear"></div>
+    </header>
+    <div id="container"></div>
+
+    <script>
+
+      alert('sit down and keep calm');
+
+      mathex.config.font_ctrl = true;
+
+      var step1 = new mathex.TextFieldStep(
+        '<h3>Text field step with a active and inactive fields followed by a FieldStep</h3>' + 
+        '<p>{% 2^7 = \\FormInput0 %}</p>' + 
+        '<p>{% 2^4 = \\FormInput1 %}</p>',
+        {
+          0: {
+            size: 3,
+            active: true,
+            result: '128',
+            type: 'string'
+          },
+          1: {
+            size: 2,
+            active: false,
+            type: 'int'
+          }
+        }
+      );
+
+      var step2 = new mathex.FieldStep(1, 16, null, {type: 'int'});
+
+      var step3 = new mathex.TextChoiceFieldStep(
+        '<h3>Choice field step</h3>' + 
+        '<p>Choose one</p>' + 
+        '<ul>' + 
+        '<li>[[0]] meow</li>' + 
+        '<li>[[1]] {% 2^7 = 32 %}</li>' + 
+        '<li>[[2]] {% 200000 %}</li>' + 
+        '</ul>',
+          0
+      );
+
+      var step4 = new mathex.TextSelectFieldStep(
+        '<h3>Select field step</h3>' + 
+        '<p>Choose one</p>' + 
+        '<ul>' + 
+        '<li>[[]] select the right option</li>' + 
+        '</ul>',
+          ['option', 'meow', 2, 3],
+          'meow'
+      );
+
+      var step5 = new mathex.TextStep(
+        '<h3>Text step</h3>' + 
+        '<p>WOW</p>'
+      );
+
+      var router = new mathex.Router();
+      router.init([step1, step2, step3, step4, step5]);
+      router.startStep();
+
+      // checking some router properties
+      ajsut.test('Checking some router properties', function() {
+        ajsut.pause();
+        setTimeout(function() {
+          ajsut.assert(router.getSteps().length == 5, 'The exercise has 5 steps');
+          ajsut.assert(router.getSteps()[router.current] instanceof mathex.TextFieldStep, 'First loaded step is instance of mathex.TextFieldStep');
+          ajsut.assert(typeOf($('field_0')) == 'element', 'The first step input field exists');
+          ajsut.assert(typeOf($('field_1')) == 'element', 'The second step input field exists');
+          ajsut.assert($('field_1').hasClass('disabled') && $('field_1').getProperty('readonly'), 'The second step input field is disabled');
+          ajsut.resume();
+        }, 2000);
+      })
+
+      // Correct answer in first input
+      ajsut.test('After giving the first right answer', function() {
+        $('field_0').focus();
+        $('field_0').set('value', 128);
+        $('field_0').fireEvent('keydown', {key: 'enter'});
+        ajsut.assert(typeOf($('message')) == 'element', 'The message was rendered');
+        ajsut.assert($('message').hasClass('success'), 'The message was a successfull one');
+        ajsut.assert($$('#message p')[0].get('text') == 'Risposta esatta', 'The message text is the correct one');
+      })
+
+      // to the next step
+      ajsut.test('Closing the message layer', function() {
+        ajsut.pause();
+        setTimeout(function(){
+          var evObj = document.createEvent('MouseEvents');
+          evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
+          $('message').fireEvent('click', evObj);
+          ajsut.assert(typeOf($('message')) == 'null', 'The message disappeared');
+          ajsut.assert(!$('field_1').hasClass('disabled') && !$('field_1').getProperty('readonly'), 'The second step input field is now active');
+          ajsut.assert($('field_0').getProperty('readonly'), 'The first input is now readonly');
+          ajsut.resume();
+        }, 2000);
+      })
+
+      // let's give a wrong answer
+      ajsut.test('Wrong answer to second input', function() {
+        ajsut.pause();
+        setTimeout(function(){
+          $('field_1').focus();
+          $('field_1').set('value', 2);
+          $('field_1').fireEvent('keydown', {key: 'enter'});
+          ajsut.assert(typeOf($('message')) == 'element', 'The message was rendered');
+          ajsut.assert($('message').hasClass('error'), 'The message was a error one');
+          ajsut.assert($$('#message p')[0].get('text') == 'Risposta errata, riprova', 'The message text is the correct one');
+          ajsut.resume();
+        }, 2000);
+      })
+
+      // wrong another time
+      ajsut.test('Closing the second message layer', function() {
+        ajsut.pause();
+        setTimeout(function(){
+          var evObj = document.createEvent('MouseEvents');
+          evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
+          $('message').fireEvent('click', evObj);
+          ajsut.assert(typeOf($('message')) == 'null', 'The message disappeared');
+          $('field_1').focus();
+          $('field_1').set('value', 3);
+          $('field_1').fireEvent('keydown', {key: 'enter'});
+          ajsut.assert(typeOf($('message')) == 'element', 'The message was rendered');
+          ajsut.assert($('message').hasClass('failed'), 'The message was a failed one');
+          ajsut.assert($$('#message p')[0].get('text') == 'Risposta errata. La risposta esatta è 16', 'The message text is the correct one');
+          ajsut.assert($('field_1').get('value') == '16', 'The right answer was written into the field');
+          ajsut.resume();
+        }, 2000);
+      })
+
+      // to the next step
+      ajsut.test('Closing the message layer', function() {
+        ajsut.pause();
+        setTimeout(function(){
+          var evObj = document.createEvent('MouseEvents');
+          evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
+          $('message').fireEvent('click', evObj);
+          ajsut.assert(typeOf($('message')) == 'null', 'The message disappeared');
+          ajsut.assert($('field_1').getProperty('readonly'), 'The second input is now readonly');
+          ajsut.resume();
+        }, 2000);
+      })
+
+      // choice field
+      ajsut.test('Choice field, wrong answer', function() {
+        ajsut.pause();
+        setTimeout(function(){
+          ajsut.assert($$('#container input[type=radio]').length == 3, 'Three radio buttons rendered');
+          var evObj = document.createEvent('MouseEvents');
+          evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
+          $('radio_1').fireEvent('click', evObj);
+          ajsut.assert($('radio_1').getStyle('display') == 'none', 'Second choice is wrong, the input now is display none');
+          ajsut.assert($('radio_1').getPrevious('span').hasClass('x'), 'The x was rendered in place of the radio');
+          ajsut.resume();
+        }, 2000);
+      })
+
+      // choice field
+      ajsut.test('Choice field, right answer', function() {
+        ajsut.pause();
+        setTimeout(function(){
+          var evObj = document.createEvent('MouseEvents');
+          evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
+          $('message').fireEvent('click', evObj);
+          var rcp = $('radio_0').getParent();
+          $('radio_0').fireEvent('click', evObj);
+          ajsut.assert($$('#message p')[0].get('text') == 'Risposta esatta', 'First choice is the right one');
+          ajsut.assert(rcp.getElements('.v').length == 1, 'The check sign was properly added');
+
+          ajsut.resume();
+        }, 2000);
+      })
+
+      // select field
+      ajsut.test('Select field', function() {
+        ajsut.pause();
+        setTimeout(function(){
+          var evObj = document.createEvent('MouseEvents');
+          evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
+          $('message').fireEvent('click', evObj);
+          ajsut.assert($$('#container select').length == 1, 'Select rendered');
+          ajsut.assert($$('#container select option').length == 5, '5 options inside the select input');
+          var select = $$('#container select')[0];
+          select.set('value', 'meow');
+          select.fireEvent('change', {});
+          ajsut.assert($$('#message p')[0].get('text') == 'Risposta esatta', 'Second option is the right one');
+          $('message').fireEvent('click', evObj);
+          ajsut.resume();
+        }, 2000);
+      })
+
+      // text field
+      ajsut.test('Text field', function() {
+        ajsut.pause();
+        setTimeout(function(){
+          ajsut.assert($$('#container > div')[3].getElements('p')[0].get('text') == 'WOW', 'Text rendered succesfully');
+
+          var tests = $$('#results li li').length;
+          var passed = $$('#results li li.passed').length;
+          var failed = $$('#results li li.failed').length;
+
+          var result = tests + ' tests executed.\n' + passed + ' passed.\n' + failed + ' failed.';
+          if(failed) result += '\nThat\'s bad.';
+          else result += '\nThat\'s good dude.';
+          alert(result);
+          ajsut.resume();
+        }, 2000);
+      })
+          
+    </script>
+  </body>
+</html>
