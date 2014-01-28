@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Chart</title>
+    <title>JSDoc: Class: TextStep</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Class: Chart</h1>
+    <h1 class="page-title">Class: TextStep</h1>
     
     
 
@@ -27,12 +27,10 @@
     
 <header>
     <h2>
-        <span class="ancestors"><a href="flowchart.html">flowchart</a>.</span>
+        <span class="ancestors"><a href="mathex.html">mathex</a>.</span>
     
-    Chart
+    TextStep
     </h2>
-    
-        <div class="class-description">Loads, renders and handles the chart flow</div>
     
 </header>  
 
@@ -43,10 +41,10 @@
     
         
 <dt>
-    <h4 class="name" id="Chart"><span class="type-signature"></span>new Chart<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id="TextStep"><span class="type-signature"></span>new TextStep<span class="signature">(tpl, <span class="optional">end_message</span>, <span class="optional">options</span>)</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
     
-    <p class="summary">Chart class</p>
+    <p class="summary">Exercises - Only text step</p>
     
 </dt>
 <dd>
@@ -57,6 +55,191 @@
     
     
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>tpl</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last">The step template.<br />
+                       <p>The math to be parsed by mathjax must be placed inside the tag {%%}, i.e. {% 2^4=16 %}</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>end_message</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last">A message to be displayed at the end of the step</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last">The step options
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>container</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
+            
+            <td class="description last">Whether or not to insert the exercise text inside a div container</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+            </td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -82,7 +265,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="flowchart.js.html">flowchart/js/flowchart.js</a>, line 331
+        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 1165
     </li></ul></dd>
     
     
@@ -103,7 +286,7 @@
     
             
 <div class="param-desc">
-    A flowchart.Chart instance
+    TextStep instance
 </div>
 
 
@@ -123,11 +306,22 @@
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code> var step = new mathex.TextStep('&lt;p&gt;my text&lt;/p&gt;', 'my message', {container: false});</code></pre>
+
+    
 </dd>
 
     
     </div>
     
+    
+        <h3 class="subsection-title">Extends</h3>
+        
+        <ul>
+            <li><a href="mathex.Step.html">mathex.Step</a></li>
+        </ul>
     
     
     
@@ -146,143 +340,10 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="getXmlObject"><span class="type-signature"></span>getXmlObject<span class="signature">(path)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id="checkFieldResult"><span class="type-signature"></span>checkFieldResult<span class="signature">(field, result, fieldobj)</span><span class="type-signature"></span></h4>
     
     
-    <p class="summary">Loads the xml from path</p>
-    
-</dt>
-<dd>
-    
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>path</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">The xml path</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="flowchart.js.html">flowchart/js/flowchart.js</a>, line 335
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    The xml object
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Object</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="listen"><span class="type-signature"></span>listen<span class="signature">(evt_name, params)</span><span class="type-signature"></span></h4>
-    
-    
-    <p class="summary">Callback called when passing from a block to the next one @see flowchart.EventDispatcher</p>
+    <p class="summary">Checks the result of a text field</p>
     
 </dt>
 <dd>
@@ -319,30 +380,7 @@
 	
         <tr>
             
-                <td class="name"><code>evt_name</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">The event name</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>params</code></td>
+                <td class="name"><code>field</code></td>
             
             
             <td class="type">
@@ -358,62 +396,20 @@
             
             
             
-            <td class="description last">The params passed by the EventDispatcher
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>from</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">The id of the previous block</td>
+            <td class="description last">The mootools input field object</td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>next</code></td>
+                <td class="name"><code>result</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">Mixed</span>
 
 
             
@@ -423,13 +419,30 @@
             
             
             
-            <td class="description last">The id of the next block</td>
+            <td class="description last">The right result</td>
         </tr>
 	
 	
-	</tbody>
-</table>
+	
+        <tr>
+            
+                <td class="name"><code>fieldobj</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
             </td>
+            
+            
+            
+            
+            
+            <td class="description last">The input object</td>
         </tr>
 	
 	
@@ -446,6 +459,11 @@
     
 
     
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="mathex.Step.html#checkFieldResult">mathex.Step#checkFieldResult</a>
+    </li></dd>
+    
     
     
     
@@ -460,7 +478,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="flowchart.js.html">flowchart/js/flowchart.js</a>, line 378
+        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 616
     </li></ul></dd>
     
     
@@ -477,16 +495,6 @@
     
     
     
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    void
-</div>
-
-
-
-        
     
     
 </dd>
@@ -494,14 +502,18 @@
         
             
 <dt>
-    <h4 class="name" id="run"><span class="type-signature"></span>run<span class="signature">(from, id)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="run"><span class="type-signature"></span>run<span class="signature">(router)</span><span class="type-signature"></span></h4>
     
     
-    <p class="summary">Renders a block</p>
+    <p class="summary">Executes the step</p>
     
 </dt>
 <dd>
     
+    
+    <div class="description">
+        Renders the parsed text
+    </div>
     
 
     
@@ -534,13 +546,13 @@
 	
         <tr>
             
-                <td class="name"><code>from</code></td>
+                <td class="name"><code>router</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">Object</span>
 
 
             
@@ -550,30 +562,7 @@
             
             
             
-            <td class="description last">The id of the previous block</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">The id of the next block</td>
+            <td class="description last">a mathex.Router instance</td>
         </tr>
 	
 	
@@ -604,128 +593,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="flowchart.js.html">flowchart/js/flowchart.js</a>, line 391
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    void
-</div>
-
-
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="start"><span class="type-signature"></span>start<span class="signature">(path)</span><span class="type-signature"></span></h4>
-    
-    
-    <p class="summary">Starts the chart flow</p>
-    
-</dt>
-<dd>
-    
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>path</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">The xml path</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="flowchart.js.html">flowchart/js/flowchart.js</a>, line 358
+        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 1171
     </li></ul></dd>
     
     
@@ -778,7 +646,7 @@
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Jan 23 2014 17:28:30 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Jan 28 2014 14:45:54 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

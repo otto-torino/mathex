@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Router</title>
+    <title>JSDoc: Class: TextChoiceFieldStep</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Class: Router</h1>
+    <h1 class="page-title">Class: TextChoiceFieldStep</h1>
     
     
 
@@ -29,10 +29,8 @@
     <h2>
         <span class="ancestors"><a href="mathex.html">mathex</a>.</span>
     
-    Router
+    TextChoiceFieldStep
     </h2>
-    
-        <div class="class-description">Given some steps the Router manages the navigation through the steps till the end of the exercise.</div>
     
 </header>  
 
@@ -43,10 +41,10 @@
     
         
 <dt>
-    <h4 class="name" id="Router"><span class="type-signature"></span>new Router<span class="signature">(<span class="optional">options</span>)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id="TextChoiceFieldStep"><span class="type-signature"></span>new TextChoiceFieldStep<span class="signature">(tpl, result, <span class="optional">end_message</span>, <span class="optional">options</span>)</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
     
-    <p class="summary">Exercises Router Class</p>
+    <p class="summary">Exercises - Text plus one radio input</p>
     
 </dt>
 <dd>
@@ -85,6 +83,97 @@
 	
         <tr>
             
+                <td class="name"><code>tpl</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last">The exercise template.<br />
+                       <p>The math to be parsed by mathjax must be placed inside the tag {%%}, i.e. {% 2^4=16 %}</p>
+                       <p>The available choices must be written this way: [[0]] my choice. Then the [[0]] is parsed and a radio buton is created.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>result</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last">The index of the correct radio answer</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>end_message</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last">A message to be displayed at the end of the step</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
                 <td class="name"><code>options</code></td>
             
             
@@ -109,7 +198,7 @@
             
             
             
-            <td class="description last">Router options
+            <td class="description last">The step options
                 <h6>Properties</h6>
                 
 
@@ -139,7 +228,7 @@
 	
         <tr>
             
-                <td class="name"><code>widgets</code></td>
+                <td class="name"><code>container</code></td>
             
             
             <td class="type">
@@ -169,7 +258,7 @@
                 </td>
             
             
-            <td class="description last">Whether or not to create the font and calculator widgets</td>
+            <td class="description last">Whether or not to insert the exercise text inside a div container</td>
         </tr>
 	
 	
@@ -206,7 +295,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 509
+        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 814
     </li></ul></dd>
     
     
@@ -227,7 +316,7 @@
     
             
 <div class="param-desc">
-    A Router instance
+    TextChoiceFieldStep instance
 </div>
 
 
@@ -247,11 +336,31 @@
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code> var step = new mathex.TextChoiceFieldStep(
+   '&lt;h3&gt;Title&lt;/h3&gt;' + 
+   '&lt;p&gt;Which color is yellow?&lt;/p&gt;' + 
+   '&lt;ul&gt;' + 
+   '&lt;li&gt;[[0]] red&lt;/li&gt;' + 
+   '&lt;li&gt;[[1]] {% 2^7 = 32 %}&lt;/li&gt;' + 
+   '&lt;li&gt;[[2]] yellow&lt;/li&gt;' + 
+   '&lt;/ul&gt;',
+   2
+ );</code></pre>
+
+    
 </dd>
 
     
     </div>
     
+    
+        <h3 class="subsection-title">Extends</h3>
+        
+        <ul>
+            <li><a href="mathex.Step.html">mathex.Step</a></li>
+        </ul>
     
     
     
@@ -270,10 +379,83 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="addSteps"><span class="type-signature"></span>addSteps<span class="signature">(s)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="addInputEvents"><span class="type-signature"></span>addInputEvents<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
-    <p class="summary">Adds steps</p>
+    <p class="summary">Adds events to the radio buttons</p>
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 890
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    void
+</div>
+
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="checkChoiceFieldResult"><span class="type-signature"></span>checkChoiceFieldResult<span class="signature">(field, id)</span><span class="type-signature"></span></h4>
+    
+    
+    <p class="summary">Checks the user answer</p>
     
 </dt>
 <dd>
@@ -310,13 +492,13 @@
 	
         <tr>
             
-                <td class="name"><code>s</code></td>
+                <td class="name"><code>field</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Array</span>
+<span class="param-type">Object</span>
 
 
             
@@ -326,187 +508,14 @@
             
             
             
-            <td class="description last">steps</td>
+            <td class="description last">The mootools radio button object</td>
         </tr>
 	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 531
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    void
-</div>
-
-
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="allSteps"><span class="type-signature"></span>allSteps<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-    <p class="summary">Executes all the steps in succession. Debugging purposes.</p>
-    
-</dt>
-<dd>
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 594
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    void
-</div>
-
-
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="endStep"><span class="type-signature"></span>endStep<span class="signature">(<span class="optional">callback</span>)</span><span class="type-signature"></span></h4>
-    
-    
-    <p class="summary">Ends the execution of a step</p>
-    
-</dt>
-<dd>
-    
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
 	
 	
         <tr>
             
-                <td class="name"><code>callback</code></td>
+                <td class="name"><code>id</code></td>
             
             
             <td class="type">
@@ -519,18 +528,10 @@
             </td>
             
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-                    
-                
-                </td>
             
             
             
-            
-            <td class="description last">A callback function to call if it was the last step</td>
+            <td class="description last">The index of the clicked radio button</td>
         </tr>
 	
 	
@@ -561,7 +562,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 577
+        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 846
     </li></ul></dd>
     
     
@@ -595,180 +596,10 @@
         
             
 <dt>
-    <h4 class="name" id="getCurrent"><span class="type-signature"></span>getCurrent<span class="signature">()</span><span class="type-signature"> &rarr; {Number}</span></h4>
+    <h4 class="name" id="checkFieldResult"><span class="type-signature"></span>checkFieldResult<span class="signature">(field, result, fieldobj)</span><span class="type-signature"></span></h4>
     
     
-    <p class="summary">Gets the current step index</p>
-    
-</dt>
-<dd>
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 550
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    The current step index
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Number</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="getSteps"><span class="type-signature"></span>getSteps<span class="signature">()</span><span class="type-signature"> &rarr; {Array}</span></h4>
-    
-    
-    <p class="summary">Gets the steps</p>
-    
-</dt>
-<dd>
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 541
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    The steps
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Array</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="init"><span class="type-signature"></span>init<span class="signature">(s)</span><span class="type-signature"></span></h4>
-    
-    
-    <p class="summary">Initializes a Router instance</p>
+    <p class="summary">Checks the result of a text field</p>
     
 </dt>
 <dd>
@@ -805,13 +636,13 @@
 	
         <tr>
             
-                <td class="name"><code>s</code></td>
+                <td class="name"><code>field</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Array</span>
+<span class="param-type">Object</span>
 
 
             
@@ -821,12 +652,126 @@
             
             
             
-            <td class="description last">The exercise's steps</td>
+            <td class="description last">The mootools input field object</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>result</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Mixed</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">The right result</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>fieldobj</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">The input object</td>
         </tr>
 	
 	
 	</tbody>
 </table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="mathex.Step.html#checkFieldResult">mathex.Step#checkFieldResult</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 616
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="deactivate"><span class="type-signature"></span>deactivate<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+    <p class="summary">Deactivates all inputs</p>
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
     
     
     
@@ -852,7 +797,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 514
+        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 918
     </li></ul></dd>
     
     
@@ -886,14 +831,91 @@
         
             
 <dt>
-    <h4 class="name" id="startStep"><span class="type-signature"></span>startStep<span class="signature">(<span class="optional">index</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="removeInputEvents"><span class="type-signature"></span>removeInputEvents<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
-    <p class="summary">Starts the execution of a step</p>
+    <p class="summary">Removes events from the radio buttons</p>
     
 </dt>
 <dd>
     
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 905
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    void
+</div>
+
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="run"><span class="type-signature"></span>run<span class="signature">(router)</span><span class="type-signature"></span></h4>
+    
+    
+    <p class="summary">Executes the step</p>
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Renders the template and activates radio buttons
+    </div>
     
 
     
@@ -914,11 +936,7 @@
 		<th>Type</th>
 		
 		
-		<th>Argument</th>
 		
-		
-		
-		<th>Default</th>
 		
 		
 		<th class="last">Description</th>
@@ -930,37 +948,23 @@
 	
         <tr>
             
-                <td class="name"><code>index</code></td>
+                <td class="name"><code>router</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Number</span>
+<span class="param-type">Object</span>
 
 
             
             </td>
             
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-                    
-                
-                </td>
             
             
             
-                <td class="default">
-                
-                    0
-                
-                </td>
-            
-            
-            <td class="description last">The index of the step to be executed, default 0</td>
+            <td class="description last">a mathex.Router instance</td>
         </tr>
 	
 	
@@ -991,7 +995,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 559
+        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 817
     </li></ul></dd>
     
     
@@ -1008,6 +1012,16 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    void
+</div>
+
+
+
+        
     
     
 </dd>
@@ -1034,7 +1048,7 @@
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Jan 23 2014 17:28:30 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Jan 28 2014 14:45:54 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

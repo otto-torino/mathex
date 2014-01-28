@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: TextStep</title>
+    <title>JSDoc: Class: QuestionRouter</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Class: TextStep</h1>
+    <h1 class="page-title">Class: QuestionRouter</h1>
     
     
 
@@ -29,8 +29,10 @@
     <h2>
         <span class="ancestors"><a href="mathex.html">mathex</a>.</span>
     
-    TextStep
+    QuestionRouter
     </h2>
+    
+        <div class="class-description">The Router class handles the navigation through questions</div>
     
 </header>  
 
@@ -41,10 +43,113 @@
     
         
 <dt>
-    <h4 class="name" id="TextStep"><span class="type-signature"></span>new TextStep<span class="signature">(tpl, <span class="optional">end_message</span>, <span class="optional">options</span>)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id="QuestionRouter"><span class="type-signature"></span>new QuestionRouter<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
     
-    <p class="summary">Exercises - Only text step</p>
+    <p class="summary">Questions - Question Router Class</p>
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 1334
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    mathex.QuestionRouter instance
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Object</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Methods</h3>
+        
+        <dl>
+            
+<dt>
+    <h4 class="name" id="addPoint"><span class="type-signature"></span>addPoint<span class="signature">(point)</span><span class="type-signature"></span></h4>
+    
+    
+    <p class="summary">Add a point to the rating</p>
     
 </dt>
 <dd>
@@ -69,7 +174,126 @@
 		<th>Type</th>
 		
 		
-		<th>Argument</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>point</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">The point to add</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 1358
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    void
+</div>
+
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="endStep"><span class="type-signature"></span>endStep<span class="signature">(result, obj)</span><span class="type-signature"></span></h4>
+    
+    
+    <p class="summary">Ends the question step</p>
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
 		
 		
 		
@@ -83,7 +307,7 @@
 	
         <tr>
             
-                <td class="name"><code>tpl</code></td>
+                <td class="name"><code>result</code></td>
             
             
             <td class="type">
@@ -96,55 +320,17 @@
             </td>
             
             
-                <td class="attributes">
-                
-                    
-                
-                </td>
             
             
             
-            
-            <td class="description last">The step template.<br />
-                       <p>The math to be parsed by mathjax must be placed inside the tag {%%}, i.e. {% 2^4=16 %}</p></td>
+            <td class="description last">The question result ('success', 'failed')</td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>end_message</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last">A message to be displayed at the end of the step</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>options</code></td>
+                <td class="name"><code>obj</code></td>
             
             
             <td class="type">
@@ -157,20 +343,301 @@
             </td>
             
             
-                <td class="attributes">
+            
+            
+            
+            <td class="description last">The mathex.Question object</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 1380
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    void
+</div>
+
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="getEndMessage"><span class="type-signature"></span>getEndMessage<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span></h4>
+    
+    
+    <p class="summary">Gets the final message basing upon the final rating</p>
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 1392
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    The message
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">String</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="init"><span class="type-signature"></span>init<span class="signature">(s)</span><span class="type-signature"></span></h4>
+    
+    
+    <p class="summary">Initializes the QuestionRouter instance</p>
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Renders widgets and gui
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>s</code></td>
+            
+            
+            <td class="type">
+            
                 
-                    &lt;optional><br>
-                
-                    
-                
-                </td>
+<span class="param-type">Array</span>
+
+
+            
+            </td>
             
             
             
             
-            <td class="description last">The step options
-                <h6>Properties</h6>
-                
+            
+            <td class="description last">Array of managed questions @see mathex.Question</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 1335
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    void
+</div>
+
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="startStep"><span class="type-signature"></span>startStep<span class="signature">(<span class="optional">index</span>)</span><span class="type-signature"></span></h4>
+    
+    
+    <p class="summary">Executes the given question</p>
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
 
 <table class="params">
     <thead>
@@ -198,13 +665,13 @@
 	
         <tr>
             
-                <td class="name"><code>container</code></td>
+                <td class="name"><code>index</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Boolean</span>
+<span class="param-type">Number</span>
 
 
             
@@ -223,18 +690,12 @@
             
                 <td class="default">
                 
-                    true
+                    0
                 
                 </td>
             
             
-            <td class="description last">Whether or not to insert the exercise text inside a div container</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-            </td>
+            <td class="description last">The index of the question to execute</td>
         </tr>
 	
 	
@@ -265,335 +726,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 1163
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    TextStep instance
-</div>
-
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type">Object</span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code> var step = new mathex.TextStep('&lt;p&gt;my text&lt;/p&gt;', 'my message', {container: false});</code></pre>
-
-    
-</dd>
-
-    
-    </div>
-    
-    
-        <h3 class="subsection-title">Extends</h3>
-        
-        <ul>
-            <li><a href="mathex.Step.html">mathex.Step</a></li>
-        </ul>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-        <h3 class="subsection-title">Methods</h3>
-        
-        <dl>
-            
-<dt>
-    <h4 class="name" id="checkFieldResult"><span class="type-signature"></span>checkFieldResult<span class="signature">(field, result, fieldobj)</span><span class="type-signature"></span></h4>
-    
-    
-    <p class="summary">Checks the result of a text field</p>
-    
-</dt>
-<dd>
-    
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>field</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">The mootools input field object</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>result</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Mixed</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">The right result</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>fieldobj</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">The input object</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="mathex.Step.html#checkFieldResult">mathex.Step#checkFieldResult</a>
-    </li></dd>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 616
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="run"><span class="type-signature"></span>run<span class="signature">(router)</span><span class="type-signature"></span></h4>
-    
-    
-    <p class="summary">Executes the step</p>
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Renders the parsed text
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>router</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">a mathex.Router instance</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 1169
+        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 1368
     </li></ul></dd>
     
     
@@ -646,7 +779,7 @@
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Jan 23 2014 17:28:31 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Jan 28 2014 14:45:53 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

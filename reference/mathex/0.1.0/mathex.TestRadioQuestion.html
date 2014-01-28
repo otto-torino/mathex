@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: StraightBlock</title>
+    <title>JSDoc: Class: TestRadioQuestion</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Class: StraightBlock</h1>
+    <h1 class="page-title">Class: TestRadioQuestion</h1>
     
     
 
@@ -27,9 +27,9 @@
     
 <header>
     <h2>
-        <span class="ancestors"><a href="flowchart.html">flowchart</a>.</span>
+        <span class="ancestors"><a href="mathex.html">mathex</a>.</span>
     
-    StraightBlock
+    TestRadioQuestion
     </h2>
     
 </header>  
@@ -41,10 +41,10 @@
     
         
 <dt>
-    <h4 class="name" id="StraightBlock"><span class="type-signature"></span>new StraightBlock<span class="signature">(node)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id="TestRadioQuestion"><span class="type-signature"></span>new TestRadioQuestion<span class="signature">(options)</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
     
-    <p class="summary">Straight Block, no choices</p>
+    <p class="summary">Test - Test radio question, answer with one multiple radio choice</p>
     
 </dt>
 <dd>
@@ -81,7 +81,7 @@
 	
         <tr>
             
-                <td class="name"><code>node</code></td>
+                <td class="name"><code>options</code></td>
             
             
             <td class="type">
@@ -97,7 +97,80 @@
             
             
             
-            <td class="description last">The xml node object</td>
+            <td class="description last">Options
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>question</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">The question and answer template to be parsed
+                                   <p>The math to be parsed by mathjax (latex syntax) must be placed inside the tag {%%}, i.e. {% 2^4=16 %}</p>
+                                   <p>The radio choices must be written this way: [[1]] choice, where 1 is the index of the choice.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>result</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">The index of the correct answer</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+            </td>
         </tr>
 	
 	
@@ -128,7 +201,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="flowchart.js.html">flowchart/js/flowchart.js</a>, line 114
+        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 1904
     </li></ul></dd>
     
     
@@ -149,7 +222,7 @@
     
             
 <div class="param-desc">
-    A flowchart.StraightBlock instance
+    mathex.TestRadioQuestion instance
 </div>
 
 
@@ -169,17 +242,25 @@
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code> var question3 = new mathex.TestQuestion('radio', {
+   question: 'Which equation is wrong?' + 
+     '&lt;ul&gt;' +
+     '&lt;li&gt;[[0]] {% 5^3 * 5^4 = 5^7 %}&lt;/li&gt;' +
+     '&lt;li&gt;[[1]] {% 2^5 * 3^5 = 6^5 %}&lt;/li&gt;' +
+     '&lt;li&gt;[[2]] {% 9^6 + 9^2 = 9^8 %}&lt;/li&gt;' +
+     '&lt;li&gt;[[3]] {% 7^8 : 7 = 7^7 %}&lt;/li&gt;' +
+     '&lt;/ul&gt;',
+   result: 2,
+ });</code></pre>
+
+    
 </dd>
 
     
     </div>
     
-    
-        <h3 class="subsection-title">Extends</h3>
-        
-        <ul>
-            <li><a href="flowchart.Block.html">flowchart.Block</a></li>
-        </ul>
     
     
     
@@ -198,10 +279,10 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="render"><span class="type-signature"></span>render<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="checkAnswer"><span class="type-signature"></span>checkAnswer<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
-    <p class="summary">Renders the block</p>
+    <p class="summary">Cheks the user answer, saves the result and proceeds with the next question</p>
     
 </dt>
 <dd>
@@ -237,7 +318,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="flowchart.js.html">flowchart/js/flowchart.js</a>, line 118
+        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 1928
     </li></ul></dd>
     
     
@@ -271,10 +352,10 @@
         
             
 <dt>
-    <h4 class="name" id="updateStatus"><span class="type-signature"></span>updateStatus<span class="signature">(status)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="run"><span class="type-signature"></span>run<span class="signature">(test)</span><span class="type-signature"></span></h4>
     
     
-    <p class="summary">updates the block status</p>
+    <p class="summary">Executes the test question</p>
     
 </dt>
 <dd>
@@ -311,13 +392,13 @@
 	
         <tr>
             
-                <td class="name"><code>status</code></td>
+                <td class="name"><code>test</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">Object</span>
 
 
             
@@ -327,7 +408,7 @@
             
             
             
-            <td class="description last">the status</td>
+            <td class="description last">The mathex.Test instance</td>
         </tr>
 	
 	
@@ -358,7 +439,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="flowchart.js.html">flowchart/js/flowchart.js</a>, line 154
+        <a href="mathex.js.html">mathex/res-otto/js/mathex.js</a>, line 1908
     </li></ul></dd>
     
     
@@ -411,7 +492,7 @@
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Jan 23 2014 17:28:30 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Jan 28 2014 14:45:53 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>
