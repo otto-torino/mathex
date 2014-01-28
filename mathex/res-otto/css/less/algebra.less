@@ -1,0 +1,36 @@
+body.algebra {
+  @mcolor: green;
+  > header, > footer {
+    background-color: @mcolor;
+    color: @mtxtcolor;
+  }
+  a:link, a:visited, .link, > h2 {
+    color: @mcolor;
+  }
+  .info {
+    background: fade(@mcolor, 40%);
+  }
+  #message {
+    border: solid @mcolor 6px;
+  }
+  // faq
+  #faq_nav span {
+    border: 2px solid @mcolor;
+    &:hover {
+      background: @mcolor;
+      color: @mtxtcolor;
+    }
+  }
+  // recovery
+  #r_nav span {
+    border: 2px solid @mcolor;
+    &:hover {
+      background: @mcolor;
+      color: @mtxtcolor;
+    }
+  }
+  // widgets
+  #calculator {
+    border-top: 10px solid @mcolor;
+  }
+}

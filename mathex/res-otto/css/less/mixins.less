@@ -1,0 +1,15 @@
+.box-sizing(@argument: content-box) {
+  -moz-box-sizing: @argument;
+  box-sizing: @argument;
+}
+
+.user-select(@argument: none) {
+  -webkit-user-select: @argument;
+  -moz-user-select: @argument;
+  -ms-user-select: @argument;
+  user-select: @argument;
+}
+
+.tab(@m; @property:'padding-right') {
+  @{property}: (@m * 30px);
+}

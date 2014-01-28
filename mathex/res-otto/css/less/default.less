@@ -1,0 +1,186 @@
+body {
+  font: normal 90%/200% Verdana, Arial, sans-serif;
+  margin: 0;
+  padding-top: 4.4em;
+  color: @txt-color;
+  > header, > footer, #container {
+    box-sizing: border-box;
+    padding: 2px 10px;
+    > h1 {
+      font-size: 1.1em;
+    }
+  }
+  #container {
+    padding-bottom: 80px;
+  }
+  > header, > footer {
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    background-color: @mcolor;
+    color: @mtxtcolor;
+  }
+  > header {
+    top: 0;
+    .box-sizing(border-box);
+  }
+  > footer {
+    bottom: 0;
+    padding-left: 200px;
+    background-image: url('../img/logoSEI_footer.png');
+    background-repeat: no-repeat;
+    background-position: 20px center;
+  }
+  > h2 {
+    padding: 5px 10px 10px;
+    border-bottom: 1px dotted #aaa;
+  }
+}
+
+a.link, a.visited, .link {
+  color: @mcolor;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* structure */
+.info {
+  margin-top: 0;
+  padding: 2px 10px;
+  background: fade(@mcolor, 40%);
+}
+
+/* titles */
+h3 {
+  padding-top: 20px !important;
+}
+h3.continue {
+  padding-top: 5px !important;
+  font-size: 1.1em;
+}
+h3.recover {
+/*  margin-top: 10px !important*/;
+  margin-top: 45px !important;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+h4 {
+  margin-top: 45px !important;
+}
+h5 {
+  font-size: 1.0em;
+}
+
+h5 {
+  font-size: 1.0em;
+  margin-bottom: 0px !important;
+}
+
+/* tags */
+p {
+  margin: 1em 0;
+  line-height: 1.4em;
+}
+p.example {
+  margin-top: 45px !important;
+}
+strong {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+blockquote {
+  line-height: 1.3em;
+}
+
+/* tab */
+.tab {
+  .tab(1);
+}
+.tab2 {
+  .tab(2);
+}
+.tab3 {
+  .tab(3);
+}
+
+/* mathjax */
+#MathJax_MenuFrame {
+    display: none !important;
+}
+
+/* messages */
+#message {
+  font-weight: bold;
+  text-align: center;
+  border-radius: 8px;
+  color: black;
+  font-size: 1.2em;
+  line-height: 1.8em;
+  border: solid @mcolor 6px;
+}
+#message.error {
+  color: orange !important;
+  border-color: orange !important;
+}
+
+#message.success {
+  color: green !important;
+  border-color: green !important;
+}
+
+#message.failed {
+  color: red !important;
+  border-color: red !important;
+}
+
+/* general classes */
+.border {
+  border: 1px solid #000;
+}
+.left {
+  float: left;
+}
+.right {
+  float: right;
+}
+.clear {
+  clear: both;
+}
+.button-close {
+  background: #fff;
+  padding: 5px;
+}
+/* layer */
+.layer {
+  padding: 10px;
+  border: 1px solid #333;
+  background: #fff;
+  box-shadow: 0 0 10px #000;
+}
+
+/* inputs */
+input[type=text] {
+  border: 1px solid #fff;
+  background: #fce483;
+  font-size: 1em;
+}
+input.disabled {
+    background: #eee !important;
+}
+select {
+  font-size: 1em;
+}
+
+ul {
+  span.x {
+    font-size: 24px;
+    margin: 0 0 0 2px;
+    color: red;
+  }
+  span.v {
+    font-size: 24px;
+    margin: 0 0 0 2px;
+    color: green;
+  }
+}
