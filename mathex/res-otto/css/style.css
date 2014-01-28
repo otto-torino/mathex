@@ -178,6 +178,10 @@ ul span.v {
 }
 /* widgets */
 #widgets {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   position: relative;
 }
 #widgets .font_controller,
