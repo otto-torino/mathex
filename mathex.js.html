@@ -217,7 +217,7 @@ mathex.Shared = {
     widget.dispose();
   },
   /**
-   * @summary Creates a player widget inside the widget container given an audio object. Removes it if the audio object is null
+   * @summary Creates a player widget in the top of the #container div, given an audio object. Removes it if the audio object is null
    * @memberof mathex.Shared
    * @method
    * @param {Object} audio_obj The audio object
@@ -227,8 +227,8 @@ mathex.Shared = {
    */
   playerWidget: function(audio_obj) {
     if(audio_obj === null) {
-      if(typeof $('widgets').getElements('audio')[0] != 'undefined') {
-        $('widgets').getElements('audio')[0].dispose();
+      if(typeof $('container').getElements('audio')[0] != 'undefined') {
+        $('container').getElements('audio')[0].dispose();
       }
       return true;
     }
@@ -239,7 +239,7 @@ mathex.Shared = {
     if(typeof audio_obj.ogg != 'undefined') {
       var ogg_source = new Element('source[src=' + audio_obj.ogg + '][type=audio/ogg]').inject(audio);
     }
-    audio.inject($('widgets'), 'top');
+    audio.inject($('container'), 'top');
   },
   /**
    * @summary Creates a font-size controller widget and places it inside the widget container
@@ -899,12 +899,14 @@ mathex.TextChoiceFieldStep = function(tpl, result, end_message, options) {
     else {
 
       if(id.toInt() === this.result) {
-        var v = new Element('span.v').set('html', '✔').replaces(document.id('radio_' + id));
+        //var v = new Element('span.v').set('html', '✔').replaces(document.id('radio_' + id));
+        var v = new Element('span.v').set('html', '✔').inject(document.id('radio_' + this.result).setStyle('display', 'none'), 'before');
         mathex.Shared.showMessage('Risposta esatta', 'success', callback);
       }
       else {
         var x = new Element('span.x').set('html', '&#215;').inject(document.id('radio_' + id).setStyle('display', 'none'), 'before');
-        var v = new Element('span.v').set('html', '✔').replaces(document.id('radio_' + this.result));
+        var v = new Element('span.v').set('html', '✔').inject(document.id('radio_' + this.result).setStyle('display', 'none'), 'before');
+        //var v = new Element('span.v').set('html', '✔').replaces(document.id('radio_' + this.result));
         mathex.Shared.showMessage('Risposta errata.', 'failed', callback);
       }
       this.deactivate();
@@ -1211,7 +1213,9 @@ mathex.TextStep = function(tpl, end_message, options) {
       $('container').set('html', $('container').get('html') + this.tpl);
     }
     MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
-
+    if(this.end_message) {
+      mathex.Shared.showMessage(this.end_message, 'message', null);
+    }
     this.router.endStep();
 
   };
@@ -1457,7 +1461,8 @@ mathex.QuestionRouter.prototype = new mathex.Router();
  * @param {Array} items The array describing all items. Each item is an object with properties:
  *                      &lt;ul>
  *                        &lt;li>&lt;b>question&lt;/b>: string. The question, can contain mathjax math inside the tag {% LATEX MATH HERE %}&lt;/li>
- *                        &lt;li>&lt;b>answer&lt;/b>: string. The answer, can contain mathjax math inside the tag {% LATEX MATH HERE %}&lt;/li>
+ *                        &lt;li>&lt;b>answer&lt;/b>: string. The answer, can contain mathjax math inside the tag {% LATEX MATH HERE %}, and links to other faqs, 
+ *                            whether indexed faqs or not (in this case showing the linked one in a layer): {{link_text:3}} or {{link_text:3:layer}}&lt;/li>
  *                        &lt;li>&lt;b>audio&lt;/b>: object. The audio object for the question and answer, it has the 'mp3' and 'ogg' properties storing the files' paths&lt;/li>
  *                      &lt;/ul>
  * @return {Object} mathex.Faq instance
@@ -1540,39 +1545,58 @@ mathex.FaqRouter = function(faq) {
    */
   this.renderFaq = function(index) {
 
+    index = parseInt(index);
     /* index */
-    var select = new Element('select.title');
-    this.faq.items.each(function(item, opt_index) {
-      if(typeof item.index == 'undefined' || item.index) {
-        var option = new Element('option')
-          .set('html', mathex.Shared.parseTpl(item.question, []))
-          .setProperty('value', opt_index)
-          .inject(select);
-        if(index == opt_index) {
-          option.setProperty('selected', 'selected');
+    var self = this;
+    var title = new Element('h3.select').set('html', mathex.Shared.parseTpl(this.faq.items[index].question, []))
+      .addEvent('click', function() {
+        var list = $(this).getNext('ul');
+        if(list.getStyle('display') == 'none') {
+          list.setStyle('display', 'inline-block');
         }
+        else {
+          list.setStyle('display', 'none');
+        }
+      });
+    var fake_select = new Element('ul.select');
+    this.faq.items.each(function(item, opt_index) {
+      if((typeof item.index == 'undefined' || item.index) && opt_index != index) {
+        var option = new Element('li')
+          .set('html', mathex.Shared.parseTpl(item.question, []))
+          .addClass('link')
+          .setProperty('data-value', opt_index)
+          .addEvent('click', function() {
+            self.renderFaq($(this).get('data-value'));
+            window.location.hash = 'top';
+          })
+          .inject(fake_select);
       }
     }.bind(this));
-    var self = this;
-    select.addEvent('change', function() {
-      self.renderFaq(this.value);
-    });
+
     var item = this.faq.items[index];
     this.faq_div.empty();
     this.faq_nav.empty();
     var answer = mathex.Shared.parseTpl(item.answer, []);
     var link_rexp = new RegExp("{{\s*(.*?):([0-9]+):?(layer)?\s*}}", "gim");
     var answer = answer.replace(link_rexp, "&lt;span class=\"link\" onclick=\"router.goto($2, '$3')\">$1&lt;/span>");
-    this.faq_div.adopt(select, new Element('div').set('html', answer));
+    this.faq_div.adopt(title, fake_select, new Element('div').set('html', answer));
 
     MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
 
     var prev = null, next = null;
     if(index > 0) {
-      prev = new Element('span').set('text', 'precedente').addEvent('click', function() {
-        this.renderFaq(index - 1);
-        window.location.hash = 'top';
-      }.bind(this)).inject(this.faq_nav);
+      var prev_exists = false;
+      for(var i = index - 1; i >= 0; i--) {
+        if(typeof this.faq.items[i].index == 'undefined' || this.faq.items[i].index) {
+          prev_exists = true;
+        }
+      }
+      if(prev_exists) {
+        prev = new Element('span').set('text', 'precedente').addEvent('click', function() {
+          this.renderFaq(index - 1);
+          window.location.hash = 'top';
+        }.bind(this)).inject(this.faq_nav);
+      }
     }
     var toindex = new Element('span').set('text', 'indice').addEvent('click', function() {
       this.renderIndex();
@@ -1580,10 +1604,18 @@ mathex.FaqRouter = function(faq) {
     }.bind(this)).inject(this.faq_nav);
 
     if(index &lt; this.faq.items.length - 1) {
-      next = new Element('span').set('text', 'successiva').addEvent('click', function() {
-        this.renderFaq(index + 1);
-        window.location.hash = 'top';
-      }.bind(this)).inject(this.faq_nav);
+      var next_exists = false;
+      for(var i = index + 1, l = this.faq.items.length; i &lt; l; i++) {
+        if(typeof this.faq.items[i].index == 'undefined' || this.faq.items[i].index) {
+          next_exists = true;
+        }
+      }
+      if(next_exists) {
+        next = new Element('span').set('text', 'successiva').addEvent('click', function() {
+          this.renderFaq(index + 1);
+          window.location.hash = 'top';
+        }.bind(this)).inject(this.faq_nav);
+      }
     }
 
     /* audio */
@@ -2089,7 +2121,7 @@ window.addEvent('load', function() {
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Jan 23 2014 17:28:30 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Jan 28 2014 14:45:52 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>
