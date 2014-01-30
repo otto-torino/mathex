@@ -190,7 +190,7 @@ mathex.Shared = {
     widget.dispose();
   },
   /**
-   * @summary Creates a player widget in the top of the #container div, given an audio object. Removes it if the audio object is null
+   * @summary Creates a player widget in the top of the #container div, given a not null audio object. Removes a previous inserted audio element.
    * @memberof mathex.Shared
    * @method
    * @param {Object} audio_obj The audio object
@@ -199,10 +199,10 @@ mathex.Shared = {
    * @return void
    */
   playerWidget: function(audio_obj) {
+    if(typeof $('container').getElements('audio')[0] != 'undefined') {
+      $('container').getElements('audio')[0].dispose();
+    }
     if(audio_obj === null) {
-      if(typeof $('container').getElements('audio')[0] != 'undefined') {
-        $('container').getElements('audio')[0].dispose();
-      }
       return true;
     }
     var audio = new Element('audio[controls]');
