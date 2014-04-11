@@ -1,5 +1,5 @@
 body {
-  font: normal 90%/200% Verdana, Arial, sans-serif;
+  font: normal 100%/200% Verdana, Arial, sans-serif;
   margin: 0;
   padding-top: 4.4em;
   color: #000000;
@@ -28,6 +28,7 @@ body > footer {
 }
 body > header {
   top: 0;
+  height: 70px;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
