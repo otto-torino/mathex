@@ -13,6 +13,26 @@ body.aritmetica {
   #message {
     border: solid @mcolor 6px;
   }
+  #message.layer-target {
+      &:before {
+        border-bottom-color: @mcolor;
+      }
+  }
+  #message.error.layer-target {
+      &:before {
+        border-bottom-color: orange;
+      }
+  }
+  #message.success.layer-target {
+      &:before {
+        border-bottom-color: green;
+      }
+  }
+  #message.failed.layer-target {
+      &:before {
+        border-bottom-color: red;
+      }
+  }
   // questions
   #answers_nav span.current {
     background: @mcolor;
