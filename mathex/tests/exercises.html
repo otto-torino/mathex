@@ -109,7 +109,7 @@
         setTimeout(function(){
           var evObj = document.createEvent('MouseEvents');
           evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
-          $('message').fireEvent('click', evObj);
+          $$('#message .layer-close')[0].fireEvent('click', evObj);
           ajsut.assert(typeOf($('message')) == 'null', 'The message disappeared');
           ajsut.assert(!$('field_1').hasClass('disabled') && !$('field_1').getProperty('readonly'), 'The second step input field is now active');
           ajsut.assert($('field_0').getProperty('readonly'), 'The first input is now readonly');
@@ -137,7 +137,7 @@
         setTimeout(function(){
           var evObj = document.createEvent('MouseEvents');
           evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
-          $('message').fireEvent('click', evObj);
+          $$('#message .layer-close')[0].fireEvent('click', evObj);
           ajsut.assert(typeOf($('message')) == 'null', 'The message disappeared');
           $('field_1').focus();
           $('field_1').set('value', 3);
@@ -156,7 +156,7 @@
         setTimeout(function(){
           var evObj = document.createEvent('MouseEvents');
           evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
-          $('message').fireEvent('click', evObj);
+          $$('#message .layer-close')[0].fireEvent('click', evObj);
           ajsut.assert(typeOf($('message')) == 'null', 'The message disappeared');
           ajsut.assert($('field_1').getProperty('readonly'), 'The second input is now readonly');
           ajsut.resume();
@@ -183,7 +183,7 @@
         setTimeout(function(){
           var evObj = document.createEvent('MouseEvents');
           evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
-          $('message').fireEvent('click', evObj);
+          $$('#message .layer-close').fireEvent('click', evObj);
           var rcp = $('radio_0').getParent();
           $('radio_0').fireEvent('click', evObj);
           ajsut.assert($$('#message p')[0].get('text') == 'Risposta esatta', 'First choice is the right one');
@@ -199,14 +199,14 @@
         setTimeout(function(){
           var evObj = document.createEvent('MouseEvents');
           evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
-          $('message').fireEvent('click', evObj);
+          $$('#message .layer-close').fireEvent('click', evObj);
           ajsut.assert($$('#container select').length == 1, 'Select rendered');
           ajsut.assert($$('#container select option').length == 5, '5 options inside the select input');
           var select = $$('#container select')[0];
           select.set('value', 'meow');
           select.fireEvent('change', {});
           ajsut.assert($$('#message p')[0].get('text') == 'Risposta esatta', 'Second option is the right one');
-          $('message').fireEvent('click', evObj);
+          $$('#message .layer-close')[0].fireEvent('click', evObj);
           ajsut.resume();
         }, 2000);
       })
