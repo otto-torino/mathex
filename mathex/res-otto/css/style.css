@@ -63,7 +63,7 @@ a.visited,
   padding: 2px 10px;
   background: rgba(128, 128, 128, 0.4);
 }
-.info a.button {
+.info .button {
   float: right;
 }
 .meaning {
@@ -514,44 +514,17 @@ ul.test li label {
   margin-top: 20px;
   padding-top: 10px;
 }
-#faq_nav span {
+#faq_nav .prev,
+#faq_nav .next,
+#faq_nav .item,
+#faq_nav .index {
   display: inline-block;
-  padding: 5px;
-  border: 2px solid #808080;
-  text-align: center;
-  height: 20px;
-  line-height: 20px;
-  margin-right: 5px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-#faq_nav span:hover {
-  background: #808080;
-  color: #ffffff;
-}
-h3.select {
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
-h3.select:after {
-  content: '';
-  display: inline-block;
-  width: 0;
-  height: 0;
-  border-top: 8px solid #333;
-  border-right: 8px solid transparent;
-  border-left: 8px solid transparent;
-  margin-left: 10px;
-}
-ul.select {
-  display: none;
+  padding: 2px 5px;
   background: #eee;
-  margin-top: 0;
-  padding-top: 0;
+  margin-right: 5px;
 }
-ul.select li {
-  border-bottom: 1px dotted #ddd;
-  padding: 5px;
+#faq_nav .selected {
+  background: #ccc;
 }
 .link_faq {
   cursor: pointer;
@@ -676,13 +649,6 @@ body.aritmetica #answers_nav span.current {
   background: #008000;
   color: #ffffff;
 }
-body.aritmetica #faq_nav span {
-  border: 2px solid #008000;
-}
-body.aritmetica #faq_nav span:hover {
-  background: #008000;
-  color: #ffffff;
-}
 body.aritmetica #r_nav span {
   border: 2px solid #008000;
 }
@@ -710,13 +676,6 @@ body.geometria .info {
 body.geometria #message {
   border: solid #800080 6px;
 }
-body.geometria #faq_nav span {
-  border: 2px solid #800080;
-}
-body.geometria #faq_nav span:hover {
-  background: #800080;
-  color: #ffffff;
-}
 body.geometria #r_nav span {
   border: 2px solid #800080;
 }
@@ -743,13 +702,6 @@ body.algebra .info {
 }
 body.algebra #message {
   border: solid #008000 6px;
-}
-body.algebra #faq_nav span {
-  border: 2px solid #008000;
-}
-body.algebra #faq_nav span:hover {
-  background: #008000;
-  color: #ffffff;
 }
 body.algebra #r_nav span {
   border: 2px solid #008000;

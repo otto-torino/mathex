@@ -276,8 +276,8 @@ mathex.Shared = {
      * @return void
      */
     playerWidget: function(audio_obj) {
-        if(typeof $('container').getElements('audio')[0] != 'undefined') {
-            $('container').getElements('audio')[0].dispose();
+        if($('audio-container') != null) {
+            $('audio-container').dispose();
         }
         if(audio_obj === null) {
             return true;
@@ -289,7 +289,11 @@ mathex.Shared = {
         if(typeof audio_obj.ogg != 'undefined') {
             var ogg_source = new Element('source[src=' + audio_obj.ogg + '][type=audio/ogg]').inject(audio);
         }
-        audio.inject($('container'), 'top');
+        var audio_container = new Element('div#audio-container').adopt(audio);
+        if(audio_obj.instructions) {
+            audio_container.adopt(new Element('p.instructions').set('html', audio_obj.instructions));
+        }
+        audio_container.inject($('container'), 'top');
     },
     /**
      * @summary Creates a font-size controller widget and places it inside the widget container
@@ -605,7 +609,7 @@ mathex.Navigator = function(options) {
         var index_button = new Element('a.button')
             .set('href', this.options.index)
             .set('text', 'indice')
-            .inject($$('body > p.info')[0]);
+            .inject(document.getElements('body > p.info')[0]);
         var clear_el = new Element('div.clear').inject(index_button, 'after');
     }
 
@@ -1614,7 +1618,7 @@ mathex.QuestionRouter.prototype = new mathex.Router();
  *                                                <li><b>question</b>: string. The question, can contain mathjax math inside the tag {% LATEX MATH HERE %}</li>
  *                                                <li><b>answer</b>: string. The answer, can contain mathjax math inside the tag {% LATEX MATH HERE %}, and links to other faqs, 
  *                                                        whether indexed faqs or not (in this case showing the linked one in a layer): {{link_text:3}} or {{link_text:3:layer}}</li>
- *                                                <li><b>audio</b>: object. The audio object for the question and answer, it has the 'mp3' and 'ogg' properties storing the files' paths</li>
+ *                                                <li><b>audio</b>: object. The audio object for the question and answer, it has the 'mp3', 'ogg' and 'instructions' properties storing the files' paths and a text</li>
  *                                            </ul>
  * @return {Object} mathex.Faq instance
  * @example
@@ -1625,6 +1629,7 @@ mathex.QuestionRouter.prototype = new mathex.Router();
  *                 audio: {
  *                     mp3: 'audio/myfile.mp3',
  *                     ogg: 'audio/myfile.ogg',
+ *                     instructions: 'listen to the audio file ...',
  *            }
  *        },
  *        {
@@ -1655,6 +1660,8 @@ mathex.FaqRouter = function(faq) {
     this.start = function() {
         this.faq_div = new Element('div#faq_container').inject($('container'), 'bottom');
         this.faq_nav = new Element('div#faq_nav').inject($('container'), 'bottom');
+        this.faq_index_button = null;
+        this.clear_faq_index_button = null;
         // widgets
         if(mathex.config.font_ctrl) {
             mathex.Shared.fontWidget();
@@ -1671,15 +1678,20 @@ mathex.FaqRouter = function(faq) {
     this.renderIndex = function() {
         this.faq_div.empty();
         this.faq_nav.empty();
+        if(this.faq_index_button) this.faq_index_button.dispose();
+        if(this.clear_faq_index_button) this.clear_faq_index_button.dispose();
+        this.faq_index_button = null;
         var list = new Element('ul').inject(this.faq_div);
+        var i = 1;
         this.faq.items.each(function(item, index) {
             if(typeof item.index == 'undefined' || item.index) {
                 var li = new Element('li.link_faq')
-                    .set('html', mathex.Shared.parseTpl(item.question, []))
+                    .set('html', i + '. ' + mathex.Shared.parseTpl(item.question, []))
                     .addEvent('click', function() {
                         this.renderFaq(index);
                     }.bind(this))
                     .inject(list, 'bottom');
+                i++;
             }
         }.bind(this));
 
@@ -1699,38 +1711,17 @@ mathex.FaqRouter = function(faq) {
         index = parseInt(index);
         /* index */
         var self = this;
-        var title = new Element('h3.select').set('html', mathex.Shared.parseTpl(this.faq.items[index].question, []))
-            .addEvent('click', function() {
-                var list = $(this).getNext('ul');
-                if(list.getStyle('display') == 'none') {
-                    list.setStyle('display', 'inline-block');
-                }
-                else {
-                    list.setStyle('display', 'none');
-                }
-            });
-        var fake_select = new Element('ul.select');
-        this.faq.items.each(function(item, opt_index) {
-            if((typeof item.index == 'undefined' || item.index) && opt_index != index) {
-                var option = new Element('li')
-                    .set('html', mathex.Shared.parseTpl(item.question, []))
-                    .addClass('link')
-                    .setProperty('data-value', opt_index)
-                    .addEvent('click', function() {
-                        self.renderFaq($(this).get('data-value'));
-                        window.location.hash = 'top';
-                    })
-                    .inject(fake_select);
-            }
-        }.bind(this));
+        var title = new Element('h3').set('html', (index + 1) + '. ' + mathex.Shared.parseTpl(this.faq.items[index].question, []))
 
         var item = this.faq.items[index];
         this.faq_div.empty();
         this.faq_nav.empty();
+        if(this.faq_index_button) this.faq_index_button.dispose();
+        if(this.clear_faq_index_button) this.clear_faq_index_button.dispose();
         var answer = mathex.Shared.parseTpl(item.answer, []);
         var link_rexp = new RegExp("{{\s*(.*?):([0-9]+):?(layer)?\s*}}", "gim");
         var answer = answer.replace(link_rexp, "<span class=\"link\" onclick=\"router.goto($2, '$3')\">$1</span>");
-        this.faq_div.adopt(title, fake_select, new Element('div').set('html', answer));
+        this.faq_div.adopt(title, new Element('div').set('html', answer));
 
         MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
 
@@ -1743,16 +1734,24 @@ mathex.FaqRouter = function(faq) {
                 }
             }
             if(prev_exists) {
-                prev = new Element('span').set('text', 'precedente').addEvent('click', function() {
+                prev = new Element('span.prev').set('text', '«').addEvent('click', function() {
                     this.renderFaq(index - 1);
                     window.location.hash = 'top';
                 }.bind(this)).inject(this.faq_nav);
             }
         }
-        var toindex = new Element('span').set('text', 'indice').addEvent('click', function() {
-            this.renderIndex();
-            window.location.hash = 'top';
-        }.bind(this)).inject(this.faq_nav);
+
+        var i = 0;
+        this.faq.items.each(function(faq) {
+            if(typeof faq.index == 'undefined' || faq.index) {
+                var item_el = new Element('span.item')
+                    .set('text', ++i)
+                    .inject(this.faq_nav);
+                if(index == i - 1) {
+                    item_el.addClass('selected');
+                }
+            }
+        });
 
         if(index < this.faq.items.length - 1) {
             var next_exists = false;
@@ -1762,12 +1761,20 @@ mathex.FaqRouter = function(faq) {
                 }
             }
             if(next_exists) {
-                next = new Element('span').set('text', 'successiva').addEvent('click', function() {
+                next = new Element('span.next').set('text', '»').addEvent('click', function() {
                     this.renderFaq(index + 1);
                     window.location.hash = 'top';
                 }.bind(this)).inject(this.faq_nav);
             }
         }
+
+        var toindex = new Element('span.index').set('text', 'indice').addEvent('click', function() {
+            this.renderIndex();
+            window.location.hash = 'top';
+        }.bind(this)).inject(this.faq_nav);
+        this.faq_index_button = toindex.clone().cloneEvents(toindex).addClass('button index').inject(document.getElements('body > p.info')[0]);
+        this.clear_faq_index_button = new Element('div.clear').inject(this.faq_index_button, 'after');
+
 
         /* audio */
         if(typeof item.audio != 'undefined') {
@@ -1971,7 +1978,7 @@ mathex.TestRadioQuestion = function(options) {
      */
     this.checkAnswer = function() {
         var result = false;
-        $$('input[type=radio]').each(function(radio, index) {
+        document.getElements('input[type=radio]').each(function(radio, index) {
             if(radio.checked && index == this.result) {
                 result = true;
             };
@@ -2114,5 +2121,5 @@ window.addEvent('load', function() {
         'line-height': 0,
         position: 'absolute',
         top: 0
-    }).inject($$('header')[0], 'after');
+    }).inject(document.getElements('header')[0], 'after');
 });
