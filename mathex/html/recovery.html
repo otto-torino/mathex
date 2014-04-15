@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>FAQ</title>
+    <title>Esercizio di recupero</title>
     <meta charset="utf-8" />
     <script src="../res-otto/js/modernizr.js"></script>
     <script src="../res-otto/js/mootools-core-yc.js"></script>
@@ -12,43 +12,92 @@
     </script>
     <link type="text/css" rel="stylesheet" href="../res-otto/css/style.css" />
   </head>
-  <body>
+  <body class="aritmetica">
     <header>
       <h1 class="left">Io e la matematica - Aritmetica I</h1>
       <p class="right" id="widgets"></p>
       <div class="clear"></div>
     </header>
-    <p class="info">Messaggio info</p>
-    <h2>Esercizi di recupero</h2>
-    <div id="container"></div>
+    <p class="info">Esercizio di recupero - unità X</p>
+    <p class="meaning">In questo esercizio: risolvi passo-passo e verifica subito le tue risposte. Se sbagli riprova. Se sbagli ancora, leggi la risposta corretta e prosegui</p>
+    <h2>Esercizio di recupero</h2>
+    <p class="instructions"><strong>Inserisci la risposta</strong>:<br />digita la risposta nel campo giallo e premi INVIO - oppure - seleziona una voce dal menu a tendina</p>
+    <div id="container">
+    </div>
     <script>
 
-      var recovery = new mathex.Recovery([
-        {
-          title: "Esercizi pagina 3",
-          tpl: '<img class="toggle" src="img/img.png" width="200" />' +
-               '<img class="toggle" src="img/img.png" />' +
-               '<p>La cippa: [[48]]' +
-               '<p>la pippa: [[{% 54^5 %}]]' +
-               '<ol>' +
-                 '<li>la pippa: [[{% 54^5 %}]]</li>' +
-                 '<li>la pippa: [[{% 54^5 %}]]</li>' +
-                 '<li>la pippa: [[{% 54^5 %}]]</li>' +
-               '</ol>'
-        },
-        {
-          title: "Esercizi pagina 9?",
-          tpl: "<p>Le equazioni sono nate per problemi numerici bla bla</p>{% 3x -5 = x + 7 %}<p>Ancora bla bla</p>"
-        }
-      ])
+      mathex.config.font_ctrl = true;
 
-      var router = new mathex.RecoveryRouter(recovery);
-      router.start();
+      var step1 = new mathex.TextFieldStep(
+      '<h3>Verifichiamo che {% 2^7 : 2^4 = 2^(7-4) = ^3 %}</h3>' + 
+      '<p>Seguiamo due procedimenti diversi</p>' + 
+      '<h4>Primo procedimento</h4>' + 
+      '<p>Senza applicare le proprietà delle potenze. Calcola</p>' + 
+      '<p>{% 2^7 = \\FormInput0 %}</p>' + 
+      '<p>{% 2^4 = \\FormInput1 %}</p>',
+        {
+          0: {
+            size: 3,
+            active: true,
+            result: '128',
+            type: 'string'
+          },
+          1: {
+            size: 2,
+            active: false,
+            type: 'int'
+          }
+        },
+        'sucaris'
+      );
+
+      var step2 = new mathex.FieldStep(1, 16, null, {type: 'int'});
+
+      var step3 = new mathex.TextChoiceFieldStep(
+      '<h3>Radio cazzo</h3>' + 
+      '<p>Scegli e muori</p>' + 
+      '<ul>' + 
+      '<li>[[0]] sucaris</li>' + 
+      '<li>[[1]] {% 2^7 = 32 %}</li>' + 
+      '<li>[[2]] {% 200000 %}</li>' + 
+      '</ul>',
+        0
+      );
+
+      var step4 = new mathex.TextSelectFieldStep(
+      '<h3>Radio cazzo</h3>' + 
+      '<p>Scegli e muori</p>' + 
+      '<ul>' + 
+      '<li>[[]] sucaris</li>' + 
+      '</ul>',
+        ['option', 'suca', 2, 3],
+        'suca'
+      );
+
+      var router = new mathex.Router();
+
+
+
+      router.init([step1, step2, step3, step4], 'hai finito');
+      router.startStep();
+
+      var n = new mathex.Navigator({
+          index: '#index',
+          prev: '#prev',
+          prev_label: 'paragrafo precedente',
+          items: 5,
+          current: 3,
+          next: '#next',
+          next_label: 'prossimo paragrafo'
+      });
 
 
     </script>
+
     <footer>
       <p>© SEI - Società Editrice Internazionale p.a. - Torino</p>
     </footer>
+
+
   </body>
 </html>

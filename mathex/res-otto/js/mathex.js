@@ -570,6 +570,93 @@ mathex.Shared = {
 
 /***********************************************************************
  *
+ *    NAVIGATION
+ *
+ ***********************************************************************/
+/**
+ * @summary Navigator Class
+ * @classdesc Renders navigation links in the info bar and at the bottom of the container.
+ * @memberof mathex
+ * @constructs mathex.Navigator
+ * @param {Object} [options] Navigator options
+ * @param {String} [options.index=null] index button url
+ * @param {String} [options.next=null] next button url
+ * @param {String} [options.prev=null] prev button url
+ * @param {Number} [options.items=0] number of pages
+ * @param {Number} [options.current=null] current selected page
+ * @param {String} [options.next_label] label next to the next button
+ * @param {String} [options.prev_label] label next to the prev button
+ * @return {Object} A Navigator instance
+ */
+mathex.Navigator = function(options) {
+    var opts = {
+        index: null,
+        next: null,
+        prev: null,
+        items: 0,
+        current: 0,
+        next_label: '',
+        prev_label: ''
+    };
+    this.options = Object.merge(opts, options);
+
+    // index
+    if(this.options.index) {
+        var index_button = new Element('a.button')
+            .set('href', this.options.index)
+            .set('text', 'indice')
+            .inject($$('body > p.info')[0]);
+        var clear_el = new Element('div.clear').inject(index_button, 'after');
+    }
+
+    // pages
+    if(this.options.prev || this.options.next) {
+        var container = new Element('div.navigation');
+        if(this.options.prev_label) {
+            var prev_el = new Element('span.prev-label')
+                .set('text', this.options.prev_label)
+                .inject(container);
+        }
+        if(this.options.prev) {
+            var prev_el = new Element('a.prev')
+                .set('href', this.options.prev)
+                .set('text', '«')
+                .inject(container);
+        }
+        if(this.options.items) {
+            for(var i = 1; i < this.options.items + 1; i++) {
+                var item_el = new Element('span.item')
+                    .set('text', i)
+                    .inject(container);
+                if(i == this.options.current) {
+                    item_el.addClass('selected');
+                }
+            }
+        }
+        if(this.options.next) {
+            var next_el = new Element('a.next')
+                .set('href', this.options.next)
+                .set('text', '»')
+                .inject(container);
+        }
+        if(this.options.next_label) {
+            var next_el = new Element('span.next-label')
+                .set('text', this.options.next_label)
+                .inject(container);
+        }
+        if(this.options.index) {
+            var index_el = new Element('a.index')
+                .set('href', this.options.index)
+                .set('text', 'indice')
+                .inject(container);
+        }
+
+        container.inject($('container'), 'after');
+    }
+}
+
+/***********************************************************************
+ *
  *    EXERCISES
  *
  ***********************************************************************/
@@ -1731,146 +1818,6 @@ mathex.FaqRouter = function(faq) {
         else {
             this.renderFaq(index);
         }
-    }
-}
-
-/***********************************************************************
- *
- *    Recovery exercises
- *    Index with questions. Each question may contain text, togglable images and initially hidden boxes which are shown when clicking over them
- *
- ***********************************************************************/
-/**
- * @summary Recovery - Recovery Class
- * @classdesc Stores an array containing all the recovery items
- * @memberof mathex
- * @constructs mathex.Recovery
- * @param {Array} items The array describing all items. Each item is an object with properties:
- *                                            <ul>
- *                                                <li><b>title</b>: string. The item title (for the index), can contain mathjax math inside the tag {% LATEX MATH HERE %}</li>
- *                                                <li><b>tpl</b>: string. The item tpl, can contain mathjax math inside the tag {% LATEX MATH HERE %}. Initially hidden boxes shown at mouse click must be in the form: [[x]]</li>
- *                                            </ul>
- * @return {Object} mathex.Recovery instance
- * @example
- *    var recovery = new mathex.Recovery([
- *        {
- *            title: "Exercises page 3",
- *            tpl: '&lt;img class="toggle" src="img/img.png" width="200" /&gt;' +
- *                     '&lt;img class="toggle" src="img/img.png" /&gt;' +
- *                     '&lt;p&gt;{% 1 + 1 %} = [[2]]&lt;/p&gt;' +
- *                     '&lt;p&gt;{% 2 + 1 %} = [[3]]&lt;/p&gt;'
- *        },
- *        {
- *            title: "Problem",
- *            tpl: "&lt;p&gt;Bla bla &lt;/p&gt;{% 3x -5 = x + 7 %}&lt;p&gt;Meow meow...&lt;/p&gt;"
- *        }
- *    ]);
- */
-mathex.Recovery = function(items) {
-    this.items = items;
-}
-/**
- * @summary Recovery - Recovery Router Class
- * @classdesc handles the recovery navigation and rendering
- * @constructs mathex.RecoveryRouter
- * @memberof mathex
- * @param {Object} recovery The mathex.Recovery instance
- * @return {Object} mathex.RecoveryRouter instance
- */
-mathex.RecoveryRouter = function(recovery) {
-
-    this.recovery = recovery;
-    /**
-     * @summary Starts the execution of the recovery
-     * @memberof mathex.RecoveryRouter.prototype
-     * @method start
-     * @return void
-     */
-    this.start = function() {
-        this.r_div = new Element('div#r_container').inject($('container'), 'bottom');
-        this.r_nav = new Element('div#r_nav').inject($('container'), 'bottom');
-        // widgets
-        if(mathex.config.font_ctrl) {
-            mathex.Shared.fontWidget();
-        }
-        mathex.Shared.calculatorWidget();
-        this.renderIndex();
-    }
-    /**
-     * @summary Renders the recovery index
-     * @memberof mathex.RecoveryRouter.prototype
-     * @method renderIndex
-     * @return void
-     */
-    this.renderIndex = function() {
-        window.location.hash = '';
-        this.r_div.empty();
-        this.r_nav.empty();
-        var list = new Element('ul').inject(this.r_div);
-        this.recovery.items.each(function(item, index) {
-            var li = new Element('li.link')
-                .set('html', mathex.Shared.parseTpl(item.title, []))
-                .addEvent('click', function() {
-                    this.renderRecovery(index);
-                }.bind(this))
-                .inject(list, 'bottom');
-        }.bind(this));
-
-        MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
-    }
-    /**
-     * @summary Renders one recovery item
-     * @memberof mathex.RecoveryRouter.prototype
-     * @method renderRecovery
-     * @param {Number} index the index of the item to be rendered
-     * @return void
-     */
-    this.renderRecovery = function(index) {
-        window.location.hash = '';
-        var item = this.recovery.items[index];
-        this.r_div.empty();
-        this.r_nav.empty();
-        var tpl = mathex.Shared.parseTpl(item.tpl, []);
-
-        // parse for hidden results
-        var hidden_rexp = new RegExp("\\[\\[(.*?)\\]\\]", "gim");
-        tpl = tpl.replace(hidden_rexp, "<span class=\"recovery-hidden\">$1</span>");
-        this.r_div.set('html', "<h2>" + mathex.Shared.parseTpl(item.title, []) + "</h2>" + tpl);
-
-        document.getElements('.recovery-hidden').addEvent('click', function() {
-            this.removeClass('recovery-hidden');
-        })
-
-        MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
-
-        var prev = null, next = null;
-        if(index > 0) {
-            prev = new Element('span').set('text', 'precedente').addEvent('click', function() {
-                this.renderRecovery(index - 1);
-                window.location.hash = 'top';
-            }.bind(this)).inject(this.r_nav);
-        }
-        var toindex = new Element('span').set('text', 'indice').addEvent('click', function() {
-            this.renderIndex();
-            window.location.hash = 'top';
-        }.bind(this)).inject(this.r_nav);
-
-        if(index < this.recovery.items.length - 1) {
-            next = new Element('span').set('text', 'successiva').addEvent('click', function() {
-                this.renderRecovery(index + 1);
-                window.location.hash = 'top';
-            }.bind(this)).inject(this.r_nav);
-        }
-    };
-    /**
-     * @summary Moves to another item
-     * @memberof mathex.RecoveryRouter.prototype
-     * @method goto
-     * @param {Number} index The index of the item to go to
-     * @return void
-     */
-    this.goto = function(index) {
-        this.renderRecovery(index);
     }
 }
 
