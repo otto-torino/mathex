@@ -296,6 +296,23 @@ mathex.Shared = {
         audio_container.inject($('container'), 'top');
     },
     /**
+     * @summary Creates a index controller widget, just a button with configurable click action
+     * @memberof mathex.Shared
+     * @method
+     * @return void
+     */
+    indexWidget: function(callback) {
+        if(!document.id('index_controller')) {
+            var ctrl = new Element('span#index_controller').set('text', 'indice');
+        }
+        else {
+            var ctrl = $('index_controller');
+        }
+        ctrl.removeEvents('click');
+        ctrl.addEvent('click', callback)
+            .inject($('widgets'));
+    },
+    /**
      * @summary Creates a font-size controller widget and places it inside the widget container
      * @memberof mathex.Shared
      * @method
@@ -597,35 +614,28 @@ mathex.Navigator = function(options) {
         index: null,
         next: null,
         prev: null,
+        next2: null,
+        prev2: null,
         items: 0,
         current: 0,
-        next_label: '',
-        prev_label: ''
     };
     this.options = Object.merge(opts, options);
 
     // index
     if(this.options.index) {
-        var index_button = new Element('a.button')
-            .set('href', this.options.index)
-            .set('text', 'indice')
-            .inject(document.getElements('body > p.info')[0]);
-        var clear_el = new Element('div.clear').inject(index_button, 'after');
+        mathex.Shared.indexWidget(function() { location.href = this.options.index; }.bind(this));
     }
 
     // pages
-    if(this.options.prev || this.options.next) {
-        var container = new Element('div.navigation');
-        if(this.options.prev_label) {
-            var prev_el = new Element('span.prev-label')
-                .set('text', this.options.prev_label)
-                .inject(container);
+    if(this.options.items) {
+        var container = new Element('div.navigation.relative');
+        var prev_2 = new Element('a.prev2').set('text', '<<').inject(container);
+        if(this.options.prev2) {
+            prev_2.set('href', this.options.prev2);
         }
+        var prev = new Element('a.prev').set('text', '<').inject(container);
         if(this.options.prev) {
-            var prev_el = new Element('a.prev')
-                .set('href', this.options.prev)
-                .set('text', '«')
-                .inject(container);
+            prev.set('href', this.options.prev);
         }
         if(this.options.items) {
             for(var i = 1; i < this.options.items + 1; i++) {
@@ -637,16 +647,13 @@ mathex.Navigator = function(options) {
                 }
             }
         }
+        var next = new Element('a.next').set('text', '>').inject(container);
         if(this.options.next) {
-            var next_el = new Element('a.next')
-                .set('href', this.options.next)
-                .set('text', '»')
-                .inject(container);
+            next.set('href', this.options.next);
         }
-        if(this.options.next_label) {
-            var next_el = new Element('span.next-label')
-                .set('text', this.options.next_label)
-                .inject(container);
+        var next_2 = new Element('a.next2').set('text', '>>').inject(container);
+        if(this.options.next2) {
+            next_2.set('href', this.options.next2);
         }
         if(this.options.index) {
             var index_el = new Element('a.index')
@@ -1640,6 +1647,13 @@ mathex.QuestionRouter.prototype = new mathex.Router();
  */
 mathex.Faq = function(items) {
     this.items = items;
+    this.index_items = [];
+    this.items.each(function(item, index) {
+        if(typeof item.index == 'undefined' || item.index === true) {
+            item.index = index;
+            this.index_items.push(item);
+        }
+    }.bind(this));
 }
 /**
  * @summary FAQ - Faq Router Class
@@ -1659,9 +1673,7 @@ mathex.FaqRouter = function(faq) {
      */
     this.start = function() {
         this.faq_div = new Element('div#faq_container').inject($('container'), 'bottom');
-        this.faq_nav = new Element('div#faq_nav').inject($('container'), 'bottom');
-        this.faq_index_button = null;
-        this.clear_faq_index_button = null;
+        this.faq_nav = new Element('div#faq_nav.navigation').inject($('container'), 'bottom');
         // widgets
         if(mathex.config.font_ctrl) {
             mathex.Shared.fontWidget();
@@ -1676,23 +1688,21 @@ mathex.FaqRouter = function(faq) {
      * @return void
      */
     this.renderIndex = function() {
+        if($('index_controller')) {
+            mathex.Shared.removeWidget($('index_controller'));
+        }
         this.faq_div.empty();
         this.faq_nav.empty();
-        if(this.faq_index_button) this.faq_index_button.dispose();
-        if(this.clear_faq_index_button) this.clear_faq_index_button.dispose();
-        this.faq_index_button = null;
         var list = new Element('ul').inject(this.faq_div);
         var i = 1;
-        this.faq.items.each(function(item, index) {
-            if(typeof item.index == 'undefined' || item.index) {
-                var li = new Element('li.link_faq')
-                    .set('html', i + '. ' + mathex.Shared.parseTpl(item.question, []))
-                    .addEvent('click', function() {
-                        this.renderFaq(index);
-                    }.bind(this))
-                    .inject(list, 'bottom');
-                i++;
-            }
+        this.faq.index_items.each(function(item, index) {
+            var li = new Element('li.link_faq')
+                .set('html', i + '. ' + mathex.Shared.parseTpl(item.question, []))
+                .addEvent('click', function() {
+                    this.renderFaq(item.index, index);
+                }.bind(this))
+                .inject(list, 'bottom');
+            i++;
         }.bind(this));
 
         mathex.Shared.playerWidget(null);
@@ -1704,20 +1714,19 @@ mathex.FaqRouter = function(faq) {
      * @memberof mathex.FaqRouter.prototype
      * @method renderFaq
      * @param {Number} index the index of the faq to be rendered
+     * @param {Number} index_index the index of the faq to be rendered considering only indexed faq
      * @return void
      */
-    this.renderFaq = function(index) {
+    this.renderFaq = function(index, index_index) {
 
         index = parseInt(index);
         /* index */
         var self = this;
-        var title = new Element('h3').set('html', (index + 1) + '. ' + mathex.Shared.parseTpl(this.faq.items[index].question, []))
+        var title = new Element('h3').set('html',  (index_index !== null ? (index_index + 1) + '. ' : '') + mathex.Shared.parseTpl(this.faq.items[index].question, []));
 
         var item = this.faq.items[index];
         this.faq_div.empty();
         this.faq_nav.empty();
-        if(this.faq_index_button) this.faq_index_button.dispose();
-        if(this.clear_faq_index_button) this.clear_faq_index_button.dispose();
         var answer = mathex.Shared.parseTpl(item.answer, []);
         var link_rexp = new RegExp("{{\s*(.*?):([0-9]+):?(layer)?\s*}}", "gim");
         var answer = answer.replace(link_rexp, "<span class=\"link\" onclick=\"router.goto($2, '$3')\">$1</span>");
@@ -1725,55 +1734,44 @@ mathex.FaqRouter = function(faq) {
 
         MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
 
-        var prev = null, next = null;
-        if(index > 0) {
-            var prev_exists = false;
-            for(var i = index - 1; i >= 0; i--) {
-                if(typeof this.faq.items[i].index == 'undefined' || this.faq.items[i].index) {
-                    prev_exists = true;
-                }
-            }
-            if(prev_exists) {
-                prev = new Element('span.prev').set('text', '«').addEvent('click', function() {
-                    this.renderFaq(index - 1);
+        if(index_index !== null) {
+            var prev = null, next = null;
+            if(index_index > 0) {
+                prev = new Element('span.prev.link').set('text', '<').addEvent('click', function() {
+                    this.renderFaq(index - 1, index_index - 1);
                     window.location.hash = 'top';
                 }.bind(this)).inject(this.faq_nav);
             }
-        }
+            else {
+                prev = new Element('span.prev').set('text', '<').inject(this.faq_nav);
+            }
 
-        var i = 0;
-        this.faq.items.each(function(faq) {
-            if(typeof faq.index == 'undefined' || faq.index) {
+            var i = 0;
+            this.faq.index_items.each(function(faq) {
                 var item_el = new Element('span.item')
                     .set('text', ++i)
                     .inject(this.faq_nav);
-                if(index == i - 1) {
+                if(index_index == i - 1) {
                     item_el.addClass('selected');
                 }
-            }
-        });
+            });
 
-        if(index < this.faq.items.length - 1) {
-            var next_exists = false;
-            for(var i = index + 1, l = this.faq.items.length; i < l; i++) {
-                if(typeof this.faq.items[i].index == 'undefined' || this.faq.items[i].index) {
-                    next_exists = true;
-                }
-            }
-            if(next_exists) {
-                next = new Element('span.next').set('text', '»').addEvent('click', function() {
-                    this.renderFaq(index + 1);
+            if(index < this.faq.index_items.length - 1) {
+                next = new Element('span.next.link').set('text', '>').addEvent('click', function() {
+                    this.renderFaq(index + 1, index_index + 1);
                     window.location.hash = 'top';
                 }.bind(this)).inject(this.faq_nav);
             }
-        }
+            else {
+                next = new Element('span.next').set('text', '>').inject(this.faq_nav);
+            }
 
-        var toindex = new Element('span.index').set('text', 'indice').addEvent('click', function() {
-            this.renderIndex();
-            window.location.hash = 'top';
-        }.bind(this)).inject(this.faq_nav);
-        this.faq_index_button = toindex.clone().cloneEvents(toindex).addClass('button index').inject(document.getElements('body > p.info')[0]);
-        this.clear_faq_index_button = new Element('div.clear').inject(this.faq_index_button, 'after');
+            var toindex = new Element('span.index').set('text', 'indice').addEvent('click', function() {
+                this.renderIndex();
+                window.location.hash = 'top';
+            }.bind(this)).inject(this.faq_nav);
+        }
+        mathex.Shared.indexWidget(function() { this.renderIndex(); window.location.hash = 'top'; }.bind(this));
 
 
         /* audio */
@@ -1823,7 +1821,13 @@ mathex.FaqRouter = function(faq) {
             layer.adopt(close, title, new Element('div').set('html', answer));
         }
         else {
-            this.renderFaq(index);
+            var item = this.faq.items[index];
+            if(typeof item.index == 'undefined' || item.index) {
+                this.renderFaq(index, this.faq.index_items.indexOf(item));
+            }
+            else {
+                this.renderFaq(index, null);
+            }
         }
     }
 }

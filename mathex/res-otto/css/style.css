@@ -230,8 +230,6 @@ ul span.v {
 }
 /* navigation */
 .navigation {
-  position: relative;
-  top: -80px;
   margin: 10px;
 }
 .navigation .prev-label,
@@ -242,14 +240,62 @@ ul span.v {
 .navigation .prev,
 .navigation .item,
 .navigation .next,
-.navigation .index {
+.navigation .index,
+.navigation .prev2,
+.navigation .next2 {
+  width: 36px;
+  height: 36px;
   display: inline-block;
-  padding: 2px 5px;
-  background: #eee;
+  text-align: center;
+  line-height: 35px;
+  background: #999;
+  border-radius: 50%;
   margin-right: 5px;
+  color: #fff;
+}
+.navigation .prev {
+  background: url(../img/prev_grey.png) no-repeat center center;
+  color: transparent !important;
+}
+.navigation .prev[href],
+.navigation .prev.link {
+  background: url(../img/prev.png) no-repeat center center;
+  cursor: pointer;
+}
+.navigation .prev2 {
+  background: url(../img/prev2_grey.png) no-repeat center center;
+  color: transparent !important;
+}
+.navigation .prev2[href] {
+  background: url(../img/prev2.png) no-repeat center center;
+}
+.navigation .next {
+  background: url(../img/next_grey.png) no-repeat center center;
+  color: transparent !important;
+}
+.navigation .next[href],
+.navigation .next.link {
+  background: url(../img/next.png) no-repeat center center;
+  cursor: pointer;
+}
+.navigation .next2 {
+  background: url(../img/next2_grey.png) no-repeat center center;
+  color: transparent !important;
+}
+.navigation .next2[href] {
+  background: url(../img/next2.png) no-repeat center center;
+}
+.navigation .index {
+  background: url(../img/index.png) no-repeat center center;
+  color: transparent !important;
+  cursor: pointer;
 }
 .navigation .selected {
-  background: #ccc;
+  background: #808080;
+}
+.navigation.relative {
+  position: relative;
+  top: -80px;
 }
 /* widgets */
 #widgets {
@@ -260,12 +306,13 @@ ul span.v {
   position: relative;
 }
 #widgets .font_controller,
-#widgets #calc {
+#widgets #calc,
+#widgets #index_controller {
   display: inline-block;
   margin-left: 10px;
-  height: 30px;
-  width: 30px;
-  line-height: 30px;
+  height: 36px;
+  width: 36px;
+  line-height: 36px;
   text-align: center;
   cursor: pointer;
 }
@@ -273,16 +320,19 @@ ul span.v {
   color: transparent;
 }
 #widgets #font_minus {
-  background: url('../img/font_minus.jpg') no-repeat center center;
+  background: url('../img/font_minus.png') no-repeat center center;
 }
 #widgets #font_plus {
-  background: url('../img/font_plus.jpg') no-repeat center center;
+  background: url('../img/font_plus.png') no-repeat center center;
 }
 #widgets #font_regular {
-  background: url('../img/font_regular.jpg') no-repeat center center;
+  background: url('../img/font_regular.png') no-repeat center center;
 }
 #widgets #calc {
-  background: #ffffff url('../img/calc.png') no-repeat center center;
+  background: url('../img/calc.png') no-repeat center center;
+}
+#widgets #index_controller {
+  background: url('../img/index.png') no-repeat center center;
 }
 /* calculator */
 #calculator {
@@ -510,22 +560,6 @@ ul.test li label {
   background: orange;
 }
 /* faq */
-#faq_nav {
-  margin-top: 20px;
-  padding-top: 10px;
-}
-#faq_nav .prev,
-#faq_nav .next,
-#faq_nav .item,
-#faq_nav .index {
-  display: inline-block;
-  padding: 2px 5px;
-  background: #eee;
-  margin-right: 5px;
-}
-#faq_nav .selected {
-  background: #ccc;
-}
 .link_faq {
   cursor: pointer;
   color: #f08008;
@@ -659,6 +693,10 @@ body.aritmetica #r_nav span:hover {
 body.aritmetica #calculator {
   border-top: 10px solid #008000;
 }
+body.aritmetica .navigation .selected {
+  background: #008000;
+  color: #ffffff;
+}
 body.geometria > header,
 body.geometria > footer {
   background-color: #800080;
@@ -686,6 +724,10 @@ body.geometria #r_nav span:hover {
 body.geometria #calculator {
   border-top: 10px solid #800080;
 }
+body.geometria .navigation .selected {
+  background: #800080;
+  color: #ffffff;
+}
 body.algebra > header,
 body.algebra > footer {
   background-color: #008000;
@@ -712,4 +754,8 @@ body.algebra #r_nav span:hover {
 }
 body.algebra #calculator {
   border-top: 10px solid #008000;
+}
+body.algebra .navigation .selected {
+  background: #008000;
+  color: #ffffff;
 }

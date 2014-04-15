@@ -245,20 +245,62 @@ ul {
 
 /* navigation */
 .navigation {
-    position: relative;
-    top: -80px;
     margin: 10px;
     .prev-label, .next-label {
         display: inline-block;
         padding: 2px 5px;
     }
-    .prev, .item, .next, .index {
+    .prev, .item, .next, .index, .prev2, .next2 {
+        width: 36px;
+        height: 36px;
         display: inline-block;
-        padding: 2px 5px;
-        background: #eee;
+        text-align: center;
+        line-height: 35px;
+        background: #999;
+        border-radius: 50%;
         margin-right: 5px;
+        color: #fff;
+    }
+    .prev {
+        background: url(../img/prev_grey.png) no-repeat center center;
+        color: transparent !important;
+    }
+    .prev[href], .prev.link {
+        background: url(../img/prev.png) no-repeat center center;
+        cursor: pointer;
+    }
+    .prev2 {
+        background: url(../img/prev2_grey.png) no-repeat center center;
+        color: transparent !important;
+    }
+    .prev2[href] {
+        background: url(../img/prev2.png) no-repeat center center;
+    }
+    .next {
+        background: url(../img/next_grey.png) no-repeat center center;
+        color: transparent !important;
+    }
+    .next[href], .next.link {
+        background: url(../img/next.png) no-repeat center center;
+        cursor: pointer;
+    }
+    .next2 {
+        background: url(../img/next2_grey.png) no-repeat center center;
+        color: transparent !important;
+    }
+    .next2[href] {
+        background: url(../img/next2.png) no-repeat center center;
+    }
+    .index {
+        background: url(../img/index.png) no-repeat center center;
+        color: transparent !important;
+        cursor: pointer;
     }
     .selected {
-        background: #ccc;
+        background: @mcolor;
     }
+}
+.navigation.relative {
+    position: relative;
+    top: -80px;
 }
