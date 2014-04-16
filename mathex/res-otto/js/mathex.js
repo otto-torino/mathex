@@ -83,6 +83,107 @@ mathex.config = {
  */
 mathex.Shared = {
     /**
+     * @summary Renders the page template inside body
+     * @description Given the title, subtitle, etc... inserts the right template structure inside the body
+     * @memberof mathex.Shared
+     * @method
+     * @param {Object} [options] The options object
+     * @param {String} [options.title] The page title
+     * @param {String} [options.subtitle] The page subtitle
+     * @param {String} [options.meaning] The exercise meaning
+     * @param {String} [options.instructions] The exercise instructions
+     * @param {String} [options.duty] The exercise duty
+     * @param {String} [options.pre_container] Html text to insert between the duty and the container
+     * @return void
+     */
+    renderTemplate: function(options) {
+        var opts = {
+            title: '',
+            subtitle: '',
+            meaning: '',
+            instructions: '',
+            duty: '',
+            pre_container: '',
+        };
+        var options = Object.merge(opts, options);
+
+        // header
+        var header = new Element('header');
+        var title = new Element('h1.left').set('html', options.title);
+        var widgets = new Element('p#widgets.right');
+        var clear = new Element('div.clear');
+
+        header.adopt(title, widgets, clear);
+
+        // subtitle, meaning, instructions, duty, pre_container
+        var subtitle = new Element('p.subtitle').set('html', options.subtitle);
+        var meaning = options.meaning
+            ? new Element('p.meaning').set('html', options.meaning)
+            : null;
+        var instructions = options.instructions
+            ? new Element('p.instructions').set('html', options.instructions)
+            : null;
+        var duty = new Element('h2.duty').set('html', options.duty);
+        var pre_container = new Element('div.pre_container').set('html', options.pre_container);
+
+        // container
+        var container = new Element('div#container');
+
+        // navigation
+        var navigation = new Element('div#navigation');
+
+        // footer
+        var footer = new Element('footer')
+            .adopt(new Element('p').set('text', '© SEI - Società Editrice Internazionale p.a. - Torino'));
+
+        document.body.adopt(
+            header,
+            subtitle,
+            meaning,
+            instructions,
+            duty,
+            pre_container,
+            container,
+            navigation,
+            footer
+        );
+
+    },
+    /**
+     * @summary Updates the content of the navigation container
+     * @memberof mathex.Shared
+     * @method setNavigation
+     * @param {Mixed} content the content html text or the html element
+     * @return void
+     */
+    setNavigation: function(content) {
+        if(typeof $('navigation') == 'undefined') {
+            console.log('navigation container doesn\' exists');
+            throw new Error('navigation container doesn\' exists');
+        }
+        var navigation = $('navigation');
+        navigation.empty();
+        if(typeof content == 'string') {
+            navigation.set('html', content);
+        }
+        else {
+            navigation.adopt(content);
+        }
+    },
+    /**
+     * @summary Clears all navigation contents
+     * @memberof mathex.Shared
+     * @method clearNavigation
+     * @return void
+     */
+    clearNavigation: function() {
+        if(typeof $('navigation') == 'undefined') {
+            console.log('navigation container doesn\' exists');
+            throw new Error('navigation container doesn\' exists');
+        }
+        $('navigation').empty();
+    },
+    /**
      * @summary Parses a mathex template
      * @description Parses mathjax tags converting them to mathjax syntax, replaces input fields inside mathjax tags and activates toggling images
      * @memberof mathex.Shared
@@ -628,7 +729,7 @@ mathex.Navigator = function(options) {
 
     // pages
     if(this.options.items) {
-        var container = new Element('div.navigation.relative');
+        var container = new Element('div.navigation');
         var prev_2 = new Element('a.prev2').set('text', '<<').inject(container);
         if(this.options.prev2) {
             prev_2.set('href', this.options.prev2);
@@ -662,7 +763,7 @@ mathex.Navigator = function(options) {
                 .inject(container);
         }
 
-        container.inject($('container'), 'after');
+        mathex.Shared.setNavigation(container);
     }
 }
 
@@ -1542,7 +1643,8 @@ mathex.QuestionRouter = function() {
         this.steps = s;
         this.steps[s.length - 1].setLast();
         var answer_div = new Element('div#answers_container').inject($('container'), 'bottom');
-        var nav_div = new Element('div#answers_nav.navigation').inject($('container'), 'bottom');
+        var nav_div = new Element('div#answers_nav.navigation');
+        mathex.Shared.setNavigation(nav_div);
         for(var i = 1, l = s.length; i < l + 1; i++) {
             var navel = new Element('span#nav' + i).set('text', i).inject(nav_div);
         }
@@ -1668,7 +1770,9 @@ mathex.QuestionRouter = function() {
      * @return {String} The final result
      */
     this.showResult = function() {
+
         $('container').empty();
+        mathex.Shared.clearNavigation();
 
         var title = new Element('h3.no-margin-top').set('text', 'Esito');
 
@@ -1677,9 +1781,9 @@ mathex.QuestionRouter = function() {
             new Element('p.result-sattempt').set('text', 'RISPOSTE CORRETTE AL SECONDO TENTATIVO: ' + this.attempt_answers),
             new Element('p.result-failed').set('text', 'RISPOSTE SBAGLIATE: ' + this.wrong_answers)
         );
-        var p_summary = new Element('p.navigation');
+        var p_summary = new Element('p.questions-summary');
         for(var i = 0, l = this.steps.length; i < l; i++) {
-            var item_el = new Element('span.item').set('text', (i + 1));
+            var item_el = new Element('span.questions-summary-question').set('text', (i + 1));
             if(this.results[i] == 1) {
                 item_el.addClass('success');
             }
@@ -1773,7 +1877,8 @@ mathex.FaqRouter = function(faq) {
      */
     this.start = function() {
         this.faq_div = new Element('div#faq_container').inject($('container'), 'bottom');
-        this.faq_nav = new Element('div#faq_nav.navigation').inject($('container'), 'bottom');
+        this.faq_nav = new Element('div#faq_nav.navigation');
+        mathex.Shared.setNavigation(this.faq_nav);
         // widgets
         if(mathex.config.font_ctrl) {
             mathex.Shared.fontWidget();
@@ -2262,7 +2367,8 @@ mathex.Test = function() {
      * @return void
      */
     this.renderNavigation = function(current) {
-        this.test_nav = new Element('div#test_nav.navigation').inject($('container'), 'bottom');
+        this.test_nav = new Element('div#test_nav.navigation');
+        mathex.Shared.setNavigation(this.test_nav);
         this.questions.each(function(question, index) {
             var item_el = new Element('span.item')
                 .set('text', (index + 1))
@@ -2313,6 +2419,9 @@ mathex.Test = function() {
      * @return void
      */
     this.renderResults = function() {
+
+        mathex.Shared.clearNavigation();
+
         var correct = 0;
         var incorrect = 0;
 

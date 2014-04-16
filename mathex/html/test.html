@@ -15,18 +15,18 @@
     <link type="text/css" rel="stylesheet" href="../res-otto/css/style.css" />
   </head>
   <body class="aritmetica">
-    <header>
-      <h1 class="left">Verifica dell'attività di recupero</h1>
-      <p class="right" id="widgets"></p>
-      <div class="clear"></div>
-    </header>
-    <p class="info">Verifica dell'attività di recupero</p>
-    <p class="meaning"><b>Verifica se hai colmato le lacune:</b> rispondi ad ogni domanda, fino alla fine del test. Ad ogni risposta ne sarà comunicato l'esito. Al termine del test potrai conoscere il risultato complessivo della prova, verificare le soluzioni e confrontarle con le tue risposte. Segui le indicazioni per continuare lo studio in base al risultato ottenuto.</p>
-    <p class="instructions"><b>Rispondi</b>: digita la risposta nei campi gialli e premi CONFERMA.</p>
-    <h2>Verifica</h2>
-    <div id="container"></div>
 
     <script>
+
+      mathex.Shared.renderTemplate({
+          title: 'Verifica dell\'attività di recupero',
+          subtitle: 'Verifica - unità x',
+          meaning: '<b>Verifica se hai colmato le lacune:</b> rispondi ad ogni domanda, fino alla fine del test. Ad ogni risposta ne sarà comunicato l\'esito. Al termine del test potrai conoscere il risultato complessivo della prova, verificare le soluzioni e confrontarle con le tue risposte. Segui le indicazioni per continuare lo studio in base al risultato ottenuto.',
+          instructions: '<b>Rispondi</b>: digita la risposta nei campi gialli e premi CONFERMA.',
+          duty: 'Verifica',
+          pre_container: ''
+      });
+
       var question1 = new mathex.TestQuestion('input', {
         question: '<p>Come si scrive la potenza che ha per esponente 3 e base 20?</p><p>{%\\FormInput0 ^ \\FormInput1%}</p>',
         inputs: {
@@ -78,9 +78,5 @@
       test.start();
     </script>
 
-    
-    <footer>
-      <p>© SEI - Società Editrice Internazionale p.a. - Torino</p>
-    </footer>
   </body>
 </html>

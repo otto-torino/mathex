@@ -16,19 +16,21 @@
     <link rel="stylesheet" type="text/css" href="ajsut.css" />
   </head>
   <body class="aritmetica">
-    <header>
-      <h1 class="left">Mathex questions tests</h1>
-      <p class="right" id="widgets"></p>
-      <div class="clear"></div>
-    </header>
-    <h2>Autoverifica</h2>
-    <div id="container"></div>
 
     <script>
 
       alert('sit down and keep calm');
 
       mathex.config.font_ctrl = true;
+
+      mathex.Shared.renderTemplate({
+          title: 'Mathex questions tests',
+          subtitle: 'Autoverifica - unità x',
+          meaning: '<b>Verifica la tua preparazione:</b> rispondi ad ogni domanda e verifica subito la tua risposta. Se hai sbagliato, riprova. Se sbagli ancora, leggi la risposta corretta e prosegui. Al termine del test conoscerai la valutazione complessiva della prova. Segui le indicazioni per continuare lo studio in base al risultato ottenuto.',
+          instructions: '<b>Rispondi</b>: seleziona la risposta corretta.',
+          duty: 'Autoverifica',
+          pre_container: ''
+      });
 
       var question1 = new mathex.Question({
         text: 'Which is the correct result of the equation {% x = 2 + 2 %}?',
@@ -117,7 +119,7 @@
           evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
           $$('#message .layer-close')[0].fireEvent('click', evObj);
           ajsut.assert($$('.question-rating > .points').get('text') == 'Il tuo punteggio totale è: 1.5', 'showed points are correct');
-          ajsut.assert($$('.navigation > span')[1].hasClass('success'), 'The navigation second item has class success');
+          ajsut.assert($$('.questions-summary > span')[1].hasClass('success'), 'The navigation second item has class success');
           ajsut.resume();
         }, 1000);
       })
@@ -142,5 +144,5 @@
       })
               
     </script>
-  </body>
+
 </html>

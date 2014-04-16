@@ -16,18 +16,21 @@
     <link rel="stylesheet" type="text/css" href="ajsut.css" />
   </head>
   <body class="aritmetica">
-    <header>
-      <h1 class="left">Mathex exercises tests</h1>
-      <p class="right" id="widgets"></p>
-      <div class="clear"></div>
-    </header>
-    <div id="container"></div>
 
     <script>
 
       alert('sit down and keep calm');
 
       mathex.config.font_ctrl = true;
+
+      mathex.Shared.renderTemplate({
+          title: 'Mathex exercises tests',
+          subtitle: 'This is a subtitle',
+          meaning: 'Explain here the meaning of the exercise',
+          instructions: '<strong>Instructions</strong>:<br />bla bla here',
+          duty: 'Exercise',
+          pre_container: ''
+      });
 
       var step1 = new mathex.TextFieldStep(
         '<h3>Text field step with a active and inactive fields followed by a FieldStep</h3>' + 

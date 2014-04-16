@@ -16,19 +16,21 @@
     <link rel="stylesheet" type="text/css" href="ajsut.css" />
   </head>
   <body class="aritmetica">
-    <header>
-      <h1 class="left">Mathex test tests</h1>
-      <p class="right" id="widgets"></p>
-      <div class="clear"></div>
-    </header>
-    <h2>Verifica</h2>
-    <div id="container"></div>
 
     <script>
 
       alert('sit down and keep calm');
 
       mathex.config.font_ctrl = true;
+
+      mathex.Shared.renderTemplate({
+          title: 'Mathex test tests',
+          subtitle: 'Verifica - unità x',
+          meaning: '<b>Verifica se hai colmato le lacune:</b> rispondi ad ogni domanda, fino alla fine del test. Ad ogni risposta ne sarà comunicato l\'esito. Al termine del test potrai conoscere il risultato complessivo della prova, verificare le soluzioni e confrontarle con le tue risposte. Segui le indicazioni per continuare lo studio in base al risultato ottenuto.',
+          instructions: '<b>Rispondi</b>: digita la risposta nei campi gialli e premi CONFERMA.',
+          duty: 'Verifica',
+          pre_container: ''
+      });
 
       var question1 = new mathex.TestQuestion('input', {
         question: '<p>Pow with exponent 3 and base 20?</p><p>{%\\FormInput0 ^ \\FormInput1%}</p>',

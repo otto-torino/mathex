@@ -16,19 +16,21 @@
     <link rel="stylesheet" type="text/css" href="ajsut.css" />
   </head>
   <body class="aritmetica">
-    <header>
-      <h1 class="left">Mathex faq tests</h1>
-      <p class="right" id="widgets"></p>
-      <div class="clear"></div>
-    </header>
-    <h2>FAQ</h2>
-    <div id="container"></div>
 
     <script>
 
       alert('sit down and keep calm');
 
       mathex.config.font_ctrl = true;
+
+      mathex.Shared.renderTemplate({
+          title: 'Mathex faq tests',
+          subtitle: 'FAQ - unità x',
+          meaning: '',
+          instructions: '',
+          duty: 'FAQ',
+          pre_container: ''
+      });
 
       var faq = new mathex.Faq([
         {

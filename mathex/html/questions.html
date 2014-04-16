@@ -13,17 +13,17 @@
     <link type="text/css" rel="stylesheet" href="../res-otto/css/style.css" />
   </head>
   <body>
-    <header>
-      <h1 class="left">Io e la matematica - Aritmetica I</h1>
-      <p class="right" id="widgets"></p>
-      <div class="clear"></div>
-    </header>
-    <p class="info">Autoverifica unità 6</p>
-    <p class="meaning"><b>Verifica la tua preparazione:</b> rispondi ad ogni domanda e verifica subito la tua risposta. Se hai sbagliato, riprova. Se sbagli ancora, leggi la risposta corretta e prosegui. Al termine del test conoscerai la valutazione complessiva della prova. Segui le indicazioni per continuare lo studio in base al risultato ottenuto.</p>
-    <p class="instructions"><b>Rispondi</b>: seleziona la risposta corretta.</p>
-    <h2>Autoverifica</h2>
-    <div id="container"></div>
+
     <script>
+
+      mathex.Shared.renderTemplate({
+          title: 'Autoverifica - Aritmetica 1',
+          subtitle: 'Autoverifica - unità x',
+          meaning: '<b>Verifica la tua preparazione:</b> rispondi ad ogni domanda e verifica subito la tua risposta. Se hai sbagliato, riprova. Se sbagli ancora, leggi la risposta corretta e prosegui. Al termine del test conoscerai la valutazione complessiva della prova. Segui le indicazioni per continuare lo studio in base al risultato ottenuto.',
+          instructions: '<b>Rispondi</b>: seleziona la risposta corretta.',
+          duty: 'Autoverifica',
+          pre_container: ''
+      });
 
       var question1 = new mathex.Question({
         text: '1. Come si chiamano due equazioni che hanno la stessa soluzione?',
@@ -64,9 +64,6 @@
 
 
     </script>
-    <footer>
-      <p>© SEI - Società Editrice Internazionale p.a. - Torino</p>
-    </footer>
 
   </body>
 </html>
