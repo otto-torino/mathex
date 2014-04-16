@@ -208,6 +208,12 @@ blockquote {
 .result-failed {
   color: red;
 }
+.result-sattempt {
+  color: orange;
+}
+.no-margin-top {
+  margin-top: 0;
+}
 /* layer */
 .layer {
   padding: 10px;
@@ -239,7 +245,7 @@ ul span.v {
 }
 /* navigation */
 .navigation {
-  margin: 10px;
+  margin: 90px 10px 10px;
 }
 .navigation .prev-label,
 .navigation .next-label {
@@ -311,8 +317,12 @@ ul span.v {
 .navigation .success {
   background: green !important;
 }
+.navigation .sattempt {
+  background: orange !important;
+}
 .navigation.relative {
   position: relative;
+  margin: 10px;
   top: -80px;
 }
 /* widgets */
@@ -556,13 +566,13 @@ ul.test li label {
 }
 #answers_nav span {
   display: inline-block;
-  width: 30px;
-  height: 50px;
-  border: 1px solid #000;
-  margin-right: 10px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  margin-right: 5px;
   text-align: center;
-  line-height: 50px;
-  border-radius: 10px 0 0 0;
+  line-height: 36px;
+  background: #eee;
 }
 #answers_nav span.current {
   background: #808080;

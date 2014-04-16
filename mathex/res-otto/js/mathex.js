@@ -1468,7 +1468,7 @@ mathex.Question = function(prop) {
     this.checkAnswer = function(index, correct) {
 
         if(!(index == correct || this.errors == 1)) {
-            mathex.Shared.showMessage('Risposta errata, riprova', 'error');
+            mathex.Shared.showMessage('Risposta errata, riprova', 'error', null, {target: this.list.getElements('input')[index]});
             var x = new Element('span.x').set('html', '&#215;').inject(this.list.getElements('input')[index].setStyle('display', 'none'), 'before');
             this.errors = 1;
         }
@@ -1476,7 +1476,7 @@ mathex.Question = function(prop) {
 
             if(this.last) {
                 var callback = function() {
-                    mathex.Shared.showMessage(this.router.getEndMessage(), 'message', null);
+                    this.router.showResult();
                 }.bind(this)
             }
             else {
@@ -1486,17 +1486,18 @@ mathex.Question = function(prop) {
             if(index == correct) {
                 if(this.errors == 1) {
                     var result = 'sattempt';
-                    this.router.addPoint(0.5);
+                    this.router.addAttemptAnswer();
                 }
                 else {
                     var result = 'success';
-                    this.router.addPoint(1);
+                    this.router.addRightAnswer();
                 }
-                mathex.Shared.showMessage('Risposta esatta', 'success', function() {this.router.endStep(result, this); callback(); }.bind(this));
+                mathex.Shared.showMessage('Risposta esatta', 'success', function() {this.router.endStep(result, this); callback(); }.bind(this), {target: this.list.getElements('input')[index]});
                 var v = new Element('span.v').set('html', '✔').replaces(this.list.getElements('input')[index]);
             }
             else {
-                mathex.Shared.showMessage('Risposta errata', 'failed', function() {this.router.endStep('failed', this); callback(); }.bind(this));
+                this.router.addWrongAnswer();
+                mathex.Shared.showMessage('Risposta errata', 'failed', function() {this.router.endStep('failed', this); callback(); }.bind(this), {target: this.list.getElements('input')[index]});
                 var x = new Element('span.x').set('html', '&#215;').inject(this.list.getElements('input')[index].setStyle('display', 'none'), 'before');
                 var v = new Element('span.v').set('html', '✔').replaces(this.list.getElements('input')[correct]);
             }
@@ -1527,9 +1528,12 @@ mathex.QuestionRouter = function() {
      * @memberof mathex.QuestionRouter.prototype
      * @method init
      * @param {Array} s Array of managed questions @see mathex.Question
+     * @param {Object} options The options object
+     * @param {Function} options.activities Function which receives as a parameter the points
+     *                   and must return the activities to be proposed
      * @return void
      */
-    this.init = function(s) {
+    this.init = function(s, options) {
         // widgets
         if(mathex.config.font_ctrl) {
             mathex.Shared.fontWidget();
@@ -1538,11 +1542,23 @@ mathex.QuestionRouter = function() {
         this.steps = s;
         this.steps[s.length - 1].setLast();
         var answer_div = new Element('div#answers_container').inject($('container'), 'bottom');
-        var nav_div = new Element('div#answers_nav').inject($('container'), 'bottom');
+        var nav_div = new Element('div#answers_nav.navigation').inject($('container'), 'bottom');
         for(var i = 1, l = s.length; i < l + 1; i++) {
             var navel = new Element('span#nav' + i).set('text', i).inject(nav_div);
         }
+
+        this.options = options || {};
+        if(typeof this.options.activities == 'undefined') {
+            this.options.activities = function(points) {
+                return '';
+            }
+        }
+
         this.points = 0;
+        this.right_answers = 0;
+        this.wrong_answers = 0;
+        this.attempt_answers = 0;
+        this.results = [];
     };
     /**
      * @summary Add a point to the rating
@@ -1553,6 +1569,39 @@ mathex.QuestionRouter = function() {
      */
     this.addPoint = function(point) {
         this.points += point;
+    };
+    /**
+     * @summary Adds a right answer
+     * @memberof mathex.QuestionRouter.prototype
+     * @method addRightAnswer
+     * @return void
+     */
+    this.addRightAnswer = function() {
+        this.right_answers += 1;
+        this.addPoint(1);
+        this.results.push(1);
+    };
+    /**
+     * @summary Adds a wrong answer
+     * @memberof mathex.QuestionRouter.prototype
+     * @method addWrongAnswer
+     * @return void
+     */
+    this.addWrongAnswer = function() {
+        this.wrong_answers += 1;
+        this.addPoint(0);
+        this.results.push(0);
+    };
+    /**
+     * @summary Adds a partially correct answer (2 attempts)
+     * @memberof mathex.QuestionRouter.prototype
+     * @method addAttemptAnswer
+     * @return void
+     */
+    this.addAttemptAnswer = function() {
+        this.attempt_answers += 1;
+        this.addPoint(0.5);
+        this.results.push(0.5);
     };
     /**
      * @summary Executes the given question
@@ -1579,32 +1628,83 @@ mathex.QuestionRouter = function() {
         mathex.QuestionRouter.prototype.endStep.call(this, obj.removeEvents.bind(obj));
     };
     /**
-     * @summary Gets the final message basing upon the final rating
+     * @summary Gets the final evaluation
      * @memberof mathex.QuestionRouter.prototype
-     * @method getEndMessage
-     * @return {String} The message
+     * @method getEvaluation
+     * @return {String} The evaluation text
      */
-    this.getEndMessage = function() {
+    this.getEvaluation = function() {
         var points = Math.floor(this.points);
-        var message = "Il tuo punteggio è " + points + '.\n';
+        var message;
         if(points < 4) {
-            message += "Numerosissime lacune.\nRistudia tutto l'argomento.";
+            message = "Preparazione del tutto insufficiente.";
         }
-        else if(points < 6) {
-            message += "La preparazione è lacunosa.\nRipassa tutto l'argomento.";
+        else if(points == 4) {
+            message = "Preparazione insufficiente";
         }
-        else if(points == 6) {
-            message += "La prova evidenzia alcune lacune da colmare con esercizi di recupero.";
+        else if(points == 5) {
+            message = "Preparazione lacunosa";
         }
-        else if(points < 9) {
-            message += "Nel complesso la preparazione è completa, puoi migliorare con esercizi di potenziamento.";
+        else if(points = 6) {
+            message = "Preparazione sufficiente";
+        }
+        else if(points == 7) {
+            message = "Preparazione buona con qualche lacuna";
+        }
+        else if(points == 8) {
+            message = "Preparazione molto buona";
         }
         else {
-            message += "La prova dimostra una preparazione adeguata.";
+            message = "Preparazione adeguata.";
         }
 
         return message;
     };
+
+    /**
+     * @summary Shows the final result, with evaluation
+     * @memberof mathex.QuestionRouter.prototype
+     * @method showResult
+     * @return {String} The final result
+     */
+    this.showResult = function() {
+        $('container').empty();
+
+        var title = new Element('h3.no-margin-top').set('text', 'Esito');
+
+        var summary = new Element('div.questions-summary').adopt(
+            new Element('p.result-success').set('text', 'RISPOSTE CORRETTE: ' + this.right_answers),
+            new Element('p.result-sattempt').set('text', 'RISPOSTE CORRETTE AL SECONDO TENTATIVO: ' + this.attempt_answers),
+            new Element('p.result-failed').set('text', 'RISPOSTE SBAGLIATE: ' + this.wrong_answers)
+        );
+        var p_summary = new Element('p.navigation');
+        for(var i = 0, l = this.steps.length; i < l; i++) {
+            var item_el = new Element('span.item').set('text', (i + 1));
+            if(this.results[i] == 1) {
+                item_el.addClass('success');
+            }
+            else if(this.results[i] == 0.5) {
+                item_el.addClass('sattempt');
+            }
+            else {
+                item_el.addClass('failed');
+            }
+            item_el.inject(p_summary);
+        }
+        p_summary.inject(summary);
+
+        var rating = new Element('div.question-rating').adopt(
+            new Element('p.points').set('text', 'Il tuo punteggio totale è: ' + this.points),
+            new Element('p.evaluation').set('text', this.getEvaluation()),
+            new Element('div.activities').set('html', this.options.activities.call(this, this.points))
+        );
+
+        container.adopt(
+            title,
+            summary,
+            rating
+        );
+    }
 
 }
 mathex.QuestionRouter.prototype = new mathex.Router();

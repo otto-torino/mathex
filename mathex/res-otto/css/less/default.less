@@ -218,6 +218,12 @@ blockquote {
 .result-failed {
     color: red;
 }
+.result-sattempt {
+    color: orange;
+}
+.no-margin-top {
+    margin-top: 0;
+}
 /* layer */
 .layer {
   padding: 10px;
@@ -254,7 +260,7 @@ ul {
 
 /* navigation */
 .navigation {
-    margin: 10px;
+    margin:  90px 10px 10px;
     .prev-label, .next-label {
         display: inline-block;
         padding: 2px 5px;
@@ -317,8 +323,12 @@ ul {
     .success {
         background: green !important;
     }
+    .sattempt {
+        background: orange !important;
+    }
 }
 .navigation.relative {
     position: relative;
+    margin: 10px;
     top: -80px;
 }

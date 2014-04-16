@@ -18,7 +18,9 @@
       <p class="right" id="widgets"></p>
       <div class="clear"></div>
     </header>
-    <p class="info">Seleziona la risposta corretta</p>
+    <p class="info">Autoverifica unità 6</p>
+    <p class="meaning"><b>Verifica la tua preparazione:</b> rispondi ad ogni domanda e verifica subito la tua risposta. Se hai sbagliato, riprova. Se sbagli ancora, leggi la risposta corretta e prosegui. Al termine del test conoscerai la valutazione complessiva della prova. Segui le indicazioni per continuare lo studio in base al risultato ottenuto.</p>
+    <p class="instructions"><b>Rispondi</b>: seleziona la risposta corretta.</p>
     <h2>Autoverifica</h2>
     <div id="container"></div>
     <script>
@@ -57,7 +59,7 @@
       })
 
       var router = new mathex.QuestionRouter();
-      router.init([question1, question2, question3])
+      router.init([question1, question2, question3], {activities: function(points) { if(points > 1) return "<b>GOOD</b>"; else return "<b>BAD!</b>"; }});
       router.startStep();
 
 
