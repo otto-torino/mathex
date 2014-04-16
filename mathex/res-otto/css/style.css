@@ -159,16 +159,19 @@ blockquote {
 }
 #message .layer-close {
   display: inline-block;
-  width: 25px;
-  height: 25px;
+  width: 36px;
+  height: 36px;
   background: #000;
   color: #fff;
   cursor: pointer;
   border-radius: 50%;
   position: absolute;
-  right: -12px;
-  top: -12px;
-  line-height: 25px;
+  right: -21px;
+  top: -20px;
+  line-height: 34px;
+}
+#message.layer-right .layer-close {
+  left: -21px !important;
 }
 #message.error {
   color: orange !important;
@@ -198,6 +201,12 @@ blockquote {
 .button-close {
   background: #fff;
   padding: 5px;
+}
+.result-success {
+  color: green;
+}
+.result-failed {
+  color: red;
 }
 /* layer */
 .layer {
@@ -292,6 +301,15 @@ ul span.v {
 }
 .navigation .selected {
   background: #808080;
+}
+.navigation .filled {
+  background: #666;
+}
+.navigation .failed {
+  background: red !important;
+}
+.navigation .success {
+  background: green !important;
 }
 .navigation.relative {
   position: relative;
@@ -649,6 +667,34 @@ ul.test li label {
 }
 .test-rating {
   font-weight: bold;
+}
+.test-summary .test-summary-question {
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  margin-right: 5px;
+  cursor: pointer;
+  color: #fff;
+  text-align: center;
+  line-height: 36px;
+}
+.test-summary .success {
+  background: green;
+}
+.test-summary .failed {
+  background: red;
+}
+#test-summary-result {
+  margin-top: 30px;
+}
+.test-result-right {
+  border-left: 5px solid green;
+  padding-left: 20px;
+}
+.test-result-wrong {
+  border-left: 5px solid red;
+  padding-left: 20px;
 }
 body.aritmetica > header,
 body.aritmetica > footer {

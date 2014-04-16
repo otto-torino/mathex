@@ -1897,9 +1897,10 @@ mathex.TestInputQuestion = function(options) {
      * @memberof mathex.TestInputQuestion.prototype
      * @method run
      * @param {Object} test The mathex.Test instance
+     * @param {Number} index The question index
      * @return void
      */
-    this.run = function(test) {
+    this.run = function(test, index) {
         var self = this;
         this.tpl = mathex.Shared.parseTpl(this.question, this.inputs);
         this.test = test;
@@ -1908,6 +1909,7 @@ mathex.TestInputQuestion = function(options) {
             .addEvent('click', self.checkAnswer.bind(self))
             .inject(new Element('div').inject($('container'), 'bottom'));
         MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
+        this.test.renderNavigation(index);
     }
     /**
      * @summary Cheks the user answer, saves the result and proceeds with the next question
@@ -1917,13 +1919,63 @@ mathex.TestInputQuestion = function(options) {
      */
     this.checkAnswer = function() {
         var result = true;
+        var values = [];
         Object.each(this.inputs, function(input, index) {
             var value = $('field_' + index).get('value');
+            values.push(value);
             result = result && mathex.Shared.checkResult(input.type, input.result, value);
         }.bind(this));
 
-        this.test.saveResult(result);
-        this.test.nextQuestion();
+        this.test.saveResult(result, values);
+
+        if(result) {
+            mathex.Shared.showMessage('Risposta esatta', 'success', this.test.nextQuestion.bind(this.test), {target: $('field_0')});
+        }
+        else {
+            mathex.Shared.showMessage('Risposta errata', 'failed', this.test.nextQuestion.bind(this.test), {target: $('field_0')});
+        }
+
+    }
+    /**
+     * @summary Shows the result for correction
+     * @description Shows the original question with the right answer and the wrong answer 
+     * if a wrong answer was given
+     * @memberof mathex.TestInputQuestion.prototype
+     * @method showResult
+     * @param {Element} container the container into which
+     * @param {Number} question_index the question index
+     * @return void
+     */
+    this.showResult = function(container, question_index) {
+        var self = this;
+        this.tpl = mathex.Shared.parseTpl(this.question, this.inputs);
+        this.test = test;
+        var right_result = new Element('div.test-result-right')
+            .set('html', this.tpl)
+            .inject(container);
+        MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
+        MathJax.Hub.Queue(function() {
+            Object.each(self.inputs, function(input, index) {
+                $('field_' + index).set('value', input.result)
+                    .setProperty('readonly', 'readonly')
+                    .setStyle('background', '#afe1bc')
+                    .removeProperty('id');
+            }.bind(self));
+        });
+        if(!this.test.results[question_index]) {
+             var wrong_result = new Element('div.test-result-wrong')
+                .set('html', this.tpl)
+                .inject(container);
+            MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
+            MathJax.Hub.Queue(function() {
+                Object.each(self.inputs, function(input, index) {
+                    $('field_' + index).set('value', this.test.answers[question_index][index])
+                        .setProperty('readonly', 'readonly')
+                        .setStyle('background', '#eca9a9')
+                        .removeProperty('id');
+                }.bind(self));
+            });
+        }
 
     }
 }
@@ -1959,9 +2011,10 @@ mathex.TestRadioQuestion = function(options) {
      * @memberof mathex.TestRadioQuestion.prototype
      * @method run
      * @param {Object} test The mathex.Test instance
+     * @param {Number} index The question index
      * @return void
      */
-    this.run = function(test) {
+    this.run = function(test, index) {
         var self = this;
         this.string = String.uniqueID();
         this.tpl = mathex.Shared.parseTpl(this.question, {});
@@ -1973,6 +2026,7 @@ mathex.TestRadioQuestion = function(options) {
             .addEvent('click', self.checkAnswer.bind(self))
             .inject(new Element('div').inject($('container'), 'bottom'));
         MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
+        this.test.renderNavigation(index);
     }
     /**
      * @summary Cheks the user answer, saves the result and proceeds with the next question
@@ -1982,16 +2036,55 @@ mathex.TestRadioQuestion = function(options) {
      */
     this.checkAnswer = function() {
         var result = false;
+        var values = [];
         document.getElements('input[type=radio]').each(function(radio, index) {
+            if(radio.checked) {
+                values.push(index);
+            }
             if(radio.checked && index == this.result) {
                 result = true;
             };
         }.bind(this));
 
-        this.test.saveResult(result);
-        this.test.nextQuestion();
+        this.test.saveResult(result, values);
+
+        if(result) {
+            mathex.Shared.showMessage('Risposta esatta', 'success', this.test.nextQuestion.bind(this.test), {target: $$('input[type=radio]')[0].getParent().getParent()});
+        }
+        else {
+            mathex.Shared.showMessage('Risposta errata', 'failed', this.test.nextQuestion.bind(this.test), {target: $$('input[type=radio]')[0].getParent().getParent()});
+        }
 
     }
+    /**
+     * @summary Shows the result for correction
+     * @description Shows the original question with the right answer and the wrong answer 
+     * if a wrong answer was given
+     * @memberof mathex.TestRadioQuestion.prototype
+     * @method showResult
+     * @param {Element} container the container into which 
+     * @param {Number} question_index the question index
+     * @return void
+     */
+    this.showResult = function(container, question_index) {
+        var self = this;
+        this.string = String.uniqueID();
+        this.tpl = mathex.Shared.parseTpl(this.question, {});
+        var radio_rexp = new RegExp("\\[\\[([0-9]*?)\\]\\]", "gim");
+        this.tpl = this.tpl.replace(radio_rexp, "<input type=\"radio\" name=\"radio_" + this.string + "\" id=\"radio_$1\" />");
+        var right_result = new Element('div.test-result-' + (this.test.results[question_index] ? 'right' : 'wrong'))
+            .set('html', this.tpl)
+            .inject(container);
+        MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
+        MathJax.Hub.Queue(function() {
+            var v = new Element('span.v').set('html', '✔').inject(document.id('radio_' + self.result).setStyle('display', 'none'), 'before');
+            if(!self.test.results[question_index]) {
+                var x = new Element('span.x').set('html', '&#215;').inject(document.id('radio_' + self.test.answers[question_index]).setStyle('display', 'none'), 'before');
+            }
+        });
+
+    }
+
 
 }
 /**
@@ -2006,6 +2099,8 @@ mathex.Test = function() {
     this.questions = [];
     this.current = 0;
     this.results = [];
+    this.answers = [];
+
     /**
      * @summary Initializes the Test instance
      * @memberof mathex.Test.prototype
@@ -2051,13 +2146,41 @@ mathex.Test = function() {
         try {
             var question = this.questions[index];
             this.current = index;
-            question.run(this);
+            question.run(this, index);
         }
         catch(err) {
             console.log(err);
             console.log('question undefined or not a question');
         }
     }
+
+    /**
+     * @summary Renders the navigation bar at the bottom of the question
+     * @memberof mathex.Test.prototype
+     * @method renderNavigation
+     * @params {Number} [current] The index of the current question
+     * @return void
+     */
+    this.renderNavigation = function(current) {
+        this.test_nav = new Element('div#test_nav.navigation').inject($('container'), 'bottom');
+        this.questions.each(function(question, index) {
+            var item_el = new Element('span.item')
+                .set('text', (index + 1))
+                .inject(this.test_nav);
+            if(index < current) {
+                if(this.results[index]) {
+                    item_el.addClass('success');
+                }
+                else {
+                    item_el.addClass('failed');
+                }
+            }
+            else if(index == current) {
+                item_el.addClass('filled');
+            }
+        }.bind(this));
+    }
+
     /**
      * @summary Stores the given result
      * @memberof mathex.Test.prototype
@@ -2065,8 +2188,9 @@ mathex.Test = function() {
      * @params {Boolean} result The result to store
      * @return void
      */
-    this.saveResult = function(result) {
+    this.saveResult = function(result, values) {
         this.results.push(result ? 1 : 0);
+        this.answers.push(values);
     }
     /**
      * @summary Goes to the next questions or the end of the test
@@ -2089,16 +2213,24 @@ mathex.Test = function() {
      * @return void
      */
     this.renderResults = function() {
-        var table = new Element('table.test-result');
-        var tr1 = new Element('tr').inject(table);
-        var tr2 = new Element('tr').inject(table);
-        for(var i = 0, l = this.questions.length; i < l; i++) {
-            tr1.adopt(new Element('th').set('text', 'Quesito ' + (i + 1)));
-            tr2.adopt(new Element('td').set('text', this.results[i]));
-        }
-        tr1.adopt(new Element('th').set('text', 'Totale'));
+        var correct = 0;
+        var incorrect = 0;
+
+        var intro_text = new Element('p')
+            .set('html', "<b>Correzione</b>: seleziona il pulsante corrispondente alla domanda di cui vuoi leggere la correzione");
+
+        this.results.each(function(result, index) {
+            if(result) correct++;
+            else incorrect++;
+        });
+
         var total = this.results.reduce(function(previousValue, currentValue, index, array){ return previousValue + currentValue; });
-        tr2.adopt(new Element('td').set('text', total));
+
+        var correct_text = new Element('p.result-success')
+            .set('text', 'RISPOSTE CORRETTE: ' + correct);
+
+        var incorrect_text = new Element('p.result-failed')
+            .set('text', 'RISPOSTE SBAGLIATE: ' + incorrect);
 
         // message
         for(var i = 0, l = this.options.steps.length; i < l; i++) {
@@ -2110,8 +2242,39 @@ mathex.Test = function() {
         }
         var rating_element = new Element('p.test-rating').setStyle('color', rating.color).set('text', rating.message);
 
+        // summary
+        var summary_container = new Element('div.test-summary');
+        this.results.each(function(result, index) {
+            var q_el = new Element('span.test-summary-question')
+                .set('text', (index + 1))
+                .addClass(result ? 'success' : 'failed')
+                .addEvent('click', this.showResult.bind(this, index))
+                .inject(summary_container);
+        }.bind(this));
+        var summary_result = new Element('div#test-summary-result')
+            .inject(summary_container);
+
         $('container').empty();
-        $('container').adopt(new Element('p').set('text', 'Risultati'), table, rating_element);
+        $('container').adopt(
+            intro_text, 
+            correct_text, 
+            incorrect_text, 
+            rating_element,
+            summary_container
+        );
+    };
+    /**
+     * @summary Renders a question result
+     * @memberof mathex.Test.prototype
+     * @method showResult
+     * @param {Number} [index] question index
+     * @param {Event} [evt] the click event
+     * @return void
+     */
+    this.showResult = function(index, evt) {
+        var container = $('test-summary-result').empty();
+        var question = this.questions[index];
+        question.showResult(container, index);
     }
 }
 
