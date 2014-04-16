@@ -21,7 +21,7 @@
       <p class="right" id="widgets"></p>
       <div class="clear"></div>
     </header>
-    <h2>Autoverifica</h2>
+    <h2>Verifica</h2>
     <div id="container"></div>
 
     <script>
@@ -86,6 +86,7 @@
           ajsut.assert(typeOf($('MathJax-Element-1-Frame')) == 'element', 'Mathjax was rendered');
           $('field_0').set('value', 20);
           $('field_1').set('value', 3);
+          $$('#container input[type=button]')[0].fireEvent('click', {});
           ajsut.resume();
         }, 2000);
       })
@@ -94,19 +95,31 @@
       ajsut.test('To second question', function() {
         ajsut.pause();
         setTimeout(function() {
-          $$('#container input[type=button]')[0].fireEvent('click', {});
+          $$('.layer-close')[0].fireEvent('click', {});
           $('field_0').set('value', 2);
+          $$('#container input[type=button]')[0].fireEvent('click', {});
+          ajsut.resume();
+        }, 2000);
+      })
+
+      // second answer was wrong
+      ajsut.test('Checking second answer', function() {
+        ajsut.pause();
+        setTimeout(function() {
+          ajsut.assert($$('#message > p')[0].get('text') == 'Risposta errata', 'Previous answer was wrong');
+          $$('.layer-close')[0].fireEvent('click', {});
           ajsut.resume();
         }, 2000);
       })
 
       // to third question, right answer
-      ajsut.test('To third question', function() {
+      ajsut.test('Third question', function() {
         ajsut.pause();
         setTimeout(function() {
-          $$('#container input[type=button]')[0].fireEvent('click', {});
           ajsut.assert($$('#container input[type=radio]').length == 4, '4 radio buttons');
           $('radio_2').setProperty('checked', 'checked');
+          $$('#container input[type=button]')[0].fireEvent('click', {});
+          $$('.layer-close')[0].fireEvent('click', {});
           ajsut.resume();
         }, 2000);
       })
@@ -115,12 +128,32 @@
       ajsut.test('To the end, checking final results', function() {
         ajsut.pause();
         setTimeout(function() {
-          $$('#container input[type=button]')[0].fireEvent('click', {});
+          ajsut.assert($$('.test-summary > span')[0].hasClass('success'), 'First answer was correct');
+          ajsut.assert($$('.test-summary > span')[1].hasClass('failed'), 'Second answer was wrong');
+          ajsut.assert($$('.test-summary > span')[2].hasClass('success'), 'Third answer was correct');
           ajsut.assert(test.results[0] == 1, 'results: first ok');
           ajsut.assert(test.results[1] == 0, 'results: second ko');
           ajsut.assert(test.results[2] == 1, 'results: third ok');
           ajsut.assert($$('.test-rating')[0].get('text') == 'miao', 'final rating message is correct');
           ajsut.assert($$('.test-rating')[0].getStyle('color') == 'yellow', 'final rating message is yellow');
+
+          ajsut.resume();
+        }, 2000);
+      })
+
+      // checking single results
+      ajsut.test('Checking single questions results', function() {
+        ajsut.pause();
+        setTimeout(function() {
+          $$('.test-summary > span')[0].fireEvent('click');
+
+          ajsut.assert($$('#test-summary-result > div')[0].hasClass('test-result-right'), 'first question check displayed, answer was correct');
+          ajsut.assert($$('input[name=field_0]')[0].get('value') == '20', 'first input correctly filled');
+
+          $$('.test-summary > span')[1].fireEvent('click');
+
+          ajsut.assert($$('#test-summary-result > div').length == 2, 'correct and wrong answers displayed for the second question');
+          ajsut.assert($$('#test-summary-result > div')[1].hasClass('test-result-wrong'), 'the second shown answer is the wrong one');
 
           var tests = $$('#results li li').length;
           var passed = $$('#results li li.passed').length;

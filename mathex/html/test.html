@@ -20,7 +20,9 @@
       <p class="right" id="widgets"></p>
       <div class="clear"></div>
     </header>
-    <p class="info">Dopo aver digitato la risposta premi INVIO; quando necessario seleziona una voce dal menu a tendina</p>
+    <p class="info">Verifica dell'attività di recupero</p>
+    <p class="meaning"><b>Verifica se hai colmato le lacune:</b> rispondi ad ogni domanda, fino alla fine del test. Ad ogni risposta ne sarà comunicato l'esito. Al termine del test potrai conoscere il risultato complessivo della prova, verificare le soluzioni e confrontarle con le tue risposte. Segui le indicazioni per continuare lo studio in base al risultato ottenuto.</p>
+    <p class="instructions"><b>Rispondi</b>: digita la risposta nei campi gialli e premi CONFERMA.</p>
     <h2>Verifica</h2>
     <div id="container"></div>
 
@@ -60,14 +62,14 @@
             '<li>[[2]] {% 9^6 + 9^2 = 9^8 %}</li>' +
             '<li>[[3]] {% 7^8 : 7 = 7^7 %}</li>' +
           '</ul>',
-        result: 2,
+        result: 3,
       });
 
       var test = new mathex.Test();
       test.init([question1, question2, question3], {
         steps: [1, 2, 3],
         rating: [
-          {message: 'mepw', color: 'red'},
+          {message: 'meow', color: 'red'},
           {message: 'miao', color: 'yellow'},
           {message: 'bao', color: 'green'},
           ],
