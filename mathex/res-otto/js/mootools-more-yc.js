@@ -1,8 +1,13 @@
-// MooTools: the javascript framework.
-// Load this file's selection again by visiting: http://mootools.net/more/f7005197184c1ad698fa1b435a9aecc0 
-// Or build this file again with packager using: packager build More/Drag More/Drag.Move
 /*
 ---
+MooTools: the javascript framework
+
+web build:
+ - http://mootools.net/more/adf6ad1e24819af3c07a3cd308f21c34
+
+packager build:
+ - packager build More/Class.Refactor More/Drag More/Drag.Move
+
 copyrights:
   - [MooTools](http://mootools.net)
 
@@ -10,7 +15,10 @@ licenses:
   - [MIT License](http://mootools.net/license.txt)
 ...
 */
-MooTools.More={version:"1.4.0.1",build:"a4244edf2aa97ac8a196fc96082dd35af1abab87"};var Drag=new Class({Implements:[Events,Options],options:{snap:6,unit:"px",grid:false,style:true,limit:false,handle:false,invert:false,preventDefault:false,stopPropagation:false,modifiers:{x:"left",y:"top"}},initialize:function(){var b=Array.link(arguments,{options:Type.isObject,element:function(c){return c!=null;
+
+MooTools.More={version:"1.4.0.1",build:"a4244edf2aa97ac8a196fc96082dd35af1abab87"};Class.refactor=function(b,a){Object.each(a,function(e,d){var c=b.prototype[d];
+c=(c&&c.$origin)||c||function(){};b.implement(d,(typeof e=="function")?function(){var f=this.previous;this.previous=c;var g=e.apply(this,arguments);this.previous=f;
+return g;}:e);});return b;};var Drag=new Class({Implements:[Events,Options],options:{snap:6,unit:"px",grid:false,style:true,limit:false,handle:false,invert:false,preventDefault:false,stopPropagation:false,modifiers:{x:"left",y:"top"}},initialize:function(){var b=Array.link(arguments,{options:Type.isObject,element:function(c){return c!=null;
 }});this.element=document.id(b.element);this.document=this.element.getDocument();this.setOptions(b.options||{});var a=typeOf(this.options.handle);this.handles=((a=="array"||a=="collection")?$$(this.options.handle):document.id(this.options.handle))||this.element;
 this.mouse={now:{},pos:{}};this.value={start:{},now:{}};this.selection=(Browser.ie)?"selectstart":"mousedown";if(Browser.ie&&!Drag.ondragstartFixed){document.ondragstart=Function.from(false);
 Drag.ondragstartFixed=true;}this.bound={start:this.start.bind(this),check:this.check.bind(this),drag:this.drag.bind(this),stop:this.stop.bind(this),cancel:this.cancel.bind(this),eventStop:Function.from(false)};

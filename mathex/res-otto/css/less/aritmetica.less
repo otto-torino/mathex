@@ -7,11 +7,31 @@ body.aritmetica {
   a:link, a:visited, .link, > h2 {
     color: @mcolor;
   }
-  .info {
+  .subtitle {
     background: fade(@mcolor, 40%);
   }
   #message {
     border: solid @mcolor 6px;
+  }
+  #message.layer-target {
+      &:before {
+        border-bottom-color: @mcolor;
+      }
+  }
+  #message.error.layer-target {
+      &:before {
+        border-bottom-color: orange;
+      }
+  }
+  #message.success.layer-target {
+      &:before {
+        border-bottom-color: green;
+      }
+  }
+  #message.failed.layer-target {
+      &:before {
+        border-bottom-color: red;
+      }
   }
   // questions
   #answers_nav span.current {
@@ -19,13 +39,7 @@ body.aritmetica {
     color: @mtxtcolor;
   }
   // faq
-  #faq_nav span {
-    border: 2px solid @mcolor;
-    &:hover {
-      background: @mcolor;
-      color: @mtxtcolor;
-    }
-  }
+
   // recovery
   #r_nav span {
     border: 2px solid @mcolor;
@@ -37,5 +51,13 @@ body.aritmetica {
   // widgets
   #calculator {
     border-top: 10px solid @mcolor;
+  }
+
+  // navigation
+  .navigation {
+      .selected {
+          background: @mcolor;
+          color: @mtxtcolor;
+      }
   }
 }

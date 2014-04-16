@@ -16,19 +16,21 @@
     <link rel="stylesheet" type="text/css" href="ajsut.css" />
   </head>
   <body class="aritmetica">
-    <header>
-      <h1 class="left">Mathex faq tests</h1>
-      <p class="right" id="widgets"></p>
-      <div class="clear"></div>
-    </header>
-    <h2>FAQ</h2>
-    <div id="container"></div>
 
     <script>
 
       alert('sit down and keep calm');
 
       mathex.config.font_ctrl = true;
+
+      mathex.Shared.renderTemplate({
+          title: 'Mathex faq tests',
+          subtitle: 'FAQ - unità x',
+          meaning: '',
+          instructions: '',
+          duty: 'FAQ',
+          pre_container: ''
+      });
 
       var faq = new mathex.Faq([
         {
@@ -68,40 +70,25 @@
           ajsut.assert($$('#container audio').length == 1, 'The audio element has been rendered');
           ajsut.assert($$('#container audio source').length == 2, 'The audio element has 2 sources');
           ajsut.assert($$('#faq_container div')[0].get('text') == 'Answer 1', 'The faq answer text is correct');
-          ajsut.assert($$('#faq_nav span')[0].get('text') == 'indice', 'The first nav button is the index button');
-          ajsut.assert($$('#faq_nav span')[1].get('text') == 'successiva', 'The second nav button is the nect button');
-          ajsut.assert($$('#faq_nav span').length == 2, 'The are only 2 nav buttons');
-          ajsut.assert($$('#faq_container ul.select')[0].getStyle('display') == 'none', 'The fake select list is hidden');
+          ajsut.assert($$('#faq_nav .prev')[0].hasClass('link') == false, 'Prev button disabled');
+          ajsut.assert($$('#faq_nav .next')[0].hasClass('link') == true, 'Next button enabled');
+          ajsut.assert($$('#faq_nav span.selected')[0].get('text') == '1', 'first item selected');
           ajsut.resume();
         }, 1000);
       })
 
-      // clicking the fake select
-      ajsut.test('Opening the fake select', function() {
+      // clicking the link
+      ajsut.test('Clicking next button', function() {
         ajsut.pause();
         setTimeout(function(){
           var evObj = document.createEvent('MouseEvents');
           evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
-          $$('#faq_container h3')[0].fireEvent('click', evObj);
-          ajsut.assert($$('#faq_container ul.select')[0].getStyle('display') != 'none', 'The fake select list is visible');
-          ajsut.assert($$('#faq_container ul.select li').length == 1, '... and it contains only one element');
-          ajsut.resume();
-        }, 1000);
-      })
-
-      // clicking the fake select voice
-      ajsut.test('Clicking the fake select voice', function() {
-        ajsut.pause();
-        setTimeout(function(){
-          var evObj = document.createEvent('MouseEvents');
-          evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
-          $$('#faq_container ul.select li')[0].fireEvent('click', evObj);
-          ajsut.assert($$('#faq_container h3')[0].get('text') == 'Question 2?', 'we\'ve moved to the second faq');
+          $$('#faq_nav .next')[0].dispatchEvent(evObj);
+          ajsut.assert($$('#faq_container h3')[0].get('text') == '2. Question 2?', 'we\'ve moved to the second faq');
           ajsut.assert($$('#faq_container span.link')[0].get('text') == 'risolvere', 'the link was parsed and rendered');
-          ajsut.assert($$('#faq_nav span').length == 2, 'The are 2 nav buttons');
           ajsut.resume();
         }, 1000);
-      })
+      });
 
       // clicking the link
       ajsut.test('Clicking the link', function() {
@@ -125,7 +112,7 @@
           $$('.layer .button-close')[0].fireEvent('click', evObj);
           ajsut.assert($$('.layer').length == 0, 'the layer was disposed');
           $$('#faq_nav span')[0].fireEvent('click', evObj);
-          ajsut.assert($$('#faq_container h3')[0].get('text') == 'Question1 with audio?', 'we\'ve moved to the first faq');
+          ajsut.assert($$('#faq_container h3')[0].get('text') == '1. Question1 with audio?', 'we\'ve moved to the first faq');
           ajsut.resume();
         }, 1000);
       })
@@ -136,7 +123,7 @@
         setTimeout(function(){
           var evObj = document.createEvent('MouseEvents');
           evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
-          $$('#faq_nav span')[0].fireEvent('click', evObj);
+          $$('#faq_nav span.index')[0].fireEvent('click', evObj);
           ajsut.assert($$('#faq_container ul li').length == 2, 'back to index');
 
           var tests = $$('#results li li').length;

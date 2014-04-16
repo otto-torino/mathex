@@ -13,14 +13,17 @@
     <link type="text/css" rel="stylesheet" href="../res-otto/css/style.css" />
   </head>
   <body>
-    <header>
-      <h1 class="left">Io e la matematica - Aritmetica I</h1>
-      <p class="right" id="widgets"></p>
-      <div class="clear"></div>
-    </header>
-    <h2>FAQ</h2>
-    <div id="container"></div>
+
     <script>
+
+      mathex.Shared.renderTemplate({
+          title: 'FAQ - Aritmetica 1',
+          subtitle: 'FAQ - unità x',
+          meaning: '',
+          instructions: '',
+          duty: 'FAQ',
+          pre_container: ''
+      });
 
       var faq = new mathex.Faq([
         {
@@ -125,8 +128,6 @@
 
 
     </script>
-    <footer>
-      <p></p>
-    </footer>
+
   </body>
 </html>

@@ -12,19 +12,20 @@
     </script>
     <link type="text/css" rel="stylesheet" href="../res-otto/css/style.css" />
   </head>
-  <body>
-    <header>
-      <h1 class="left">Io e la matematica - Aritmetica I</h1>
-      <p class="right" id="widgets"></p>
-      <div class="clear"></div>
-    </header>
-    <p class="info">Dopo aver digitato la rsiposta premi INVIO</p>
-    <h2>Esercizio guidato</h2>
-    <div id="container">
-    </div>
+  <body class="aritmetica">
+
     <script>
 
       mathex.config.font_ctrl = true;
+
+      mathex.Shared.renderTemplate({
+          title: 'Io e la matematica - Aritmetica 1',
+          subtitle: 'Esercizio guidato - unità x',
+          meaning: 'In questo esercizio: risolvi passo-passo e verifica subito le tue risposte. Se sbagli riprova. Se sbagli ancora, leggi la risposta corretta e prosegui',
+          instructions: '<strong>Inserisci la risposta</strong>:<br />digita la risposta nel campo giallo e premi INVIO - oppure - seleziona una voce dal menu a tendina',
+          duty: 'Esercizio guidato',
+          pre_container: ''
+      });
 
       var step1 = new mathex.TextFieldStep(
       '<h3>Verifichiamo che {% 2^7 : 2^4 = 2^(7-4) = ^3 %}</h3>' + 
@@ -81,11 +82,6 @@
 
 
     </script>
-
-    <footer>
-      <p>© SEI - Società Editrice Internazionale p.a. - Torino</p>
-    </footer>
-
 
   </body>
 </html>

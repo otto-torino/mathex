@@ -7,20 +7,14 @@ body.algebra {
   a:link, a:visited, .link, > h2 {
     color: @mcolor;
   }
-  .info {
+  .suibtitle {
     background: fade(@mcolor, 40%);
   }
   #message {
     border: solid @mcolor 6px;
   }
   // faq
-  #faq_nav span {
-    border: 2px solid @mcolor;
-    &:hover {
-      background: @mcolor;
-      color: @mtxtcolor;
-    }
-  }
+
   // recovery
   #r_nav span {
     border: 2px solid @mcolor;
@@ -32,5 +26,12 @@ body.algebra {
   // widgets
   #calculator {
     border-top: 10px solid @mcolor;
+  }
+  // navigation
+  .navigation {
+      .selected {
+          background: @mcolor;
+          color: @mtxtcolor;
+      }
   }
 }
