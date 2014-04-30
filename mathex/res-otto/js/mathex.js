@@ -2126,19 +2126,23 @@ mathex.TestInputQuestion = function(options) {
     this.checkAnswer = function() {
         var result = true;
         var values = [];
+        var length = 0;
         Object.each(this.inputs, function(input, index) {
             var value = $('field_' + index).get('value');
             values.push(value);
             result = result && mathex.Shared.checkResult(input.type, input.result, value);
+            length++;
         }.bind(this));
 
         this.test.saveResult(result, values);
 
+        var target = length > 1 ? null : $('field_0');
+
         if(result) {
-            mathex.Shared.showMessage('Risposta esatta', 'success', this.test.nextQuestion.bind(this.test), {target: $('field_0')});
+            mathex.Shared.showMessage('Risposta esatta', 'success', this.test.nextQuestion.bind(this.test), {target: target});
         }
         else {
-            mathex.Shared.showMessage('Risposta errata', 'failed', this.test.nextQuestion.bind(this.test), {target: $('field_0')});
+            mathex.Shared.showMessage('Risposta errata', 'failed', this.test.nextQuestion.bind(this.test), {target: target});
         }
 
     }
