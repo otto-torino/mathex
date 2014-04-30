@@ -1772,7 +1772,10 @@ mathex.QuestionRouter = function() {
     this.showResult = function() {
 
         $('container').empty();
-        $$('p.instructions')[0].setStyle('display', 'none');
+        var instructions;
+        if(instructions = $$('p.instructions')[0]) {
+            instructions.setStyle('display', 'none');
+        }
         mathex.Shared.clearNavigation();
 
         var title = new Element('h3.no-margin-top').set('text', 'Esito');
@@ -2426,11 +2429,17 @@ mathex.Test = function() {
     this.renderResults = function() {
 
         mathex.Shared.clearNavigation();
+        var instructions;
+        if(instructions = $$('p.instructions')[0]) {
+            instructions.setStyle('display', 'none');
+        }
 
         var correct = 0;
         var incorrect = 0;
 
-        var intro_text = new Element('p')
+        var title = new Element('h3.no-margin-top').set('text', 'Esito');
+
+        var intro_text = new Element('p.test-correction')
             .set('html', "<b>Correzione</b>: seleziona il pulsante corrispondente alla domanda di cui vuoi leggere la correzione");
 
         this.results.each(function(result, index) {
@@ -2470,10 +2479,11 @@ mathex.Test = function() {
 
         $('container').empty();
         $('container').adopt(
-            intro_text, 
+            title, 
             correct_text, 
             incorrect_text, 
             rating_element,
+            intro_text, 
             summary_container
         );
     };
