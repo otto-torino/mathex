@@ -1772,6 +1772,7 @@ mathex.QuestionRouter = function() {
     this.showResult = function() {
 
         $('container').empty();
+        $$('p.instructions')[0].setStyle('display', 'none');
         mathex.Shared.clearNavigation();
 
         var title = new Element('h3.no-margin-top').set('text', 'Esito');

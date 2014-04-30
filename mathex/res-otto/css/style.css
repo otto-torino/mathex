@@ -620,6 +620,13 @@ ul.test li label {
 .questions-summary .sattempt {
   background: orange;
 }
+p.questions-summary {
+  margin: 40px 0;
+}
+.question-rating {
+  background: #eee;
+  padding: 5px;
+}
 /* faq */
 .link_faq {
   cursor: pointer;
