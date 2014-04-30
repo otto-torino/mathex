@@ -328,6 +328,17 @@ ul span.v {
 .navigation .sattempt {
   background: orange !important;
 }
+/* buttons */
+input[type=button],
+input[type=submit] {
+  background: #000;
+  height: 30px;
+  border: 1px solid #000;
+  line-height: 30px;
+  text-align: center;
+  color: #fff;
+  border-radius: 8px;
+}
 /* widgets */
 #widgets {
   -webkit-user-select: none;
