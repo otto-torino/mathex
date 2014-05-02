@@ -140,8 +140,8 @@ mathex.Shared = {
             header,
             subtitle,
             meaning,
-            instructions,
             duty,
+            instructions,
             pre_container,
             container,
             navigation,
@@ -1772,6 +1772,10 @@ mathex.QuestionRouter = function() {
     this.showResult = function() {
 
         $('container').empty();
+        var instructions;
+        if(instructions = $$('p.instructions')[0]) {
+            instructions.setStyle('display', 'none');
+        }
         mathex.Shared.clearNavigation();
 
         var title = new Element('h3.no-margin-top').set('text', 'Esito');
@@ -2112,7 +2116,7 @@ mathex.TestInputQuestion = function(options) {
         var div = new Element('div').set('html', this.tpl).inject($('container'), 'bottom');
         var confirm = new Element('input[type=button][value=conferma]')
             .addEvent('click', self.checkAnswer.bind(self))
-            .inject(new Element('div').inject($('container'), 'bottom'));
+            .inject(new Element('div.test-confirm').inject($('container'), 'bottom'));
         MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
         this.test.renderNavigation(index);
     }
@@ -2125,19 +2129,23 @@ mathex.TestInputQuestion = function(options) {
     this.checkAnswer = function() {
         var result = true;
         var values = [];
+        var length = 0;
         Object.each(this.inputs, function(input, index) {
             var value = $('field_' + index).get('value');
             values.push(value);
             result = result && mathex.Shared.checkResult(input.type, input.result, value);
+            length++;
         }.bind(this));
 
         this.test.saveResult(result, values);
 
+        var target = length > 1 ? null : $('field_0');
+
         if(result) {
-            mathex.Shared.showMessage('Risposta esatta', 'success', this.test.nextQuestion.bind(this.test), {target: $('field_0')});
+            mathex.Shared.showMessage('Risposta esatta', 'success', this.test.nextQuestion.bind(this.test), {target: target});
         }
         else {
-            mathex.Shared.showMessage('Risposta errata', 'failed', this.test.nextQuestion.bind(this.test), {target: $('field_0')});
+            mathex.Shared.showMessage('Risposta errata', 'failed', this.test.nextQuestion.bind(this.test), {target: target});
         }
 
     }
@@ -2229,7 +2237,7 @@ mathex.TestRadioQuestion = function(options) {
         var div = new Element('div').set('html', this.tpl).inject($('container'), 'bottom');
         var confirm = new Element('input[type=button][value=conferma]')
             .addEvent('click', self.checkAnswer.bind(self))
-            .inject(new Element('div').inject($('container'), 'bottom'));
+            .inject(new Element('div.test-confirm').inject($('container'), 'bottom'));
         MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
         this.test.renderNavigation(index);
     }
@@ -2421,11 +2429,17 @@ mathex.Test = function() {
     this.renderResults = function() {
 
         mathex.Shared.clearNavigation();
+        var instructions;
+        if(instructions = $$('p.instructions')[0]) {
+            instructions.setStyle('display', 'none');
+        }
 
         var correct = 0;
         var incorrect = 0;
 
-        var intro_text = new Element('p')
+        var title = new Element('h3.no-margin-top').set('text', 'Esito');
+
+        var intro_text = new Element('p.test-correction')
             .set('html', "<b>Correzione</b>: seleziona il pulsante corrispondente alla domanda di cui vuoi leggere la correzione");
 
         this.results.each(function(result, index) {
@@ -2465,10 +2479,11 @@ mathex.Test = function() {
 
         $('container').empty();
         $('container').adopt(
-            intro_text, 
+            title, 
             correct_text, 
             incorrect_text, 
             rating_element,
+            intro_text, 
             summary_container
         );
     };
