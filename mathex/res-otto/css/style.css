@@ -332,9 +332,10 @@ ul span.v {
 input[type=button],
 input[type=submit] {
   background: #000;
-  height: 30px;
+  height: 34px;
+  font-size: 1.1em;
   border: 1px solid #000;
-  line-height: 30px;
+  line-height: 36px;
   text-align: center;
   color: #fff;
   border-radius: 8px;
@@ -750,6 +751,9 @@ p.questions-summary {
   background: #eee;
   padding: 2px 10px;
   margin-top: 40px;
+}
+.test-confirm {
+  margin-top: 30px;
 }
 body.aritmetica > header,
 body.aritmetica > footer {

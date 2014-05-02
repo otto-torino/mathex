@@ -2116,7 +2116,7 @@ mathex.TestInputQuestion = function(options) {
         var div = new Element('div').set('html', this.tpl).inject($('container'), 'bottom');
         var confirm = new Element('input[type=button][value=conferma]')
             .addEvent('click', self.checkAnswer.bind(self))
-            .inject(new Element('div').inject($('container'), 'bottom'));
+            .inject(new Element('div.test-confirm').inject($('container'), 'bottom'));
         MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
         this.test.renderNavigation(index);
     }
@@ -2237,7 +2237,7 @@ mathex.TestRadioQuestion = function(options) {
         var div = new Element('div').set('html', this.tpl).inject($('container'), 'bottom');
         var confirm = new Element('input[type=button][value=conferma]')
             .addEvent('click', self.checkAnswer.bind(self))
-            .inject(new Element('div').inject($('container'), 'bottom'));
+            .inject(new Element('div.test-confirm').inject($('container'), 'bottom'));
         MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
         this.test.renderNavigation(index);
     }
