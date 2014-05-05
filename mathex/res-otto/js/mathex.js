@@ -2031,11 +2031,11 @@ mathex.FaqRouter = function(faq) {
         }
         else {
             var item = this.faq.items[index];
-            if(typeof item.index == 'undefined' || item.index) {
-                this.renderFaq(index, this.faq.index_items.indexOf(item));
+            if(item.index === false) {
+                this.renderFaq(index, null);
             }
             else {
-                this.renderFaq(index, null);
+                this.renderFaq(index, this.faq.index_items.indexOf(item));
             }
         }
     }
