@@ -449,11 +449,10 @@ mathex.Shared = {
         };
 
         this.addEvents = function() {
-            this.audio_obj.load();
-            this.audio_obj.onloadeddata = function() { 
+            this.audio_obj.addEventListener('loadeddata', function() { 
                 this.time_duration_el.set('text', this.toHHMMSS(this.audio_obj.duration));
                 this.time_current_el.set('text', this.toHHMMSS(this.audio_obj.currentTime));
-            }.bind(this);
+            }.bind(this));
             this.source_ctrl_button.addEvent('click', this.sourceCtrlAction.bind(this));
 
             new Slider(this.volume_slider, this.volume_slider.getElement('.volume-knob'), {
