@@ -85,3 +85,94 @@
   padding: 0 5px;
   cursor: auto;
 }
+
+/* Player */
+.player {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    width: 210px;
+    height: 100px;
+    background: #000;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 16px;
+    color: #fff;
+    font-family: arial, sans-serif;
+    margin-bottom: 20px;
+}
+.player .source-ctrl-container {
+    height: 50px;
+    width: 50px;
+    background: #fff;
+    border-radius: 50%;
+    float: left;
+    position: relative;
+    cursor: pointer;
+    color: #000;
+    background: rgb(255,255,255); /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%, rgba(241,241,241,1) 50%, rgba(225,225,225,1) 51%, rgba(246,246,246,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(255,255,255,1)), color-stop(50%,rgba(241,241,241,1)), color-stop(51%,rgba(225,225,225,1)), color-stop(100%,rgba(246,246,246,1))); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%,rgba(241,241,241,1) 50%,rgba(225,225,225,1) 51%,rgba(246,246,246,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%,rgba(241,241,241,1) 50%,rgba(225,225,225,1) 51%,rgba(246,246,246,1) 100%); /* Opera 12+ */
+    background: -ms-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%,rgba(241,241,241,1) 50%,rgba(225,225,225,1) 51%,rgba(246,246,246,1) 100%); /* IE10+ */
+    background: radial-gradient(ellipse at center, rgba(255,255,255,1) 0%,rgba(241,241,241,1) 50%,rgba(225,225,225,1) 51%,rgba(246,246,246,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+.player .source-ctrl-container:hover {
+    background: rgb(246,246,246); /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover, rgba(246,246,246,1) 0%, rgba(225,225,225,1) 49%, rgba(241,241,241,1) 50%, rgba(255,255,255,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(246,246,246,1)), color-stop(49%,rgba(225,225,225,1)), color-stop(50%,rgba(241,241,241,1)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, ellipse cover, rgba(246,246,246,1) 0%,rgba(225,225,225,1) 49%,rgba(241,241,241,1) 50%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, ellipse cover, rgba(246,246,246,1) 0%,rgba(225,225,225,1) 49%,rgba(241,241,241,1) 50%,rgba(255,255,255,1) 100%); /* Opera 12+ */
+    background: -ms-radial-gradient(center, ellipse cover, rgba(246,246,246,1) 0%,rgba(225,225,225,1) 49%,rgba(241,241,241,1) 50%,rgba(255,255,255,1) 100%); /* IE10+ */
+    background: radial-gradient(ellipse at center, rgba(246,246,246,1) 0%,rgba(225,225,225,1) 49%,rgba(241,241,241,1) 50%,rgba(255,255,255,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f6f6f6', endColorstr='#ffffff',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+.player .volume-ctrl-container {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    padding-top: 10px;
+    height: 50px;
+    width: 118px;
+    float: right;
+}
+.player .fa-pause {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+}
+.player .fa-play {
+    position: absolute;
+    top: 18px;
+    left: 20px;
+}
+.player .time-info {
+    clear: both;
+    position: relative;
+    top: 8px;
+    text-align: center;
+    font-size: 13px;
+}
+.player .time-current {
+    color: #ffff00;
+}
+.player .volume-slider {
+    display: inline-block;
+    height: 2px;
+    width: 50px;
+    background: #666;
+    margin: 0 10px;
+    position: relative;
+    top: -10px;
+}
+.player .volume-knob {
+    background: #fff;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    position: relative;
+    top: -6px;
+}
+
+
+

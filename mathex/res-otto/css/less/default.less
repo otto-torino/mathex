@@ -1,7 +1,7 @@
 body {
   font: normal 100%/200% Verdana, Arial, sans-serif;
   margin: 0;
-  padding-top: 4.4em;
+  padding-top: 4.3em;
   color: @txt-color;
   > header, > footer, #container {
     box-sizing: border-box;
@@ -22,15 +22,20 @@ body {
   }
   > header {
     top: 0;
-    height: 70px;
+    height: 4.3em;
     .box-sizing(border-box);
+    background-image: url('../img/logoSEI_footer.png');
+    background-repeat: no-repeat;
+    background-position: 99% center;
+    padding-right: 150px;
   }
   > footer {
     bottom: 0;
-    padding-left: 200px;
-    background-image: url('../img/logoSEI_footer.png');
-    background-repeat: no-repeat;
-    background-position: 20px center;
+    padding: 0 10px;
+    font-size: 0.9em;
+    > p {
+        margin: 5px 0;
+    }
   }
   > h2 {
     padding: 5px 10px 10px;
@@ -233,6 +238,31 @@ blockquote {
   border: 1px solid #333;
   background: #fff;
   box-shadow: 0 0 10px #000;
+  .button-close {
+      background: #000;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      color: #fff !important;
+      text-align: center;
+      line-height: 32px;
+  }
+  .layer-close {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    background: #000;
+    color: #fff !important;
+    cursor: pointer;
+    border-radius: 50%;
+    position: absolute;
+    right: -21px;
+    top: -20px;
+    line-height: 34px;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+  }
 }
 
 /* inputs */
@@ -253,6 +283,7 @@ ul {
     font-size: 24px;
     margin: 0 0 0 2px;
     color: red;
+    font-weight: bold;
   }
   span.v {
     font-size: 24px;
@@ -283,6 +314,12 @@ ul {
         border-radius: 50%;
         margin-right: 5px;
         color: #fff;
+    }
+    .item.active {
+        background: #000;
+        cursor: pointer;
+        color: #fff !important;
+        text-decoration: none !important;
     }
     .prev {
         background: url(../img/prev_grey.png) no-repeat center center;

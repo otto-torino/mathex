@@ -155,7 +155,7 @@
           $$('.test-summary > span')[1].fireEvent('click');
 
           ajsut.assert($$('#test-summary-result > div').length == 2, 'correct and wrong answers displayed for the second question');
-          ajsut.assert($$('#test-summary-result > div')[1].hasClass('test-result-wrong'), 'the second shown answer is the wrong one');
+          ajsut.assert($$('#test-summary-result > div')[0].hasClass('test-result-wrong'), 'the first shown answer is the wrong one');
 
           var tests = $$('#results li li').length;
           var passed = $$('#results li li.passed').length;

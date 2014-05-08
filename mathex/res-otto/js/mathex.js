@@ -123,7 +123,9 @@ mathex.Shared = {
         var instructions = options.instructions
             ? new Element('p.instructions').set('html', options.instructions)
             : null;
-        var duty = new Element('h2.duty').set('html', options.duty);
+        var duty = options.duty
+            ? new Element('h2.duty').set('html', options.duty)
+            : null;
         var pre_container = new Element('div.pre_container').set('html', options.pre_container);
 
         // container
@@ -383,7 +385,7 @@ mathex.Shared = {
         if(audio_obj === null) {
             return true;
         }
-        var audio = new Element('audio[controls]');
+        var audio = new Element('audio');
         if(typeof audio_obj.mp3 != 'undefined') {
             var mp3_source = new Element('source[src=' + audio_obj.mp3 + '][type=audio/mp3]').inject(audio);
         }
@@ -395,6 +397,115 @@ mathex.Shared = {
             audio_container.adopt(new Element('p.instructions').set('html', audio_obj.instructions));
         }
         audio_container.inject($('container'), 'top');
+        var player = new mathex.Shared.Player(audio);
+        player.init();
+    },
+    Player: function(audio_element, options) {
+
+        this.audio_obj = document.id(audio_element);
+        this.options = options;
+
+        this.init = function() {
+            this.status = 'pause';
+            //this.duration = this.audio_obj.duration;
+            this.time = '00';
+            this.render();
+            this.addEvents();
+        };
+
+        this.render = function() {
+
+            // source controller
+            this.source_ctrl_el = new Element('div.source-ctrl.fa.fa-play');
+            this.source_ctrl_button = new Element('div.source-ctrl-container')
+                .adopt(this.source_ctrl_el);
+
+            // time info
+            this.time_current_el = new Element('span.time-current');
+            this.time_duration_el = new Element('span.time-duration');
+            var time_info = new Element('div.time-info')
+                .adopt(
+                    this.time_current_el,
+                    new Element('span.time-current-duration-separator').set('text', ' / '),
+                    this.time_duration_el
+                );
+
+            // volume ctrl
+            this.volume_slider = new Element('div.volume-slider');
+            this.volume_ctrl = new Element('div.volume-ctrl')
+                .adopt(
+                    new Element('span.fa.fa-2x.fa-volume-off'),
+                    this.volume_slider.adopt( new Element('div.volume-knob')),
+                    new Element('span.fa.fa-2x.fa-volume-up')
+                );
+
+            var container = new Element('div.player')
+                .adopt(
+                    this.source_ctrl_button,
+                    new Element('div.volume-ctrl-container').adopt(this.volume_ctrl),
+                    time_info
+                )
+                .inject(this.audio_obj, 'after');
+        };
+
+        this.addEvents = function() {
+            this.audio_obj.load();
+            this.audio_obj.onloadeddata = function() { 
+                this.time_duration_el.set('text', this.toHHMMSS(this.audio_obj.duration));
+                this.time_current_el.set('text', this.toHHMMSS(this.audio_obj.currentTime));
+            }.bind(this);
+            this.source_ctrl_button.addEvent('click', this.sourceCtrlAction.bind(this));
+
+            new Slider(this.volume_slider, this.volume_slider.getElement('.volume-knob'), {
+                range: [0, 100],
+                initialStep: this.audio_obj.volume * 100,
+                onChange: function(value){
+                    this.audio_obj.volume = value/100;
+                }.bind(this)
+            });
+        };
+
+        this.sourceCtrlAction = function() {
+            if(this.status == 'pause') {
+                this.play();
+            }
+            else {
+                this.pause();
+            }
+        };
+
+        this.toHHMMSS = function(s) {
+            var sec_num = parseInt(s, 10);
+            var hours   = Math.floor(sec_num / 3600);
+            var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+            var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+            if(hours   < 10) { hours   = "0" + hours; }
+            if(minutes < 10) { minutes = "0" + minutes; }
+            if(seconds < 10) { seconds = "0" + seconds; }
+
+            var time = (hours == '00' ? '' : hours + ':') + minutes + ':' + seconds;
+
+            return time;
+        }
+
+        this.play = function() {
+            this.time_current_el.set('text', this.toHHMMSS(this.audio_obj.currentTime));
+            this.time_ti = setInterval(function() {
+                this.time_current_el.set('text', this.toHHMMSS(this.audio_obj.currentTime));
+            }.bind(this), 1000);
+            this.source_ctrl_el.removeClass('fa-play').addClass('fa-pause');
+            this.audio_obj.play();
+            this.status = 'play';
+        };
+
+        this.pause = function() {
+            clearInterval(this.time_ti);
+            this.source_ctrl_el.removeClass('fa-pause').addClass('fa-play');
+            this.audio_obj.pause();
+            this.status = 'pause';
+        };
+
     },
     /**
      * @summary Creates a index controller widget, just a button with configurable click action
@@ -705,6 +816,7 @@ mathex.Shared = {
  * @param {String} [options.next=null] next button url
  * @param {String} [options.prev=null] prev button url
  * @param {Number} [options.items=0] number of pages
+ * @param {Array} [options.urls=[]] array of pages urls, given urls make the relative controller become active
  * @param {Number} [options.current=null] current selected page
  * @param {String} [options.next_label] label next to the next button
  * @param {String} [options.prev_label] label next to the prev button
@@ -718,6 +830,7 @@ mathex.Navigator = function(options) {
         next2: null,
         prev2: null,
         items: 0,
+        urls: [],
         current: 0,
     };
     this.options = Object.merge(opts, options);
@@ -740,7 +853,13 @@ mathex.Navigator = function(options) {
         }
         if(this.options.items) {
             for(var i = 1; i < this.options.items + 1; i++) {
-                var item_el = new Element('span.item')
+                if(typeof this.options.urls[i - 1] != 'undefined' && this.options.urls[i - 1] && i != this.options.current) {
+                    var el = 'a.item.active[href=' + this.options.urls[i - 1] + ']';
+                }
+                else {
+                    var el = 'span.item';
+                }
+                var item_el = new Element(el)
                     .set('text', i)
                     .inject(container);
                 if(i == this.options.current) {
@@ -920,10 +1039,9 @@ mathex.Step = {
                     mathex.Shared.showMessage(fieldobj.comment, 'message', this.addInputEvents.bind(this), {target: field});
                 }
                 else {
-                    mathex.Shared.showMessage('Risposta errata, riprova', 'error', this.addInputEvents.bind(this), {target: field});
+                    mathex.Shared.showMessage('Risposta errata, riprova', 'error', function() { field.value = ''; this.addInputEvents(); }.bind(this), {target: field});
                 }
                 field.blur();
-                field.value = '';
                 field.store('errors', 1);
             }
             else {
@@ -932,8 +1050,7 @@ mathex.Step = {
                     this.deactivate();
                     this.router.endStep();
                 }.bind(this);
-                mathex.Shared.showMessage('Risposta errata. La risposta esatta è ' + result, 'failed', end_callback, {target: field});
-                field.value = result;
+                mathex.Shared.showMessage('Risposta errata. La risposta esatta è ' + result, 'failed', function() { field.value = result; end_callback(); }, {target: field});
             }
         }
         else {
@@ -1305,8 +1422,7 @@ mathex.TextSelectFieldStep = function(tpl, select_options, result, end_message, 
         }
 
         if(!(field.value == this.result || this.errors == 1)) {
-            mathex.Shared.showMessage('Risposta errata, riprova', 'error', this.addInputEvents.bind(this), {target: field});
-            field.set('value', '');
+            mathex.Shared.showMessage('Risposta errata, riprova', 'error', function() { field.set('value', ''); this.addInputEvents(); }.bind(this), {target: field});
             this.errors = 1;
         }
         else {
@@ -1321,8 +1437,7 @@ mathex.TextSelectFieldStep = function(tpl, select_options, result, end_message, 
                 mathex.Shared.showMessage('Risposta esatta', 'success', end_callback, {target: field});
             }
             else {
-                mathex.Shared.showMessage('Risposta errata', 'failed', end_callback, {target: field});
-                field.set('value', this.result);
+                mathex.Shared.showMessage('Risposta errata', 'failed', function() { field.set('value', this.result); end_callback(); }.bind(this), {target: field});
             }
         }
 
@@ -1569,7 +1684,7 @@ mathex.Question = function(prop) {
     this.checkAnswer = function(index, correct) {
 
         if(!(index == correct || this.errors == 1)) {
-            mathex.Shared.showMessage('Risposta errata, riprova', 'error', null, {target: this.list.getElements('input')[index]});
+            mathex.Shared.showMessage('Risposta errata, riprova', 'error', null);
             var x = new Element('span.x').set('html', '&#215;').inject(this.list.getElements('input')[index].setStyle('display', 'none'), 'before');
             this.errors = 1;
         }
@@ -1593,12 +1708,12 @@ mathex.Question = function(prop) {
                     var result = 'success';
                     this.router.addRightAnswer();
                 }
-                mathex.Shared.showMessage('Risposta esatta', 'success', function() {this.router.endStep(result, this); callback(); }.bind(this), {target: this.list.getElements('input')[index]});
+                mathex.Shared.showMessage('Risposta esatta', 'success', function() {this.router.endStep(result, this); callback(); }.bind(this));
                 var v = new Element('span.v').set('html', '✔').replaces(this.list.getElements('input')[index]);
             }
             else {
                 this.router.addWrongAnswer();
-                mathex.Shared.showMessage('Risposta errata', 'failed', function() {this.router.endStep('failed', this); callback(); }.bind(this), {target: this.list.getElements('input')[index]});
+                mathex.Shared.showMessage('Risposta errata', 'failed', function() {this.router.endStep('failed', this); callback(); }.bind(this));
                 var x = new Element('span.x').set('html', '&#215;').inject(this.list.getElements('input')[index].setStyle('display', 'none'), 'before');
                 var v = new Element('span.v').set('html', '✔').replaces(this.list.getElements('input')[correct]);
             }
@@ -1956,14 +2071,18 @@ mathex.FaqRouter = function(faq) {
             }
 
             var i = 0;
-            this.faq.index_items.each(function(faq) {
+            this.faq.index_items.each(function(faq, index) {
                 var item_el = new Element('span.item')
                     .set('text', ++i)
                     .inject(this.faq_nav);
                 if(index_index == i - 1) {
                     item_el.addClass('selected');
                 }
-            });
+                else {
+                    item_el.addClass('active link')
+                        .addEvent('click', function() { this.renderFaq(this.faq.items.indexOf(faq), index); window.location.hash = 'top'; }.bind(this));
+                }
+            }.bind(this));
 
             if(index < this.faq.index_items.length - 1) {
                 next = new Element('span.next.link').set('text', '>').addEvent('click', function() {
@@ -2016,18 +2135,14 @@ mathex.FaqRouter = function(faq) {
                 'right': 0,
                 'width': '500px',
                 'height': '50%',
-                'overflow': 'auto'
                 //'top': (viewport.cY - 100) + 'px',
                 //'left': (viewport.cX - 200) + 'px',
             }).inject($(document.body));
             var title = new Element('h2').set('html', mathex.Shared.parseTpl(item.question, []));
-            var close = new Element('div.link.button-close').setStyles({
-                position: 'absolute',
-                right: 0,
-                top: 0,
-                'font-size': '32px'
-            }).set('html', '&#215;').addEvent('click', function() { layer.dispose(); });
+            var close = new Element('span.link.layer-close')
+                .set('html', '&#215;').addEvent('click', function() { layer.dispose(); });
             layer.adopt(close, title, new Element('div').set('html', answer));
+            MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
         }
         else {
             var item = this.faq.items[index];
@@ -2163,18 +2278,6 @@ mathex.TestInputQuestion = function(options) {
         var self = this;
         this.tpl = mathex.Shared.parseTpl(this.question, this.inputs);
         this.test = test;
-        var right_result = new Element('div.test-result-right')
-            .set('html', this.tpl)
-            .inject(container);
-        MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
-        MathJax.Hub.Queue(function() {
-            Object.each(self.inputs, function(input, index) {
-                $('field_' + index).set('value', input.result)
-                    .setProperty('readonly', 'readonly')
-                    .setStyle('background', '#afe1bc')
-                    .removeProperty('id');
-            }.bind(self));
-        });
         if(!this.test.results[question_index]) {
              var wrong_result = new Element('div.test-result-wrong')
                 .set('html', this.tpl)
@@ -2189,7 +2292,18 @@ mathex.TestInputQuestion = function(options) {
                 }.bind(self));
             });
         }
-
+        var right_result = new Element('div.test-result-right')
+            .set('html', this.tpl)
+            .inject(container);
+        MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
+        MathJax.Hub.Queue(function() {
+            Object.each(self.inputs, function(input, index) {
+                $('field_' + index).set('value', input.result)
+                    .setProperty('readonly', 'readonly')
+                    .setStyle('background', '#afe1bc')
+                    .removeProperty('id');
+            }.bind(self));
+        });
     }
 }
 /**

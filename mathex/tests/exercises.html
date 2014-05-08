@@ -148,7 +148,6 @@
           ajsut.assert(typeOf($('message')) == 'element', 'The message was rendered');
           ajsut.assert($('message').hasClass('failed'), 'The message was a failed one');
           ajsut.assert($$('#message p')[0].get('text') == 'Risposta errata. La risposta esatta è 16', 'The message text is the correct one');
-          ajsut.assert($('field_1').get('value') == '16', 'The right answer was written into the field');
           ajsut.resume();
         }, 2000);
       })
@@ -161,6 +160,7 @@
           evObj.initMouseEvent( 'click', true, true, window, 1, 1, 1, 7, 220, false, false, true, false, 0, null );
           $$('#message .layer-close')[0].fireEvent('click', evObj);
           ajsut.assert(typeOf($('message')) == 'null', 'The message disappeared');
+          ajsut.assert($('field_1').get('value') == '16', 'The right answer was written into the previous field');
           ajsut.assert($('field_1').getProperty('readonly'), 'The second input is now readonly');
           ajsut.resume();
         }, 2000);
