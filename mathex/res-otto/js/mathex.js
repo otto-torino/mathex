@@ -324,6 +324,10 @@ mathex.Shared = {
                 }.bind(this))
         );
 
+        var drag_instance = new Drag(this.message_container, {
+            'limit':{'x':[0, (doc_dim.width-this.message_container.getCoordinates().width)], 'y':[0, ]}
+        });
+
     },
     /**
      * @summary Gets the viewport coordinates of the current window (width, height, left offest, top offset, coordinates of the center point).
@@ -431,12 +435,14 @@ mathex.Shared = {
                 );
 
             // volume ctrl
-            this.volume_slider = new Element('div.volume-slider');
+            this.volume_slider_el = new Element('div.volume-slider');
+            this.volume_off = new Element('span.fa.fa-2x.fa-volume-off');
+            this.volume_up = new Element('span.fa.fa-2x.fa-volume-up');
             this.volume_ctrl = new Element('div.volume-ctrl')
                 .adopt(
-                    new Element('span.fa.fa-2x.fa-volume-off'),
-                    this.volume_slider.adopt( new Element('div.volume-knob')),
-                    new Element('span.fa.fa-2x.fa-volume-up')
+                    this.volume_off,
+                    this.volume_slider_el.adopt( new Element('div.volume-knob')),
+                    this.volume_up
                 );
 
             var container = new Element('div.player')
@@ -455,7 +461,17 @@ mathex.Shared = {
             }.bind(this));
             this.source_ctrl_button.addEvent('click', this.sourceCtrlAction.bind(this));
 
-            new Slider(this.volume_slider, this.volume_slider.getElement('.volume-knob'), {
+            this.volume_off.addEvent('click', function() {
+                this.audio_obj.volume = Math.max(this.audio_obj.volume - 0.1, 0);
+                this.volume_slider.set(Math.max((this.audio_obj.volume - 0.1) * 100, 0));
+            }.bind(this));
+
+            this.volume_up.addEvent('click', function() {
+                this.audio_obj.volume = Math.min(this.audio_obj.volume + 0.1, 1);
+                this.volume_slider.set(Math.min((this.audio_obj.volume + 0.1) * 100, 100));
+            }.bind(this));
+
+            this.volume_slider = new Slider(this.volume_slider_el, this.volume_slider_el.getElement('.volume-knob'), {
                 range: [0, 100],
                 initialStep: this.audio_obj.volume * 100,
                 onChange: function(value){

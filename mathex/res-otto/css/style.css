@@ -1883,6 +1883,13 @@ input[type=submit] {
   top: 18px;
   left: 20px;
 }
+.player .fa-volume-up,
+.player .fa-volume-off {
+  cursor: pointer;
+}
+.player .volume-knob {
+  cursor: move;
+}
 .player .time-info {
   clear: both;
   position: relative;
