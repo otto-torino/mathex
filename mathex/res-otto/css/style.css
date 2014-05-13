@@ -1371,7 +1371,7 @@ body > header {
   box-sizing: border-box;
   background-image: url('../img/logoSEI_footer.png');
   background-repeat: no-repeat;
-  background-position: 99% center;
+  background-position: right 10px center;
   padding-right: 150px;
 }
 body > footer {

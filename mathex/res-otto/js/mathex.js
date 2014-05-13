@@ -2156,7 +2156,13 @@ mathex.FaqRouter = function(faq) {
             var title = new Element('h2').set('html', mathex.Shared.parseTpl(item.question, []));
             var close = new Element('span.link.layer-close')
                 .set('html', '&#215;').addEvent('click', function() { layer.dispose(); });
-            layer.adopt(close, title, new Element('div').set('html', answer));
+            layer.adopt(close, new Element('div.layer-body').adopt(
+                    title, new Element('div').set('html', answer)
+                ).setStyles({
+                    'height': (layer.getCoordinates().height - 40) + 'px',
+                    'overflow': 'auto'
+                })
+            );
             MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
         }
         else {
