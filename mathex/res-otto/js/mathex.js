@@ -2306,7 +2306,9 @@ mathex.TestInputQuestion = function(options) {
 
         this.test.saveResult(result, values);
 
-        var target = length > 1 ? null : $('field_0');
+        // uncomment and comment next line to make layers appear near the input field
+        //var target = length > 1 ? null : $('field_0');
+        var target = null;
 
         if(result) {
             mathex.Shared.showMessage('Risposta esatta', 'success', this.test.nextQuestion.bind(this.test), {target: target});
@@ -2427,11 +2429,15 @@ mathex.TestRadioQuestion = function(options) {
 
         this.test.saveResult(result, values);
 
+        // uncomment and comment next line to make layers appear near the input field
+        //var target = $$('input[type=radio]')[0].getParent().getParent();
+        var target = null;
+
         if(result) {
-            mathex.Shared.showMessage('Risposta esatta', 'success', this.test.nextQuestion.bind(this.test), {target: $$('input[type=radio]')[0].getParent().getParent()});
+            mathex.Shared.showMessage('Risposta esatta', 'success', this.test.nextQuestion.bind(this.test), {target: target});
         }
         else {
-            mathex.Shared.showMessage('Risposta errata', 'failed', this.test.nextQuestion.bind(this.test), {target: $$('input[type=radio]')[0].getParent().getParent()});
+            mathex.Shared.showMessage('Risposta errata', 'failed', this.test.nextQuestion.bind(this.test), {target: target});
         }
 
     }
