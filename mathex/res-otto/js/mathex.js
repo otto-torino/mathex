@@ -2464,7 +2464,9 @@ mathex.TestRadioQuestion = function(options) {
         MathJax.Hub.Queue(function() {
             var v = new Element('span.v').set('html', '✔').inject(document.id('radio_' + self.result).setStyle('display', 'none'), 'before');
             if(!self.test.results[question_index]) {
-                var x = new Element('span.x').set('html', '&#215;').inject(document.id('radio_' + self.test.answers[question_index]).setStyle('display', 'none'), 'before');
+                if(self.test.answers[question_index].length) {
+                    var x = new Element('span.x').set('html', '&#215;').inject(document.id('radio_' + self.test.answers[question_index][0]).setStyle('display', 'none'), 'before');
+                }
             }
         });
 
