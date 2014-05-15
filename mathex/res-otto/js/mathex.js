@@ -1091,6 +1091,7 @@ mathex.Step = {
  * @param {String} [end_message] A message to be displayed at the end of the step
  * @param {Object} [options] The step options
  * @param {Boolean} [options.container=true] Whether or not to insert the exercise text inside a div container
+ * @param {String} [options.target=null] Id of the target element where to insert the step content, if null the content is inserted at the bottom of the container
  * @return {Object} TextFieldStep instance
  *
  * @example
@@ -1119,6 +1120,7 @@ mathex.Step = {
 mathex.TextFieldStep = function(tpl, inputs, end_message, options) {
 
     this.container = options && typeof options.container != 'undefined' ? options.container : true;
+    this.target = options && typeof options.target != 'undefined' ? options.target : null;
 
     /**
      * @summary Executes the step
@@ -1135,10 +1137,15 @@ mathex.TextFieldStep = function(tpl, inputs, end_message, options) {
         var self = this;
         this.router = router;
         if(this.container) {
-            var div = new Element('div').set('html', this.tpl).inject($('container'), 'bottom');
+            var div = new Element('div').set('html', this.tpl).inject( this.target ? $(this.target) : $('container'), 'bottom');
         }
         else {
-            $('container').set('html', $('container').get('html') + this.tpl);
+            if(this.target) {
+                $(this.target).set('html', $(this.target).get('html') + this.tpl);
+            }
+            else {
+                $('container').set('html', $('container').get('html') + this.tpl);
+            }
         }
         MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
         MathJax.Hub.Queue(function() {
@@ -1212,6 +1219,7 @@ mathex.TextFieldStep.prototype = mathex.Step;
  * @param {String} [end_message] A message to be displayed at the end of the step
  * @param {Object} [options] The step options
  * @param {Boolean} [options.container=true] Whether or not to insert the exercise text inside a div container
+ * @param {String} [options.target=null] Id of the target element where to insert the step content, if null the content is inserted at the bottom of the container
  * @return {Object} TextChoiceFieldStep instance
  * @example
  *    var step = new mathex.TextChoiceFieldStep(
@@ -1228,6 +1236,8 @@ mathex.TextFieldStep.prototype = mathex.Step;
 mathex.TextChoiceFieldStep = function(tpl, result, end_message, options) {
 
     this.container = options && typeof options.container != 'undefined' ? options.container : true;
+    this.target = options && typeof options.target != 'undefined' ? options.target : null;
+
     /**
      * @summary Executes the step
      * @description Renders the template and activates radio buttons
@@ -1247,10 +1257,15 @@ mathex.TextChoiceFieldStep = function(tpl, result, end_message, options) {
         var self = this;
         this.router = router;
         if(this.container) {
-            var div = new Element('div').set('html', this.tpl).inject($('container'), 'bottom');
+            var div = new Element('div').set('html', this.tpl).inject( this.target ? $(this.target) : $('container'), 'bottom');
         }
         else {
-            $('container').set('html', $('container').get('html') + this.tpl);
+            if(this.target) {
+                $(this.target).set('html', $(this.target).get('html') + this.tpl);
+            }
+            else {
+                $('container').set('html', $('container').get('html') + this.tpl);
+            }
         }
         MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
         MathJax.Hub.Queue(function() {
@@ -1362,6 +1377,7 @@ mathex.TextChoiceFieldStep.prototype = mathex.Step;
  * @params {String} [end_message] A message to be displayed at the end of the step
  * @params {Object} [options] The step options
  * @params {Boolean} [options.container=true] Whether or not to insert the exercise text inside a div container
+ * @param {String} [options.target=null] Id of the target element where to insert the step content, if null the content is inserted at the bottom of the container
  * @return {Object} TextSelectFieldStep instance
  * @example
  *
@@ -1376,6 +1392,8 @@ mathex.TextChoiceFieldStep.prototype = mathex.Step;
 mathex.TextSelectFieldStep = function(tpl, select_options, result, end_message, options) {
 
     this.container = options && typeof options.container != 'undefined' ? options.container : true;
+    this.target = options && typeof options.target != 'undefined' ? options.target : null;
+
     /**
      * @summary Populates the select field with the options
      * @memberof mathex.TextSelectFieldStep.prototype
@@ -1406,10 +1424,15 @@ mathex.TextSelectFieldStep = function(tpl, select_options, result, end_message, 
         var self = this;
         this.router = router;
         if(this.container) {
-            var div = new Element('div').set('html', this.tpl).inject($('container'), 'bottom');
+            var div = new Element('div').set('html', this.tpl).inject( this.target ? $(this.target) : $('container'), 'bottom');
         }
         else {
-            $('container').set('html', $('container').get('html') + this.tpl);
+            if(this.target) {
+                $(this.target).set('html', $(this.target).get('html') + this.tpl);
+            }
+            else {
+                $('container').set('html', $('container').get('html') + this.tpl);
+            }
         }
         this.populateSelect();
         MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
@@ -1578,6 +1601,7 @@ mathex.FieldStep.prototype = mathex.Step;
  * @param {String} [end_message] A message to be displayed at the end of the step
  * @param {Object} [options] The step options
  * @param {Boolean} [options.container=true] Whether or not to insert the exercise text inside a div container
+ * @param {String} [options.target=null] Id of the target element where to insert the step content, if null the content is inserted at the bottom of the container
  * @return {Object} TextStep instance
  * @example
  *    var step = new mathex.TextStep('&lt;p&gt;my text&lt;/p&gt;', 'my message', {container: false});
@@ -1585,6 +1609,7 @@ mathex.FieldStep.prototype = mathex.Step;
 mathex.TextStep = function(tpl, end_message, options) {
 
     this.container = options && typeof options.container != 'undefined' ? options.container : true;
+    this.target = options && typeof options.target != 'undefined' ? options.target : null;
 
     this.tpl = mathex.Shared.parseTpl(tpl, {});
     this.end_message = typeof end_message == 'undefined' ? null : end_message;
@@ -1600,11 +1625,17 @@ mathex.TextStep = function(tpl, end_message, options) {
         var self = this;
         this.router = router;
         if(this.container) {
-            var div = new Element('div').set('html', this.tpl).inject($('container'), 'bottom');
+            var div = new Element('div').set('html', this.tpl).inject( this.target ? $(this.target) : $('container'), 'bottom');
         }
         else {
-            $('container').set('html', $('container').get('html') + this.tpl);
+            if(this.target) {
+                $(this.target).set('html', $(this.target).get('html') + this.tpl);
+            }
+            else {
+                $('container').set('html', $('container').get('html') + this.tpl);
+            }
         }
+
         MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
         if(this.end_message) {
             mathex.Shared.showMessage(this.end_message, 'message', null);
