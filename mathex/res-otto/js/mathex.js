@@ -628,6 +628,7 @@ mathex.Shared = {
                         top: vp.cY - 150,
                         left: vp.cX - 106
                     })
+                    .adopt(new Element('span.close').set('text', '×').addEvent('click', function() { this.hide(); }.bind(this)))
                     .adopt(this.display = new Element('div#display').set('text', 0), table);
 
                     var doc_dimensions = document.getCoordinates();
