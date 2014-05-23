@@ -1909,7 +1909,7 @@ mathex.QuestionRouter = function() {
         else if(points == 5) {
             message = "Preparazione lacunosa";
         }
-        else if(points = 6) {
+        else if(points == 6) {
             message = "Preparazione sufficiente";
         }
         else if(points == 7) {
