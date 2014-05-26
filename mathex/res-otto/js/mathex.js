@@ -2231,8 +2231,140 @@ mathex.TestQuestion = function(type, options) {
     else if(type == 'radio') {
         return new mathex.TestRadioQuestion(options);
     }
+    else if(type == 'multicheck') {
+        return new mathex.TestMulticheckQuestion(options);
+    }
     else return null;
 }
+
+/**
+ * @summary Test - Test multicheck question, answer with multiple checkboxes
+ * @memberof mathex
+ * @constructs mathex.TestMulticheckQuestion
+ * @param {Object} options Options
+ * @param {String} options.question The question and answer template to be parsed
+ *                                                                        <p>The math to be parsed by mathjax (latex syntax) must be placed inside the tag {%%}, i.e. {% 2^4=16 %}</p>
+ *                                                                        <p>The checkboxes must be written this way: [[1]] choice, where 1 is the index of the choice.</p>
+ * @param {Array} options.result The indexes of the correct answers
+ * @return {Object} mathex.TestMulticheckQuestion instance
+ * @example
+ *    var question3 = new mathex.TestQuestion('multicheck', {
+ *        question: 'Which equations are correct?' + 
+ *            '&lt;ul&gt;' +
+ *            '&lt;li&gt;[[0]] {% 5^3 * 5^4 = 5^7 %}&lt;/li&gt;' +
+ *            '&lt;li&gt;[[1]] {% 2^5 * 3^5 = 6^5 %}&lt;/li&gt;' +
+ *            '&lt;li&gt;[[2]] {% 9^6 + 9^2 = 9^8 %}&lt;/li&gt;' +
+ *            '&lt;li&gt;[[3]] {% 7^8 : 7 = 7^7 %}&lt;/li&gt;' +
+ *            '&lt;/ul&gt;',
+ *        result: [0, 1, 3],
+ *    });
+ *
+ */
+mathex.TestMulticheckQuestion = function(options) {
+
+    this.question = options.question;
+    this.result = options.result;
+    /**
+     * @summary Executes the test question
+     * @memberof mathex.TestMulticheckQuestion.prototype
+     * @method run
+     * @param {Object} test The mathex.Test instance
+     * @param {Number} index The question index
+     * @return void
+     */
+    this.run = function(test, index) {
+        var self = this;
+        this.string = String.uniqueID();
+        this.tpl = mathex.Shared.parseTpl(this.question, {});
+        var check_rexp = new RegExp("\\[\\[([0-9]*?)\\]\\]", "gim");
+        this.tpl = this.tpl.replace(check_rexp, "<input type=\"checkbox\" name=\"check_" + this.string + "\" id=\"check_$1\" />");
+        this.test = test;
+        var div = new Element('div').set('html', this.tpl).inject($('container'), 'bottom');
+        var confirm = new Element('input[type=button][value=conferma]')
+            .addEvent('click', self.checkAnswer.bind(self))
+            .inject(new Element('div.test-confirm').inject($('container'), 'bottom'));
+        MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
+        this.test.renderNavigation(index);
+    }
+    /**
+     * @summary Cheks the user answer, saves the result and proceeds with the next question
+     * @memberof mathex.TestMulticheckQuestion.prototype
+     * @method checkAnswer
+     * @return void
+     */
+    this.checkAnswer = function() {
+        var result = true;
+        var values = [];
+        document.getElements('input[type=checkbox]').each(function(checkbox) {
+            var index = checkbox.get('id').replace(/check_/, '').toInt();
+            if(checkbox.checked) {
+                values.push(index);
+            }
+            if((checkbox.checked && this.result.indexOf(index) == -1) || (!checkbox.checked && this.result.indexOf(index) != -1)) {
+                result = false;
+            };
+        }.bind(this));
+
+        this.test.saveResult(result, values);
+
+        // uncomment and comment next line to make layers appear near the input field
+        //var target = $$('input[type=radio]')[0].getParent().getParent();
+        var target = null;
+
+        if(result) {
+            mathex.Shared.showMessage('Risposta esatta', 'success', this.test.nextQuestion.bind(this.test), {target: target});
+        }
+        else {
+            mathex.Shared.showMessage('Risposta errata', 'failed', this.test.nextQuestion.bind(this.test), {target: target});
+        }
+
+    }
+    /**
+     * @summary Shows the result for correction
+     * @description Shows the original question with the right answer and the wrong answer 
+     * if a wrong answer was given
+     * @memberof mathex.TestMulticheckQuestion.prototype
+     * @method showResult
+     * @param {Element} container the container into which 
+     * @param {Number} question_index the question index
+     * @return void
+     */
+    this.showResult = function(container, question_index) {
+        var self = this;
+        this.string = String.uniqueID();
+        this.tpl = mathex.Shared.parseTpl(this.question, {});
+        var checkbox_rexp = new RegExp("\\[\\[([0-9]*?)\\]\\]", "gim");
+        this.tpl = this.tpl.replace(checkbox_rexp, "<input type=\"checkbox\" name=\"multicheck" + this.string + "\" id=\"check_$1\" />");
+        this.test = test;
+        if(!this.test.results[question_index]) {
+            var wrong_result = new Element('div.test-result-wrong')
+                .set('html', this.tpl)
+                .inject(container);
+            MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
+            MathJax.Hub.Queue(function() {
+                Object.each(this.test.answers[question_index], function(index) {
+                    $('check_' + index).setProperty('checked', 'checked')
+                        .setStyle('background', '#eca9a9')
+                        .removeProperty('id');
+                }.bind(self));
+                wrong_result.getElements('input[type=checkbox]').setProperty('disabled', 'disabled');
+            });
+        }
+        var right_result = new Element('div.test-result-right')
+            .set('html', this.tpl)
+            .inject(container);
+        MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
+        MathJax.Hub.Queue(function() {
+            Object.each(self.result, function(index) {
+                $('check_' + index).setProperty('checked', 'checked')
+                    .setStyle('background', '#afe1bc')
+                    .removeProperty('id');
+            }.bind(self));
+            right_result.getElements('input[type=checkbox]').setProperty('disabled', 'disabled');
+        });
+    }
+}
+
 /**
  * @summary Test - Test question, answers with only text fields
  * @memberof mathex
