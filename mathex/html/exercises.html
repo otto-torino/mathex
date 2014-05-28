@@ -27,7 +27,18 @@
           pre_container: ''
       });
 
-      var step1 = new mathex.TextFieldStep(
+      var step1 = new mathex.TextMulticheckFieldStep(
+          '<h3>Multicheck</h3>' + 
+          '<p>Quali sono colori</p>' + 
+          '<ul>' + 
+          '<li>[[0]] giallo</li>' + 
+          '<li>[[1]] {% 2^7 = 32 %}</li>' + 
+          '<li>[[2]] rosso</li>' + 
+          '</ul>',
+          [0, 2]
+      );
+
+      var step2 = new mathex.TextFieldStep(
       '<h3>Verifichiamo che {% 2^7 : 2^4 = 2^(7-4) = ^3 %}</h3>' + 
       '<p>Seguiamo due procedimenti diversi</p>' + 
       '<h4>Primo procedimento</h4>' + 
@@ -50,9 +61,9 @@
         'sucaris'
       );
 
-      var step2 = new mathex.FieldStep(1, 16, null, {type: 'int'});
+      var step3 = new mathex.FieldStep(1, 16, null, {type: 'int'});
 
-      var step3 = new mathex.TextChoiceFieldStep(
+      var step4 = new mathex.TextChoiceFieldStep(
       '<h3>Radio cazzo</h3>' + 
       '<p>Scegli e muori</p>' + 
       '<ul>' + 
@@ -63,7 +74,7 @@
         0
       );
 
-      var step4 = new mathex.TextSelectFieldStep(
+      var step5 = new mathex.TextSelectFieldStep(
       '<h3>Radio cazzo</h3>' + 
       '<p>Scegli e muori</p>' + 
       '<ul>' + 
@@ -77,7 +88,7 @@
 
 
 
-      router.init([step1, step2, step3, step4], 'hai finito');
+      router.init([step1, step2, step3, step4, step5], 'hai finito');
       router.startStep();
 
 

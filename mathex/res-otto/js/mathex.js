@@ -1319,7 +1319,7 @@ mathex.TextChoiceFieldStep = function(tpl, result, end_message, options) {
             }
         }
 
-    }
+    };
     /**
      * @summary Adds events to the radio buttons
      * @memberof mathex.TextChoiceFieldStep.prototype
@@ -1364,6 +1364,185 @@ mathex.TextChoiceFieldStep = function(tpl, result, end_message, options) {
     }
 }
 mathex.TextChoiceFieldStep.prototype = mathex.Step;
+
+/**
+ * @summary Exercises - Text plus multiple checkboxes
+ * @memberof mathex
+ * @constructs mathex.TextMulticheckFieldStep
+ * @extends mathex.Step
+ * @param {String} tpl The exercise template.<br />
+ *                 <p>The math to be parsed by mathjax must be placed inside the tag {%%}, i.e. {% 2^4=16 %}</p>
+ *                 <p>The available choices must be written this way: [[0]] my choice. Then the [[0]] is parsed and a radio buton is created.</p>
+ * @param {Array} result The indexes of the checked answers
+ * @param {String} [end_message] A message to be displayed at the end of the step
+ * @param {Object} [options] The step options
+ * @param {Boolean} [options.container=true] Whether or not to insert the exercise text inside a div container
+ * @param {String} [options.target=null] Id of the target element where to insert the step content, if null the content is inserted at the bottom of the container
+ * @return {Object} TextMulticheckFieldStep instance
+ * @example
+ *    var step = new mathex.TextChoiceFieldStep(
+ *        '&lt;h3&gt;Title&lt;/h3&gt;' + 
+ *        '&lt;p&gt;Which are colors?&lt;/p&gt;' + 
+ *        '&lt;ul&gt;' + 
+ *        '&lt;li&gt;[[0]] red&lt;/li&gt;' + 
+ *        '&lt;li&gt;[[1]] {% 2^7 = 32 %}&lt;/li&gt;' + 
+ *        '&lt;li&gt;[[2]] yellow&lt;/li&gt;' + 
+ *        '&lt;/ul&gt;',
+ *        [0, 2]
+ *    );
+ */
+mathex.TextMulticheckFieldStep = function(tpl, result, end_message, options) {
+
+    this.container = options && typeof options.container != 'undefined' ? options.container : true;
+    this.target = options && typeof options.target != 'undefined' ? options.target : null;
+
+    /**
+     * @summary Executes the step
+     * @description Renders the template and activates the checkboxes
+     * @memberof mathex.TextMulticheckFieldStep.prototype
+     * @method run
+     * @param {Object} router a mathex.Router instance
+     * @return void
+     */
+    this.run = function(router) {
+        this.errors = 0;
+        this.string = String.uniqueID();
+        this.tpl = mathex.Shared.parseTpl(tpl, []);
+        var check_rexp = new RegExp("\\[\\[([0-9]*?)\\]\\]", "gim");
+        this.tpl = this.tpl.replace(check_rexp, "<input type=\"checkbox\" name=\"check_" + this.string + "[]\" id=\"check_$1\" />");
+        this.tpl += '<p><input type="button" value="verifica" id="' + this.string + '_confirm" /></p>';
+        this.result = result;
+        this.end_message = typeof end_message == 'undefined' ? null : end_message;
+        var self = this;
+        this.router = router;
+        if(this.container) {
+            var div = new Element('div').set('html', this.tpl).inject( this.target ? $(this.target) : $('container'), 'bottom');
+        }
+        else {
+            if(this.target) {
+                $(this.target).set('html', $(this.target).get('html') + this.tpl);
+            }
+            else {
+                $('container').set('html', $('container').get('html') + this.tpl);
+            }
+        }
+        MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
+        MathJax.Hub.Queue(function() {
+            self.addInputEvents();
+        });
+    };
+    /**
+     * @summary Checks the user answer
+     * @memberof mathex.TextMulticheckFieldStep.prototype
+     * @method checkMulticheckFieldResult
+     * @return void
+     */
+    this.checkMulticheckFieldResult = function() {
+        this.removeInputEvents();
+
+        if(this.end_message) {
+            var callback = function() {
+                mathex.Shared.showMessage(this.end_message, 'message', null);
+            }.bind(this)
+        }
+        else {
+            var callback = null;
+        }
+
+        var result = true;
+        var checkboxes = document.getElements('input[type=checkbox][name^=check_' + this.string +'[]');
+        checkboxes.each(function(checkbox) {
+            var index = checkbox.get('id').replace(/check_/, '').toInt();
+            if((checkbox.checked && this.result.indexOf(index) == -1) || (!checkbox.checked && this.result.indexOf(index) != -1)) {
+                result = false;
+            };
+        }.bind(this));
+
+        if(!(result || this.errors == 1)) {
+            mathex.Shared.showMessage('Risposta errata, riprova', 'error', function() {this.addInputEvents(); this.clean();}.bind(this), {target: checkboxes[checkboxes.length - 1]});
+            this.errors = 1;
+        }
+        else {
+            var end_callback = function() {
+                if(callback) callback();
+                this.deactivate();
+                this.router.endStep();
+            }.bind(this);
+
+
+            if(result) {
+                mathex.Shared.showMessage('Risposta esatta', 'success', end_callback, {target: checkboxes[checkboxes.length - 1]});
+            }
+            else {
+                mathex.Shared.showMessage('Risposta errata.', 'failed', function() { end_callback(); this.setRightResult(); }.bind(this), {target: checkboxes[checkboxes.length - 1]});
+            }
+        }
+    };
+    /**
+     * @summary sets the right result
+     * @memberof mathex.TextMulticheckFieldStep.prototype
+     * @method setRightResult
+     * @return void
+     */
+    this.setRightResult = function() {
+        document.getElements('input[name^=check_' + this.string + '[]').each(function(input, index) {
+            var index = input.get('id').replace(/check_/, '').toInt();
+            if(this.result.indexOf(index) == -1) {
+                input.removeProperty('checked');
+            }
+            else {
+                input.setProperty('checked', 'checked');
+            }
+        }.bind(this));
+    };
+    /**
+     * @summary cleans the checkboxes
+     * @memberof mathex.TextMulticheckFieldStep.prototype
+     * @method clean
+     * @return void
+     */
+    this.clean = function() {
+        document.getElements('input[name^=check_' + this.string + '[]').each(function(input, index) {
+            input.removeProperty('checked');
+        });
+    };
+    /**
+     * @summary Adds events to the confirm button
+     * @memberof mathex.TextMulticheckFieldStep.prototype
+     * @method addInputEvents
+     * @return void
+     */
+    this.addInputEvents = function() {
+        var self = this;
+        document.id(this.string + '_confirm').addEvent('click', self.clickhandler = function() {
+            self.checkMulticheckFieldResult();
+        });
+    };
+    /**
+     * @summary Removes events from the confirm button
+     * @memberof mathex.TextMulticheckFieldStep.prototype
+     * @method removeInputEvents
+     * @return void
+     */
+    this.removeInputEvents = function() {
+        var self = this;
+        document.id(this.string + '_confirm').removeEvent('click', self.clickhandler);
+    }
+    /**
+     * @summary Deactivates all inputs
+     * @memberof mathex.TextMulticheckFieldStep.prototype
+     * @method deactivate
+     * @return void
+     */
+    this.deactivate = function() {
+        document.getElements('input[name^=check_' + this.string + '[]').each(function(input, index) {
+            var input_obj = input;
+            input_obj.setProperty('disabled', 'disabled');
+        }.bind(this));
+        document.id(this.string + '_confirm').getParent('p').dispose();
+    }
+}
+mathex.TextMulticheckFieldStep.prototype = mathex.Step;
 
 /**
  * @summary Exercises - Text plus one select input
