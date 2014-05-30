@@ -1860,6 +1860,7 @@ mathex.Question = function(prop) {
     this.text = prop.text;
     this.answers = prop.answers;
     this.correct_answer = prop.correct_answer;
+    this.error_message = prop.error_message || null;
     this.errors = 0;
     this.last = false;
     /**
@@ -2127,20 +2128,26 @@ mathex.QuestionRouter = function() {
             new Element('p.result-failed').set('text', 'RISPOSTE SBAGLIATE: ' + this.wrong_answers)
         );
         var p_summary = new Element('p.questions-summary');
-        for(var i = 0, l = this.steps.length; i < l; i++) {
+        this.steps.each(function(step, i) {
             var item_el = new Element('span.questions-summary-question').set('text', (i + 1));
             if(this.results[i] == 1) {
                 item_el.addClass('success');
             }
-            else if(this.results[i] == 0.5) {
-                item_el.addClass('sattempt');
-            }
             else {
-                item_el.addClass('failed');
+                if(this.results[i] == 0.5) {
+                    item_el.addClass('sattempt');
+                }
+                else {
+                    item_el.addClass('failed');
+                }
+                if(this.steps[i].error_message) {
+                    item_el.addClass('link').addEvent('click', function() {
+                        document.id('question-error-message').set('html', this.steps[i].error_message);
+                    }.bind(this));
+                }
             }
             item_el.inject(p_summary);
-        }
-        p_summary.inject(summary);
+        }.bind(this));
 
         var rating = new Element('div.question-rating').adopt(
             new Element('p.points').set('text', 'Il tuo punteggio totale è: ' + this.points),
@@ -2148,10 +2155,14 @@ mathex.QuestionRouter = function() {
             new Element('div.activities').set('html', this.options.activities.call(this, this.points))
         );
 
+        var error_msg_container = new Element('div#question-error-message');
+
         container.adopt(
             title,
             summary,
-            rating
+            rating,
+            p_summary,
+            error_msg_container
         );
     }
 
