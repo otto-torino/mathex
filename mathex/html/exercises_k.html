@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Esercizio guidato</title>
+    <meta charset="utf-8" />
+    <script src="../res-otto/js/modernizr.js"></script>
+    <script src="../res-otto/js/mootools-core-yc.js"></script>
+    <script src="../res-otto/js/mootools-more-yc.js"></script>
+    <script src="../res-otto/js/mathex.js"></script>
+    <script type="text/javascript"
+      src="../res-otto/js/MathJax.js?config=custom">
+    </script>
+    <link type="text/css" rel="stylesheet" href="../res-otto/css/style.css" />
+  </head>
+  <body class="aritmetica">
+
+    <script>
+
+      mathex.config.font_ctrl = true;
+
+      mathex.Shared.renderTemplate({
+          title: 'Io e la matematica - Aritmetica 1',
+          subtitle: 'Esercizio guidato - unità x',
+          meaning: 'In questo esercizio: risolvi passo-passo e verifica subito le tue risposte. Se sbagli riprova. Se sbagli ancora, leggi la risposta corretta e prosegui',
+          instructions: '<strong>Inserisci la risposta</strong>:<br />digita la risposta nel campo giallo e premi INVIO - oppure - seleziona una voce dal menu a tendina',
+          duty: 'Esercizio guidato',
+          pre_container: ''
+      });
+
+      var step1 = new mathex.TextFieldStep(
+      '<h3>Verifichiamo che {% 2^7 : 2^4 = 2^(7-4) = ^3 %}</h3>' + 
+      '<p>Seguiamo due procedimenti diversi</p>' + 
+      '<h4>Primo procedimento</h4>' + 
+      '<p>Senza applicare le proprietà delle potenze. Calcola</p>' + 
+      '<p>{% 2^7 = \\FormInput0 %}</p>' + 
+      '<p>{% 2^4 = \\FormInput1 %}</p>',
+        {
+          0: {
+            size: 3,
+            active: true,
+            result: '128',
+            type: 'string'
+          },
+          1: {
+            size: 2,
+            active: false,
+            type: 'int'
+          }
+        },
+        'sucaris'
+      );
+
+      var step2 = new mathex.FieldStep(1, 16, null, {type: 'int'});
+
+      var step3 = new mathex.TextChoiceFieldStep(
+      '<h3>Radio cazzo</h3>' + 
+      '<p>Scegli e muori</p>' + 
+      '<ul>' + 
+      '<li>[[0]] sucaris</li>' + 
+      '<li>[[1]] {% 2^7 = 32 %}</li>' + 
+      '<li>[[2]] {% 200000 %}</li>' + 
+      '</ul>',
+        0
+      );
+      
+      var step4 = new mathex.TextChoiceFieldStep(
+      '<h3>Radio cazzo</h3>' + 
+      '<p>Scegli e muori</p>' + 
+      '<ul>' + 
+      '<li>[[3]] pippa</li>' + 
+      '<li>[[4]] {% 2^7 = 32 %}</li>' + 
+      '<li>[[5]] {% 200000 %}</li>' + 
+      '</ul>',
+        3
+      );
+
+      var step5 = new mathex.TextSelectFieldStep(
+      '<h3>Radio cazzo</h3>' + 
+      '<p>Scegli e muori</p>' + 
+      '<ul>' + 
+      '<li>[[]] sucaris</li>' + 
+      '</ul>',
+        ['option', 'suca', 2, 3],
+        'suca'
+      );
+
+      var router = new mathex.Router();
+
+
+
+      router.init([step3, step4], 'hai finito');
+      router.startStep();
+
+
+    </script>
+
+  </body>
+</html>
