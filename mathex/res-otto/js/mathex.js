@@ -2533,7 +2533,7 @@ mathex.TestMulticheckQuestion = function(options) {
             MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
             MathJax.Hub.Queue(function() {
                 Object.each(this.test.answers[question_index], function(index) {
-                    $('check_' + index).setProperty('checked', 'checked')
+                    $$('.test-result-wrong #check_' + index)[0].setProperty('checked', 'checked')
                         .setStyle('background', '#eca9a9')
                         .removeProperty('id');
                 }.bind(self));
@@ -2546,7 +2546,7 @@ mathex.TestMulticheckQuestion = function(options) {
         MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
         MathJax.Hub.Queue(function() {
             Object.each(self.result, function(index) {
-                $('check_' + index).setProperty('checked', 'checked')
+                $$('.test-result-right #check_' + index)[0].setProperty('checked', 'checked')
                     .setStyle('background', '#afe1bc')
                     .removeProperty('id');
             }.bind(self));
