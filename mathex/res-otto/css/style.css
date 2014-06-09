@@ -1709,6 +1709,7 @@ input[type=submit] {
   background: #000;
   height: 36px;
   font-size: 1.1em;
+  margin-left: 43px; margin-top: 20px;
   border: 1px solid #000;
   line-height: 30px;
   text-align: center;
