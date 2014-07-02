@@ -1471,7 +1471,7 @@ mathex.TextMulticheckFieldStep = function(tpl, result, end_message, options) {
 
 
             if(result) {
-                mathex.Shared.showMessage('Risposta esatta', 'success', end_callback, {target: checkboxes[checkboxes.length - 1]});
+                mathex.Shared.showMessage('Risposta esatta', 'success', function() { end_callback(); this.setRightResult(); }.bind(this), {target: checkboxes[checkboxes.length - 1]});
             }
             else {
                 mathex.Shared.showMessage('Risposta errata.', 'failed', function() { end_callback(); this.setRightResult(); }.bind(this), {target: checkboxes[checkboxes.length - 1]});
@@ -1491,7 +1491,7 @@ mathex.TextMulticheckFieldStep = function(tpl, result, end_message, options) {
                 input.removeProperty('checked');
             }
             else {
-                input.setProperty('checked', 'checked');
+                var v = new Element('span.v').set('html', '✔').inject(input.setStyle('display', 'none'), 'before');
             }
         }.bind(this));
     };
@@ -2546,9 +2546,10 @@ mathex.TestMulticheckQuestion = function(options) {
         MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
         MathJax.Hub.Queue(function() {
             Object.each(self.result, function(index) {
-                $$('.test-result-right #check_' + index)[0].setProperty('checked', 'checked')
-                    .setStyle('background', '#afe1bc')
-                    .removeProperty('id');
+                var v = new Element('span.v').set('html', '✔').inject($$('.test-result-right #check_' + index)[0].setStyle('display', 'none').removeProperty('id'), 'before');
+                //$$('.test-result-right #check_' + index)[0].setProperty('checked', 'checked')
+                //    .setStyle('background', '#afe1bc')
+                //    .removeProperty('id');
             }.bind(self));
             right_result.getElements('input[type=checkbox]').setProperty('disabled', 'disabled');
         });
