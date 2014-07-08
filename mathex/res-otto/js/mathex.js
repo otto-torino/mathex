@@ -1827,6 +1827,70 @@ mathex.TextStep = function(tpl, end_message, options) {
 }
 mathex.TextStep.prototype = mathex.Step;
 
+/**
+ * @summary Exercises - Toggle step (toggle images and answers)
+ * @memberof mathex
+ * @constructs mathex.ToggleStep
+ * @extends mathex.Step
+ * @param {String} tpl The step template.<br />
+ *                 <p>The math to be parsed by mathjax must be placed inside the tag {%%}, i.e. {% 2^4=16 %}. Hidden stuff (shown with a click) must be placed inside double square brackets. 
+ *                 Use the class 'toggle' to toggle images (src changes from img_name.xxx to img_name_toggle.xxx)</p>
+ * @param {String} [end_message] A message to be displayed at the end of the step
+ * @param {Object} [options] The step options
+ * @param {Boolean} [options.container=true] Whether or not to insert the exercise text inside a div container
+ * @param {String} [options.target=null] Id of the target element where to insert the step content, if null the content is inserted at the bottom of the container
+ * @return {Object} ToggleStep instance
+ * @example
+ *    var step = new mathex.ToggleStep('&lt;p&gt;my text&lt;/p&gt;&lt;img src="/path/to/img" class="toggle" /&gt;&lt;p&gt;click to unhide [[{% 54^5 %}]&lt;/p&gt;', 'my message', {container: false});
+ */
+mathex.ToggleStep = function(tpl, end_message, options) {
+
+    this.container = options && typeof options.container != 'undefined' ? options.container : true;
+    this.target = options && typeof options.target != 'undefined' ? options.target : null;
+
+    this.tpl = mathex.Shared.parseTpl(tpl, {});
+    this.end_message = typeof end_message == 'undefined' ? null : end_message;
+    /**
+     * @summary Executes the step
+     * @description Renders the parsed text
+     * @memberof mathex.TextStep.prototype
+     * @method run
+     * @param {Object} router a mathex.Router instance
+     * @return void
+     */
+    this.run = function(router) {
+        var self = this;
+        this.router = router;
+        // parse hidden stuff
+        var hidden_rexp = new RegExp("\\[\\[(.*?)\\]\\]", "gim");
+        this.tpl = this.tpl.replace(hidden_rexp, "<span class=\"recovery-hidden\">$1</span>");
+        if(this.container) {
+            var div = new Element('div').set('html', this.tpl).inject( this.target ? $(this.target) : $('container'), 'bottom');
+        }
+        else {
+            if(this.target) {
+                $(this.target).set('html', $(this.target).get('html') + this.tpl);
+            }
+            else {
+                $('container').set('html', $('container').get('html') + this.tpl);
+            }
+        }
+
+        document.getElements('.recovery-hidden').addEvent('click', function() {
+            this.removeClass('recovery-hidden');
+        })
+
+        MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
+        if(this.end_message) {
+            mathex.Shared.showMessage(this.end_message, 'message', null);
+        }
+        this.router.endStep();
+
+    };
+
+}
+mathex.ToggleStep.prototype = mathex.Step;
+
 /***********************************************************************
  *
  *    QUESTIONS

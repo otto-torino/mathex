@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Esercizio di recupero</title>
+    <meta charset="utf-8" />
+    <script src="../res-otto/js/modernizr.js"></script>
+    <script src="../res-otto/js/mootools-core-yc.js"></script>
+    <script src="../res-otto/js/mootools-more-yc.js"></script>
+    <script src="../res-otto/js/mathex.js"></script>
+    <script type="text/javascript"
+      src="../res-otto/js/MathJax.js?config=custom">
+    </script>
+    <link type="text/css" rel="stylesheet" href="../res-otto/css/style.css" />
+  </head>
+  <body class="aritmetica">
+
+    <script>
+
+      mathex.config.font_ctrl = true;
+
+      mathex.Shared.renderTemplate({
+          title: 'Io e la matematica - Aritmetica 1',
+          subtitle: 'Esercizio di recupero - unità x',
+          meaning: 'In questo esercizio: risolvi passo-passo e verifica subito le tue risposte. Se sbagli riprova. Se sbagli ancora, leggi la risposta corretta e prosegui',
+          instructions: '<strong>Inserisci la risposta</strong>:<br />digita la risposta nel campo giallo e premi INVIO - oppure - seleziona una voce dal menu a tendina',
+          duty: 'Esercizio di recupero',
+          pre_container: ''
+      });
+
+      var step = new mathex.ToggleStep(
+        '<h3>Toggle step</h3>' + 
+        '<img class="toggle" src="img/img.png" width="200" />' + 
+        '<p>Text</p>' + 
+        '<ul>' + 
+        '<li>[[{% 2^5 %}]] sucaris</li>' + 
+        '<li>[[text]] sucaris</li>' + 
+        '</ul>'
+      );
+
+      var router = new mathex.Router();
+
+
+
+      router.init([step], 'hai finito');
+      router.startStep();
+
+    </script>
+
+  </body>
+</html>
