@@ -2285,10 +2285,14 @@ mathex.Faq = function(items) {
  * @memberof mathex
  * @constructs mathex.FaqRouter
  * @param {Object} faq The mathex.Faq instance
+ * @param {Object} options Options
+ * @param {Object} options.audio  The audio object it has the 'mp3', 'ogg' and 'instructions' properties storing the files' paths and a text
  * @return {Object} mathex.Faq instance
  */
-mathex.FaqRouter = function(faq) {
+mathex.FaqRouter = function(faq, options) {
     this.faq = faq;
+    this.options = options;
+
     /**
      * @summary Starts the execution of the faq
      * @memberof mathex.FaqRouter.prototype
@@ -2333,6 +2337,14 @@ mathex.FaqRouter = function(faq) {
         mathex.Shared.playerWidget(null);
 
         MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
+
+        /* audio */
+        if(typeof this.options != 'undefined' && typeof this.options.audio != 'undefined') {
+            mathex.Shared.playerWidget(this.options.audio);
+        }
+        else {
+            mathex.Shared.playerWidget(null);
+        }
     }
     /**
      * @summary Renders one single faq (question, answer)

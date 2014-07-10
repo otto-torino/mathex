@@ -69,7 +69,13 @@
         }
       ])
 
-      var router = new mathex.FaqRouter(faq);
+      var router = new mathex.FaqRouter(faq, {
+        audio: {
+          mp3: 'audio/bird_of_sorrow.mp3',
+          ogg: 'audio/bird_of_sorrow.ogg',
+          instructions: '<b>Ascolta la teoria</b>: seleziona il tasto AVVIO del registratore',
+        }
+      });
       router.start();
 
     </script>
