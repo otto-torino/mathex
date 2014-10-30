@@ -339,15 +339,20 @@ flowchart.Chart = function() {
    * @param {String} path The xml path
    * @return {Object} The xml object
    */
-  this.getXmlObject = function(path) {
+  this.getXmlObject = function(param, type) {
     var xml_object = null;
-    var xmltext = jQuery.ajax({
+    if(type == 'path') {
+      var xmltext = jQuery.ajax({
         async: false,
         type:"GET",
         context: this,
-        url: path,
+        url: param,
         dataType:"xml"
       }).responseText;
+    }
+    else if(type == 'string') {
+      var xmltext = param;
+    }
 
     var parser = new DOMParser();
     xml_object = parser.parseFromString(xmltext, "text/xml");
@@ -355,6 +360,7 @@ flowchart.Chart = function() {
     return xml_object;
 
   }
+
   /**
    * @summary Starts the chart flow
    * @memberof flowchart.Chart.prototype
@@ -362,10 +368,10 @@ flowchart.Chart = function() {
    * @param {String} path The xml path
    * @return void
    */
-  this.start = function(path) {
+  this.start = function(param, type) {
 
     // retrieve xml object
-    this._xml_object = this.getXmlObject(path);
+    this._xml_object = this.getXmlObject(param, type);
     // create html container element
     this._chart = jQuery('<div id="chart"></div>').appendTo('body');
     // retrieve root element
@@ -375,6 +381,7 @@ flowchart.Chart = function() {
     // run the first block
     this.run(0, 1);
   }
+
   /**
    * @summary Callback called when passing from a block to the next one @see flowchart.EventDispatcher
    * @memberof flowchart.Chart.prototype

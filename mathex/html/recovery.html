@@ -27,6 +27,24 @@
           pre_container: ''
       });
 
+        var step0 = new mathex.DragOrderStep(
+            '<h3>Drag and Drop</h3>' +
+            '<p>{% 3^2 + 5 > 12 %}</p>' +
+            '<p>Metti in ordine crescente gli elementi</p>' +
+            '<div class="drag-container">' +
+            '<div data-drag="1" data-position="3"><img src="../res-otto/img/index.png" /></div>' +
+            '<div data-drag="1" data-position="2">{% 1^6 %}</div>' +
+            '<div data-drag="1" data-position="4">8 + 4</div>' +
+            '<div data-drag="1" data-position="1">{% 0*6 %}</div>' +
+            '</div>' +
+            '<div class="drop-container">' +
+            '<div data-drop="1"></div>' +
+            '<div data-drop="2"></div>' +
+            '<div data-drop="3"></div>' +
+            '<div data-drop="4"></div>' +
+            '</div>'
+        );
+
       var step1 = new mathex.TextFieldStep(
       '<h3>Verifichiamo che {% 2^7 : 2^4 = 2^(7-4) = ^3 %}</h3>' + 
       '<p>Seguiamo due procedimenti diversi</p>' + 
@@ -77,7 +95,7 @@
 
 
 
-      router.init([step1, step2, step3, step4], 'hai finito');
+      router.init([step0, step1, step2, step3, step4], 'hai finito');
       router.startStep();
 
       var n = new mathex.Navigator({

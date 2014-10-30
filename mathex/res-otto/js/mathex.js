@@ -31,6 +31,7 @@ Class.refactor(Drag, {
         start: function(event) {
                 document.body.addEvents({
                         touchmove: this.touchmove = function(event) {event.preventDefault(); this.bound.check(event); }.bind(this),
+                        //touchmove: this.bound.check,
                         touchend: this.bound.cancel
                 });
                 this.previous.apply(this, arguments);
@@ -1079,6 +1080,229 @@ mathex.Step = {
         }
     }
 }
+
+/**
+ * @summary Exercises - Drag items in the correct order
+ * @memberof mathex
+ * @constructs mathex.DragOrderStep
+ * @extends mathex.Step
+ * @param {String} tpl The exercise template.<br />
+ *                     <p>The math to be parsed by mathjax (latex syntax) must be placed inside the tag {%%}, i.e. {% 2^4=16 %}</p>
+ *                     <p>Draggable items must have a data-drag attribute equal to 1 and a data-position attribute equal to the 
+ *                     right final order position.</p>
+ *                     <p>Droppable items must have a data-drop attribute equal to the order position they represent.</p>
+ * @param {Array} drag_instance The array of objects describing the elements that can be dragged and must be ordered
+ * @param {String} [end_message] A message to be displayed at the end of the step
+ * @param {Object} [options] The step options
+ * @param {Boolean} [options.container=true] Whether or not to insert the exercise text inside a div container
+ * @param {String} [options.target=null] Id of the target element where to insert the step content, if null the content is inserted at the bottom of the container
+ * @param {String} [options.verify_step=false] Whether to verify each drag and drop step or not
+ * @return {Object} DragOrderStep instance
+ */
+mathex.DragOrderStep = function(tpl, drag_elements, end_message, options) {
+
+    this.errors = 0;
+    this.unique_key = String.uniqueID();
+    this.container = options && typeof options.container != 'undefined' ? options.container : true;
+    this.target = options && typeof options.target != 'undefined' ? options.target : null;
+    this.verify_step = options && typeof options.verify_step != 'undefined' ? options.verify_step : false;
+
+    /**
+     * @summary Executes the step
+     * @description Renders the template and activates the input fields
+     * @memberof mathex.TextFieldStep.prototype
+     * @method run
+     * @param {Object} router a mathex.Router instance
+     * @return void
+     */
+    this.run = function(router) {
+        this.tpl = mathex.Shared.parseTpl(tpl);
+        this.end_message = typeof end_message == 'undefined' ? null : end_message;
+        var self = this;
+        this.router = router;
+        if(this.container) {
+            var div = new Element('div').set('html', this.tpl).inject( this.target ? $(this.target) : $('container'), 'bottom');
+        }
+        else {
+            if(this.target) {
+                $(this.target).set('html', $(this.target).get('html') + this.tpl);
+            }
+            else {
+                $('container').set('html', $('container').get('html') + this.tpl);
+            }
+        }
+        MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
+        MathJax.Hub.Queue(function() {
+            self.activateDrag();
+        });
+    };
+
+    /**
+     * @summary Activates drag functionality on data-drag elements
+     * @memberof mathex.DragOrderStep.prototype
+     * @method activateDrag
+     * @return void
+     */
+    this.activateDrag = function() {
+
+        var self = this;
+
+        $$('[data-drag], [data-drop]').each(function(el) {
+            el.setProperty('data-id', self.unique_key);
+        });
+
+        var touchstart = function(evt) {
+            evt.stop();
+            var item = this;
+            // if already dropped can't be moved till gets undropped
+            if(item.get('data-enabled') == 0) return 0;
+            // move a clone
+            var clone = item.clone().setStyles(item.getCoordinates()).setStyles({
+                opacity: 0.7,
+                position: 'absolute'
+            }).inject(document.body);
+
+            var drag = new Drag.Move(clone, {
+                droppables: $$('[data-drop][data-id=' + self.unique_key +']:not([data-filled=1])'),
+                onDrop: function(dragging, drop) {
+                    dragging.destroy();
+                    // drop area
+                    if (drop != null){
+                        // verify step
+                        if(self.verify_step) {
+                            self.verifyStep(dragging, drop);
+                        }
+                        var clone = item.clone().inject(drop);
+                        // item is disabled
+                        item.set('data-enabled', 0);
+                        // drop element is filled (no more drop)
+                        drop.set('data-filled', 1);
+                        drop.removeClass('enter');
+                        // undrop
+                        drop.adopt(new Element('div.drop-remove').set('text', 'X').addEvent('click', function() {
+                            clone.destroy();
+                            item.set('data-enabled', 1);
+                            drop.set('data-filled', 0);
+                            this.destroy();
+                        }));
+                        // check end
+                        self.checkFinalStep();
+                    }
+                },
+                onEnter: function(dragging, drop){
+                    drop.addClass('enter');
+                },
+                onLeave: function(dragging, drop){
+                    drop.removeClass('enter');
+                },
+                onCancel: function(dragging){
+                    dragging.destroy();
+                }
+            });
+            drag.start(evt);
+
+        }
+        $$('[data-drag=1][data-id=' + self.unique_key +']').addEvents({
+            'touchstart': touchstart,
+            'mousedown': touchstart
+        });
+    };
+
+    /**
+     * @summary Verifies single drag and drop result
+     * @memberof mathex.DragOrderStep.prototype
+     * @method verifyStep
+     * @return void
+     */
+    this.verifyStep = function(dragging, drop) {
+        if(dragging.get('data-position') == drop.get('data-drop')) {
+            alert('ok');
+        }
+        else {
+            alert('error');
+        }
+    };
+
+    /**
+     * @summary Deactivates the step
+     * @memberof mathex.DragOrderStep.prototype
+     * @method deactivate
+     * @return void
+     */
+    this.deactivate = function() {
+        $$('[data-drop][data-id=' + this.unique_key + ']').each(function(el) {
+            el.getChildren('.drop-remove')[0].destroy();
+        });
+    }
+
+    /**
+     * @summary Checks final result
+     * @memberof mathex.DragOrderStep.prototype
+     * @method checkFinalStep
+     * @return void
+     */
+    this.checkFinalStep = function() {
+        var self = this;
+        var errors = 0;
+        var errors_data_drop = [];
+        var unfilled = $$('[data-drop][data-id=' + this.unique_key + ']:not([data-filled=1])').length;
+        if(unfilled) {
+            return 0;
+        }
+        else {
+            if(this.end_message) {
+                var callback = function() {
+                    mathex.Shared.showMessage(this.end_message, 'message', null);
+                }.bind(this)
+            }
+            else {
+                var callback = null;
+            }
+            $$('[data-drop][data-id=' + this.unique_key + ']').each(function(el) {
+                var dragging = el.getChildren('[data-drag]');
+                if(dragging.get('data-position') != el.get('data-drop')) {
+                    errors++;
+                    errors_data_drop.push(el);
+                }
+            });
+
+            if(errors) {
+                if(self.errors == 0) {
+                    mathex.Shared.showMessage('Risposta errata, riprova', 'error', function() {
+                        errors_data_drop.each(function(drop) {
+                            drop.getChildren('.drop-remove')[0].fireEvent('click');
+                        });
+                    }.bind(this), {});
+                }
+                else {
+                    var end_callback = function() {
+                        if(callback) callback();
+                        this.deactivate();
+                        this.router.endStep();
+                    }.bind(this);
+                    mathex.Shared.showMessage('Risposta errata. Visualizza la risposta corretta', 'failed', function() {
+                        errors_data_drop.each(function(drop) {
+                            var dragging = drop.getChildren('[data-drag]')[0]
+                            dragging.inject($$('[data-drop=' + dragging.get('data-position') + '][data-id=' + self.unique_key + ']')[0]);
+                        });
+                        end_callback();
+                    }, {});
+                }
+                self.errors = 1;
+            }
+            else {
+                var success_callback = function() {
+                    if(callback) callback();
+                    this.deactivate();
+                    this.router.endStep();
+                }.bind(this);
+                mathex.Shared.showMessage('Risposta esatta', 'success', success_callback, {});
+            }
+        }
+    };
+}
+
+mathex.DragOrderStep.prototype = mathex.Step;
 
 /**
  * @summary Exercises - Text plus one active field
@@ -2500,7 +2724,229 @@ mathex.TestQuestion = function(type, options) {
     else if(type == 'multicheck') {
         return new mathex.TestMulticheckQuestion(options);
     }
+    else if(type == 'dragorder') {
+        return new mathex.TestDragOrderQuestion(options);
+    }
     else return null;
+}
+
+/**
+ * @summary Test - Test drag order question, drag elements in the right order
+ * @memberof mathex
+ * @constructs mathex.TestDragOrderQuestion
+ * @param {Object} options Options
+ * @param {String} options.question The question template which includes draggabler and droppable elements.
+ *                             <p>The math to be parsed by mathjax (latex syntax) must be placed inside the tag {%%}, i.e. {% 2^4=16 %}</p>
+ *                             <p>Draggable items must have a data-drag attribute equal to 1 and a data-position attribute equal to the 
+ *                             right final order position.</p>
+ *                             <p>Droppable items must have a data-drop attribute equal to the order position they represent.</p>
+ * @param {String} [options.verify_step=false] Whether to verify each drag and drop step or not
+ * @return {Object} mathex.TestDragOrderQuestion instance
+ * @example
+ *          var question0 = new mathex.TestQuestion('dragorder', {
+ *              tpl: '<h3>Drag and Drop</h3>' +
+ *                   '<p>Metti in ordine crescente gli elementi</p>' +
+ *                   '<div class="drag-container">' +
+ *                   '<div data-drag="1" data-position="3"><img src="../res-otto/img/index.png" /></div>' +
+ *                   '<div data-drag="1" data-position="2">{% 1^6 %}</div>' +
+ *                   '<div data-drag="1" data-position="1">{% 0*6 %}</div>' +
+ *                   '</div>' +
+ *                   '<div class="drop-container">' +
+ *                   '<div data-drop="1"></div>' +
+ *                   '<div data-drop="2"></div>' +
+ *                   '<div data-drop="3"></div>' +
+ *                   '</div>'
+ *          });
+ *
+ */
+mathex.TestDragOrderQuestion = function(options) {
+
+    this.errors = 0;
+    this.unique_key = String.uniqueID();
+    this.question = options.question;
+    this.verify_step = options && typeof options.verify_step != 'undefined' ? options.verify_step : false;
+
+    /**
+     * @summary Executes the test question
+     * @memberof mathex.TestDragOrderQuestion.prototype
+     * @method run
+     * @param {Object} test The mathex.Test instance
+     * @param {Number} index The question index
+     * @return void
+     */
+    this.run = function(test, index) {
+        var self = this;
+        this.tpl = mathex.Shared.parseTpl(this.question, {});
+        this.test = test;
+        var div = new Element('div').set('html', this.tpl).inject($('container'), 'bottom');
+        this.activateDrag();
+        var confirm = new Element('input[type=button][value=conferma]')
+            .addEvent('click', self.checkAnswer.bind(self))
+            .inject(new Element('div.test-confirm').inject($('container'), 'bottom'));
+        MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
+        this.test.renderNavigation(index);
+    };
+
+    /**
+     * @summary Activates drag functionality on data-drag elements
+     * @memberof mathex.TestDragOrderQuestion.prototype
+     * @method activateDrag
+     * @return void
+     */
+    this.activateDrag = function() {
+
+        var self = this;
+
+        $$('[data-drag], [data-drop]').each(function(el) {
+            el.setProperty('data-id', self.unique_key);
+        });
+
+        var touchstart = function(evt) {
+            evt.stop();
+            var item = this;
+            // if already dropped can't be moved till gets undropped
+            if(item.get('data-enabled') == 0) return 0;
+            // move a clone
+            var clone = item.clone().setStyles(item.getCoordinates()).setStyles({
+                opacity: 0.7,
+                position: 'absolute'
+            }).inject(document.body);
+
+            var drag = new Drag.Move(clone, {
+                droppables: $$('[data-drop][data-id=' + self.unique_key +']:not([data-filled=1])'),
+                onDrop: function(dragging, drop) {
+                    dragging.destroy();
+                    // drop area
+                    if (drop != null){
+                        // verify step
+                        if(self.verify_step) {
+                            self.verifyStep(dragging, drop);
+                        }
+                        var clone = item.clone().inject(drop);
+                        // item is disabled
+                        item.set('data-enabled', 0);
+                        // drop element is filled (no more drop)
+                        drop.set('data-filled', 1);
+                        drop.removeClass('enter');
+                        // undrop
+                        drop.adopt(new Element('div.drop-remove').set('text', 'X').addEvent('click', function() {
+                            clone.destroy();
+                            item.set('data-enabled', 1);
+                            drop.set('data-filled', 0);
+                            this.destroy();
+                        }));
+                    }
+                },
+                onEnter: function(dragging, drop){
+                    drop.addClass('enter');
+                },
+                onLeave: function(dragging, drop){
+                    drop.removeClass('enter');
+                },
+                onCancel: function(dragging){
+                    dragging.destroy();
+                }
+            });
+            drag.start(evt);
+
+        }
+        $$('[data-drag=1][data-id=' + self.unique_key +']').addEvents({
+            'touchstart': touchstart,
+            'mousedown': touchstart
+        });
+    };
+
+    /**
+     * @summary Verifies single drag and drop result
+     * @memberof mathex.TestDragOrderQuestion.prototype
+     * @method verifyStep
+     * @return void
+     */
+    this.verifyStep = function(dragging, drop) {
+        if(dragging.get('data-position') == drop.get('data-drop')) {
+            alert('ok');
+        }
+        else {
+            alert('error');
+        }
+    };
+
+    /**
+     * @summary Cheks the user answer, saves the result and proceeds with the next question
+     * @memberof mathex.TestDragOrderQuestion.prototype
+     * @method checkAnswer
+     * @return void
+     */
+    this.checkAnswer = function() {
+        var result = true;
+        var values = [];
+        $$('[data-drop][data-id=' + this.unique_key + ']').each(function(el) {
+            var dragging = el.getChildren('[data-drag]')[0];
+            if(dragging) {
+                values.push(dragging.get('data-position'));
+                if(dragging.get('data-position') != el.get('data-drop')) {
+                    result = false;
+                }
+            }
+            else {
+                result = false;
+                values.push(null);
+            }
+        });
+        this.test.saveResult(result, values);
+        var target = null;
+
+        if(result) {
+            mathex.Shared.showMessage('Risposta esatta', 'success', this.test.nextQuestion.bind(this.test), {target: target});
+        }
+        else {
+            mathex.Shared.showMessage('Risposta errata', 'failed', this.test.nextQuestion.bind(this.test), {target: target});
+        }
+    };
+
+    /**
+     * @summary Shows the result for correction
+     * @description Shows the original question with the right answer and the wrong answer 
+     * if a wrong answer was given
+     * @memberof mathex.TestDragOrderQuestion.prototype
+     * @method showResult
+     * @param {Element} container the container into which 
+     * @param {Number} question_index the question index
+     * @return void
+     */
+    this.showResult = function(container, question_index) {
+        var self = this;
+        this.string = String.uniqueID();
+        this.tpl = mathex.Shared.parseTpl(this.question, {});
+        this.test = test;
+        if(!this.test.results[question_index]) {
+            var wrong_result = new Element('div.test-result-wrong')
+                .set('html', this.tpl)
+                .inject(container);
+            MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
+            MathJax.Hub.Queue(function() {
+                wrong_result.getElements('[data-drop]').each(function(drop, i) {
+                    if(self.test.answers[question_index][i] !== null) {
+                        drop.set('data-filled', 1);
+                        var dragging = wrong_result.getElements('[data-drag][data-position=' + self.test.answers[question_index][i] + ']')[0];
+                        dragging.clone().inject(drop);
+                    }
+                });
+            });
+        }
+        var right_result = new Element('div.test-result-right')
+            .set('html', this.tpl)
+            .inject(container);
+        MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
+        MathJax.Hub.Queue(function() {
+               right_result.getElements('[data-drop]').each(function(drop, i) {
+                    drop.set('data-filled', 1);
+                    var dragging = wrong_result.getElements('[data-drag][data-position=' + drop.get('data-drop') + ']')[0];
+                    dragging.clone().inject(drop);
+                });
+
+        });
+    };
 }
 
 /**
@@ -2509,8 +2955,8 @@ mathex.TestQuestion = function(type, options) {
  * @constructs mathex.TestMulticheckQuestion
  * @param {Object} options Options
  * @param {String} options.question The question and answer template to be parsed
- *                                                                        <p>The math to be parsed by mathjax (latex syntax) must be placed inside the tag {%%}, i.e. {% 2^4=16 %}</p>
- *                                                                        <p>The checkboxes must be written this way: [[1]] choice, where 1 is the index of the choice.</p>
+ *                                  <p>The math to be parsed by mathjax (latex syntax) must be placed inside the tag {%%}, i.e. {% 2^4=16 %}</p>
+ *                                  <p>The checkboxes must be written this way: [[1]] choice, where 1 is the index of the choice.</p>
  * @param {Array} options.result The indexes of the correct answers
  * @return {Object} mathex.TestMulticheckQuestion instance
  * @example

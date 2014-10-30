@@ -2071,6 +2071,66 @@ td.riga {
 .input_tab #field_2 {
   text-align: right;
 }
+/* drag order */
+.drag-container {
+  border: 1px solid #eee;
+  padding: 10px;
+}
+div[data-enabled='0'] {
+  opacity: 0.4;
+  cursor: auto !important;
+}
+div[data-drag] {
+  border: 1px solid #eee;
+  background: #eee;
+  padding: 40px;
+  display: inline-block;
+  cursor: move;
+  margin: 5px;
+  box-sizing: border-box;
+}
+.drop-container {
+  border: 1px solid #eee;
+  padding: 10px;
+}
+.drop-container div[data-drop] {
+  border: 1px solid #eee;
+  padding: 30px;
+  margin: 5px;
+  width: 160px;
+  height: 160px;
+  position: relative;
+}
+.drop-container div[data-drop]:before {
+  content: attr(data-drop);
+  position: absolute;
+  color: #fff;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  top: 0;
+  left: 0;
+  background: #000;
+}
+.drop-container div[data-filled='1'] {
+  background: #eee !important;
+}
+.drop-container .enter {
+  background: #eee;
+}
+.drop-container .drop-remove {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  cursor: pointer;
+  color: #fff;
+  background: #000;
+}
 /* questions */
 ul.test {
   list-style-type: none;

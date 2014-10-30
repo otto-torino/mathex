@@ -1,93 +1,112 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Esercizi di recupero - unità 4</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="../res-otto/js/modernizr.js"></script>
+    <head>
+        <title>Esercizi di recupero - unità 4</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="../res-otto/js/modernizr.js"></script>
 
-    <script src="../res-otto/js/mootools-core-yc.js"></script>
-    <script src="../res-otto/js/mootools-more-yc.js"></script>
-    <script src="../res-otto/js/mathex.js"></script>
-    <script type="text/javascript"
-      src="../res-otto/js/MathJax.js?config=custom">
-    </script>
-    <link type="text/css" rel="stylesheet" href="../res-otto/css/style.css" />
-  </head>
-  <body class="aritmetica">
+        <script src="../res-otto/js/mootools-core-yc.js"></script>
+        <script src="../res-otto/js/mootools-more-yc.js"></script>
+        <script src="../res-otto/js/mathex.js"></script>
+        <script type="text/javascript"
+            src="../res-otto/js/MathJax.js?config=custom">
+        </script>
+        <link type="text/css" rel="stylesheet" href="../res-otto/css/style.css" />
+    </head>
+    <body class="aritmetica">
 
-    <script>
+        <script>
 
-      mathex.Shared.renderTemplate({
-          title: 'Verifica dell\'attività di recupero',
-          subtitle: 'Verifica - unità x',
-          meaning: '<b>Verifica se hai colmato le lacune:</b> rispondi ad ogni domanda, fino alla fine del test. Ad ogni risposta ne sarà comunicato l\'esito. Al termine del test potrai conoscere il risultato complessivo della prova, verificare le soluzioni e confrontarle con le tue risposte. Segui le indicazioni per continuare lo studio in base al risultato ottenuto.',
-          instructions: '<b>Rispondi</b>: digita la risposta nei campi gialli e premi CONFERMA.',
-          duty: 'Verifica',
-          pre_container: ''
-      });
+            mathex.Shared.renderTemplate({
+                    title: 'Verifica dell\'attività di recupero',
+                    subtitle: 'Verifica - unità x',
+                    meaning: '<b>Verifica se hai colmato le lacune:</b> rispondi ad ogni domanda, fino alla fine del test. Ad ogni risposta ne sarà comunicato l\'esito. Al termine del test potrai conoscere il risultato complessivo della prova, verificare le soluzioni e confrontarle con le tue risposte. Segui le indicazioni per continuare lo studio in base al risultato ottenuto.',
+                    instructions: '<b>Rispondi</b>: digita la risposta nei campi gialli e premi CONFERMA.',
+                    duty: 'Verifica',
+                    pre_container: ''
+            });
 
-      var question1 = new mathex.TestQuestion('multicheck', {
-        question: 'Seleziona le equazioni corrette' + 
-          '<ul class="test">' +
-            '<li>[[0]] {% 1^3 * 1^2 = 1 %}</li>' +
-            '<li>[[1]] {% 5 * 8 = 48 %}</li>' +
-            '<li>[[2]] {% 9^6 + 9^2 = 9^8 %}</li>' +
-            '<li>[[3]] {% 7^8 : 7 = 7^7 %}</li>' +
-          '</ul>',
-        result: [0, 3],
-      });
+            var question0 = new mathex.TestQuestion('dragorder', {
+                question: '<h3>Drag and Drop</h3>' +
+                     '<p>{% 3^2 + 5 > 12 %}</p>' +
+                     '<p>Metti in ordine crescente gli elementi</p>' +
+                     '<div class="drag-container">' +
+                     '<div data-drag="1" data-position="3"><img src="../res-otto/img/index.png" /></div>' +
+                     '<div data-drag="1" data-position="2">{% 1^6 %}</div>' +
+                     '<div data-drag="1" data-position="4">8 + 4</div>' +
+                     '<div data-drag="1" data-position="1">{% 0*6 %}</div>' +
+                     '</div>' +
+                     '<div class="drop-container">' +
+                     '<div data-drop="1"></div>' +
+                     '<div data-drop="2"></div>' +
+                     '<div data-drop="3"></div>' +
+                     '<div data-drop="4"></div>' +
+                     '</div>'
+            });
 
-      var question2 = new mathex.TestQuestion('input', {
-        question: '<p>Come si scrive la potenza che ha per esponente 3 e base 20?</p><p>{%\\FormInput0 ^ \\FormInput1%}</p>',
-        inputs: {
-          0: {
-            size: 2,
-            result: '20',
-            type: 'int'
-          },
-          1: {
-            size: 1,
-            result: 3,
-            type: 'int'
-          }
-        }
-      });
+            var question1 = new mathex.TestQuestion('multicheck', {
+                question: 'Seleziona le equazioni corrette' + 
+                    '<ul class="test">' +
+                        '<li>[[0]] {% 1^3 * 1^2 = 1 %}</li>' +
+                        '<li>[[1]] {% 5 * 8 = 48 %}</li>' +
+                        '<li>[[2]] {% 9^6 + 9^2 = 9^8 %}</li>' +
+                        '<li>[[3]] {% 7^8 : 7 = 7^7 %}</li>' +
+                    '</ul>',
+                result: [0, 3],
+            });
 
-      var question3 = new mathex.TestQuestion('input', {
-        question: '<p>Qual è il valore della potenza {% 0.3 ^ 4 %}?</p><p>{%\\FormInput0%}</p>',
-        inputs: {
-          0: {
-            size: 6,
-            result: '0.0081',
-            type: 'float'
-          }
-        }
-      });
+            var question2 = new mathex.TestQuestion('input', {
+                question: '<p>Come si scrive la potenza che ha per esponente 3 e base 20?</p><p>{%\\FormInput0 ^ \\FormInput1%}</p>',
+                inputs: {
+                    0: {
+                        size: 2,
+                        result: '20',
+                        type: 'int'
+                    },
+                    1: {
+                        size: 1,
+                        result: 3,
+                        type: 'int'
+                    }
+                }
+            });
 
-      var question4 = new mathex.TestQuestion('radio', {
-        question: 'Quale delle seguenti eguaglianze è errata?' + 
-          '<ul class="test">' +
-            '<li>[[0]] {% 5^3 * 5^4 = 5^7 %}</li>' +
-            '<li>[[1]] {% 2^5 * 3^5 = 6^5 %}</li>' +
-            '<li>[[2]] {% 9^6 + 9^2 = 9^8 %}</li>' +
-            '<li>[[3]] {% 7^8 : 7 = 7^7 %}</li>' +
-          '</ul>',
-        result: 3,
-      });
+            var question3 = new mathex.TestQuestion('input', {
+                question: '<p>Qual è il valore della potenza {% 0.3 ^ 4 %}?</p><p>{%\\FormInput0%}</p>',
+                inputs: {
+                    0: {
+                        size: 6,
+                        result: '0.0081',
+                        type: 'float'
+                    }
+                }
+            });
 
-      var test = new mathex.Test();
-      test.init([question1, question2, question3, question4], {
-        steps: [1, 2, 3],
-        rating: [
-          {message: 'meow', color: 'red'},
-          {message: 'miao', color: 'yellow'},
-          {message: 'bao', color: 'green'},
-          ],
-          widgets: true
-      });
-      test.start();
-    </script>
+            var question4 = new mathex.TestQuestion('radio', {
+                question: 'Quale delle seguenti eguaglianze è errata?' + 
+                    '<ul class="test">' +
+                        '<li>[[0]] {% 5^3 * 5^4 = 5^7 %}</li>' +
+                        '<li>[[1]] {% 2^5 * 3^5 = 6^5 %}</li>' +
+                        '<li>[[2]] {% 9^6 + 9^2 = 9^8 %}</li>' +
+                        '<li>[[3]] {% 7^8 : 7 = 7^7 %}</li>' +
+                    '</ul>',
+                result: 3,
+            });
 
-  </body>
+            var test = new mathex.Test();
+            //test.init([question0, question1, question2, question3, question4], {
+            test.init([question0, question1], {
+                steps: [1, 2, 3],
+                rating: [
+                    {message: 'meow', color: 'red'},
+                    {message: 'miao', color: 'yellow'},
+                    {message: 'bao', color: 'green'},
+                    ],
+                    widgets: true
+            });
+            test.start();
+        </script>
+
+    </body>
 </html>
