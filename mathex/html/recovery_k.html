@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Esercizi di recupero - unità 1</title>
+    <meta charset="utf-8" />
+    <script src="../res-otto/js/modernizr.js"></script>
+    <script src="../res-otto/js/mootools-core-yc.js"></script>
+    <script src="../res-otto/js/mootools-more-yc.js"></script>
+    <script src="../res-otto/js/mathex.js"></script>
+    <script type="text/javascript"
+      src="../res-otto/js/MathJax.js?config=custom">
+    </script>
+    <link type="text/css" rel="stylesheet" href="../res-otto/css/style.css" />
+    <style>
+    .drag-container {
+        border: 0px solid #eee;
+        margin: 10px 10px 10px 10px;
+        position: relative;
+        box-sizing: border-box;
+        width: 30%;
+        float: left;
+    }
+    .drop-container {
+        padding: 2px;
+        border: 0px solid #eee;
+        width: 60%;
+        float: left;
+    }
+
+    .drop-container div[data-drop] {
+        border: 0px solid #eee;
+        margin: 2px;
+        margin-bottom: 1px;
+        height: 7em;
+        position: relative;
+        box-sizing: border-box;
+        width: 100%;
+        color:#ffffff;
+        background: #008000;
+        padding: 5px 40px;
+        height: auto !important;
+        min-height: 70px;
+    }
+
+    .drop-container div[data-drop] div[data-drag]{
+        padding: 0;
+        margin: 0;
+        display: inline;
+    }
+
+    td.drag-container{border:0px solid #eee; text-align:top;}
+    td.drop-container{border:0px solid #eee; text-align:top; width:60px}
+    
+    div[data-drag] {
+        border: 1px solid #3805ff;
+        background: #eee;
+        padding: 8px;
+        display: inline-block;
+        cursor: move; 
+        margin: 2px;
+        box-sizing: border-box;
+        color:#ccc;
+        color:#ffffff;
+        background: #3805ff;
+    }
+    div.container_k {
+        border: 0px solid #eee;
+        width:100%
+    }
+    .drop-container div[data-filled='1'], .enter {
+        background: #3805ff !important;
+        color:#ffffff;
+    }
+
+    </style>  
+  </head>
+  <body class="aritmetica">
+
+    <script>
+
+      mathex.config.font_ctrl = true;
+
+      mathex.Shared.renderTemplate({
+          title: 'Alfamat - Algebra',
+          subtitle: '<strong>Esercizio di recupero - unità 1 - paragrafo 1</strong>',
+          meaning: 'Accoppia opportunamente gli elementi delle colonne. Se sbagli riprova.',
+          instructions: '<strong>Inserisci la risposta</strong>:<br />seleziona un elemento blu (a destra) e trascinalo su un elemento verde (a sinistra). La verifica dell\'esercizio appare quando tutti gli elementi sono stati accoppiati.',
+          duty: 'Accoppia le espressioni algebriche alle corrispondenti espressioni verbali.' ,
+          pre_container: ''
+      });
+
+
+
+      
+
+        /*var step2 = new mathex.DragOrderStep(
+
+'<div class="container_k">'+
+            '<div class="drop-container"><div data-drop="1" style="margin-top:13px">la somma di <i>x</i> e <i>y</i> divisa per {%t%}:{%\\quad%}</div></div><div class="drag-container"><div data-drag="1" data-position="8">{% \\frac{1}{2} n %}</div></div><div class="clear"></div>' +
+  
+            '<div class="drop-container"><div data-drop="2" style="margin-top:13px">otto volte {%n%} aumentato di uno:{%\\quad%}</div></div><div class="drag-container"><div data-drag="1" data-position="10">{% n - 4%}</div></div><div class="clear"></div>' +
+              
+            '<div class="drop-container"><div data-drop="3" style="margin-top:13px">la metà di {%n%}:{%\\quad%}</div></div><div class="drag-container"><div data-drag="1" data-position="9">{% 5 + 2a %}</div></div><div class="clear"></div>' +
+              
+            '<div class="drop-container"><div data-drop="4" style="margin-top:13px">5 aumentato del doppio di {%a%}:{%\\quad%}</div></div><div class="drag-container"><div data-drag="1" data-position="7">{% 8n + 1 %}</div></div><div class="clear"></div>' +
+              
+            '<div class="drop-container"><div data-drop="5" style="margin-top:13px">{%n%} diminuito di 4:{%\\quad%}</div></div><div class="drag-container"><div data-drag="1" data-position="6">{% \\frac{x+y}{t}%}</div></div>' +
+'<div class="clear"></div></div>'
+        );*/
+
+        var step2 = new mathex.DragOrderStep(
+
+            '<div class="container_k">' +
+            '<div class="drop-container">' +
+            '<div data-drop="1" style="margin-top:13px">la somma di <i>x</i> e <i>y</i> divisa per {%t%}:{%\\quad%}</div>' +
+            '<div data-drop="2" style="margin-top:13px">otto volte {%n%} aumentato di uno:{%\\quad%}</div>' +
+            '<div data-drop="3" style="margin-top:13px">la metà di {%n%}:{%\\quad%}</div>' +
+            '<div data-drop="4" style="margin-top:13px">5 aumentato del doppio di {%a%}:{%\\quad%}</div>' +
+            '<div data-drop="5" style="margin-top:13px">{%n%} diminuito di 4:{%\\quad%}</div>' +
+            '</div>' + 
+            '<div class="drag-container">' +
+            '<div data-drag="1" data-position="3">{% \\frac{1}{2} n %}</div>' +
+            '<div data-drag="1" data-position="5">{% n - 4%}</div>' +
+            '<div data-drag="1" data-position="4">{% 5 + 2a %}</div>' +
+            '<div data-drag="1" data-position="2">{% 8n + 1 %}</div>' +
+            '<div data-drag="1" data-position="1">{% \\frac{x+y}{t}%}</div>' +
+            '</div><div class="clear"></div>'
+        );
+        
+        
+
+    
+
+      var router2 = new mathex.Router({widgets:true});
+      router2.init([step2], 'hai finito');
+      router2.startStep();
+      
+      
+
+      var n = new mathex.Navigator({
+          index: 'A2_11_esrec_79_index.html',
+          prev: '',
+          prev2: '',
+          items: 5,
+          urls: ['A2_11_esrec_79_1_1.html', 'A2_11_esrec_79_1_2.html', 'A2_11_esrec_79_1_3.html', 'A2_11_esrec_79_1_4.html', 'A2_11_esrec_79_1_5.html'],
+          current: 1,
+          next: 'A2_11_esrec_79_1_2.html',
+          next2: 'A2_11_esrec_79_2_1.html',
+      });
+
+
+    </script>
+
+  </body>
+</html>
